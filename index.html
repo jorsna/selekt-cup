@@ -1393,7 +1393,7 @@ function renderScoring() {
       return m;
     })(s.modell);
     var imgHtml = typeof CAR_IMAGES !== 'undefined' && CAR_IMAGES[carKey]
-      ? '<img class="score-car-img" src="'+CAR_IMAGES[s.modell]+'" alt="'+s.modell+'">'
+      ? '<img class="score-car-img" src="'+CAR_IMAGES[carKey]+'" alt="'+s.modell+'">'
       : '<div class="score-car-placeholder">'+s.modell+'</div>';
     return '<div class="score-card" style="animation-delay:'+(i*0.02)+'s">'
       + (userRole==='selger'?'<div class="score-del" onclick="askDel(\''+s.id+'\',\''+s.selger+' \u2013 '+s.modell+'\')">Slett</div>':'')

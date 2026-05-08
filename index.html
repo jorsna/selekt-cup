@@ -496,14 +496,14 @@ html, body {
       <select id="sel-selger"><option value="">Selger...</option></select>
       <select id="sel-modell">
         <option value="">Modell...</option>
-        <option>EX30</option>
-        <option>XC40/EX40</option>
-        <option>EX90</option>
-        <option>EC40</option>
-        <option>ES90</option>
-        <option>XC60 &#11088; (+2p)</option>
-        <option>XC90</option>
-        <option>V90 &#11088; (+2p)</option>
+        <option value="EX30">EX30</option>
+        <option value="XC40/EX40">XC40/EX40</option>
+        <option value="EX90">EX90</option>
+        <option value="EC40">EC40</option>
+        <option value="ES90">ES90</option>
+        <option value="XC60">&#11088; XC60 (+2p)</option>
+        <option value="XC90">XC90</option>
+        <option value="V90">&#11088; V90 (+2p)</option>
       </select>
     </div>
     <div class="fin-label" id="fin-label" onclick="toggleFin()">
@@ -1380,7 +1380,19 @@ function renderScoring() {
     var dp = (s.ts||'').substring(0,10), tp = (s.ts||'').substring(11,16);
     var dArr = dp.split('-');
     var dateShow = dArr[2] ? dArr[2]+'.'+dArr[1]+'.' : dp;
-    var imgHtml = typeof CAR_IMAGES !== 'undefined' && CAR_IMAGES[s.modell]
+    var carKey = (function(m) {
+      if (!m) return '';
+      if (m.indexOf('XC40') >= 0 || m.indexOf('EX40') >= 0) return 'XC40';
+      if (m.indexOf('XC60') >= 0) return 'XC60';
+      if (m.indexOf('XC90') >= 0) return 'XC90';
+      if (m.indexOf('V90')  >= 0) return 'V90';
+      if (m.indexOf('EX30') >= 0) return 'EX30';
+      if (m.indexOf('EX90') >= 0) return 'EX90';
+      if (m.indexOf('EC40') >= 0) return 'EC40';
+      if (m.indexOf('ES90') >= 0) return 'ES90';
+      return m;
+    })(s.modell);
+    var imgHtml = typeof CAR_IMAGES !== 'undefined' && CAR_IMAGES[carKey]
       ? '<img class="score-car-img" src="'+CAR_IMAGES[s.modell]+'" alt="'+s.modell+'">'
       : '<div class="score-car-placeholder">'+s.modell+'</div>';
     return '<div class="score-card" style="animation-delay:'+(i*0.02)+'s">'

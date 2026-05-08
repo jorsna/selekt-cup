@@ -1399,7 +1399,7 @@ function renderScoring() {
       + (userRole==='selger'?'<div class="score-del" onclick="askDel(\''+s.id+'\',\''+s.selger+' \u2013 '+s.modell+'\')">Slett</div>':'')
       + (isNew?'<div class="score-new">NY</div>':'')
       + imgHtml
-      + '<div class="score-modell">'+s.modell+'</div>'
+      + '<div class="score-modell">'+(s.modell||'').replace(/ ?&#11088;.*$/,'').replace(/ ?⭐.*$/,'').replace(/ ?\+2p.*/,'').replace(/ ?\(\+2p\).*/,'').trim()+'</div>'
       + (s.finansiert?'<div style="font-family:Anton,sans-serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-top:3px">\u25c6 FINANSIERT</div>':'')
       + '<div class="score-selger">'+s.selger+'</div>'
       + '<div class="score-tid">'+lbl+' &middot; '+dateShow+' '+tp+'</div>'
@@ -1491,6 +1491,9 @@ function reg() {
   var now = new Date(), mo = now.getMonth() + 1;
   var mnd = mo===5?'mai' : mo===6?'jun' : '';
   if (!mnd) { toast('Konkurransen gjelder mai og juni!'); return; }
+  // Sjekk startdato
+  var startDate = new Date('2026-05-11T00:00:00');
+  if (new Date() < startDate) { toast('Konkurransen starter mandag 11. mai!'); return; }
 
   var sObj = SELGERE.find(function(x) { return x.navn === selger; }) || {};
   var ts = now.getFullYear()+'-'+pad(mo)+'-'+pad(now.getDate())+'T'+pad(now.getHours())+':'+pad(now.getMinutes())+':00';

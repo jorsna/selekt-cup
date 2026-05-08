@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VCSO Selekt Cup – Kommer snart</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#0a1a0f;--g2:#0f2014;--g3:#1e3d26;--g4:#2a5235;
+  --gold:#c9a84c;--gold2:#f0c96e;--gold3:#ffe08a;
+}
+html,body{background:var(--g);font-family:'Barlow Condensed',sans-serif;color:#fff;min-height:100vh;overflow-x:hidden}
+
+/* ANIMATED BG */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(201,168,76,.10) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(30,61,38,.5) 0%,transparent 60%);
+  animation:pulse 7s ease-in-out infinite alternate
+}
+@keyframes pulse{from{opacity:.6}to{opacity:1}}
+
+/* PITCH LINES */
+body::after{
+  content:'';position:fixed;bottom:0;left:0;right:0;height:220px;z-index:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(201,168,76,.04) 38px,rgba(201,168,76,.04) 40px),
+    linear-gradient(180deg,transparent 0%,rgba(14,28,16,.9) 100%)
+}
+
+/* PAGE */
+.page{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;gap:0}
+
+/* TOP PILL */
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 16px;border-radius:99px;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
+  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:28px;
+  opacity:0;animation:fadeDown .5s .1s ease forwards
+}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* LOGO AREA */
+.logo-wrap{margin-bottom:28px;opacity:0;animation:fadeDown .5s .2s ease forwards}
+.crest{
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--g3),var(--g));
+  border:2.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;margin:0 auto 12px;
+  box-shadow:0 0 0 10px rgba(201,168,76,.07),0 0 50px rgba(201,168,76,.2)
+}
+.brand-top{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.brand-main{font-size:36px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--gold3),var(--gold),var(--gold2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.brand-sub{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px}
+
+/* MAIN HEADLINE */
+.headline-wrap{margin-bottom:36px;opacity:0;animation:fadeUp .6s .35s ease forwards}
+.headline{font-size:clamp(42px,10vw,72px);font-weight:900;line-height:.92;text-transform:uppercase;letter-spacing:-1px}
+.headline span{
+  display:block;
+  background:linear-gradient(135deg,#fff 0%,var(--gold2) 50%,#fff 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 4s linear infinite
+}
+.headline .sub-word{
+  font-size:clamp(22px,5vw,36px);font-style:italic;font-weight:700;
+  color:rgba(255,255,255,.35);letter-spacing:2px;display:block;margin-top:4px
+}
+@keyframes shine{to{background-position:200% center}}
+
+/* DATE BOX */
+.date-row{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:36px;
+  opacity:0;animation:fadeUp .6s .45s ease forwards
+}
+.date-box{
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
+  border-radius:6px;padding:10px 18px;text-align:center;
+}
+.date-n{font-size:32px;font-weight:900;color:var(--gold);line-height:1}
+.date-l{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.6)}
+.date-sep{font-size:24px;color:rgba(201,168,76,.3)}
+.date-month{font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+/* FEATURES */
+.features{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  max-width:500px;margin-bottom:40px;
+  opacity:0;animation:fadeUp .6s .55s ease forwards
+}
+.feat{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:99px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.7);
+  letter-spacing:.5px
+}
+.feat-icon{font-size:15px}
+
+/* CTA */
+.cta-wrap{opacity:0;animation:fadeUp .6s .65s ease forwards}
+.cta-text{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
+.url{
+  display:inline-block;padding:14px 32px;
+  background:var(--gold);color:var(--g);
+  font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
+  border-radius:5px;text-decoration:none;
+  box-shadow:0 0 30px rgba(201,168,76,.3);
+  transition:all .2s
+}
+.url:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 4px 40px rgba(201,168,76,.4)}
+.pw{margin-top:12px;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px}
+.pw span{color:var(--gold);font-weight:700}
+
+/* COUNTDOWN */
+.countdown{
+  display:flex;gap:8px;align-items:center;
+  margin-top:36px;
+  opacity:0;animation:fadeUp .5s .75s ease forwards
+}
+.cd-box{background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:8px 12px;min-width:52px;text-align:center}
+.cd-n{font-size:26px;font-weight:900;color:var(--gold);line-height:1}
+.cd-l{font-size:7px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(201,168,76,.5)}
+.cd-sep{font-size:20px;color:rgba(201,168,76,.25);font-weight:300}
+.cd-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:8px;text-align:center}
+
+/* BOTTOM TAGLINE */
+.tagline{
+  margin-top:40px;font-size:11px;font-style:italic;
+  color:rgba(255,255,255,.2);letter-spacing:1px;
+  opacity:0;animation:fadeUp .5s .85s ease forwards
+}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="pill">
+    <div class="pill-dot"></div>
+    Ny konkurranse
+  </div>
+
+  <div class="logo-wrap">
+    <div class="crest">⚽</div>
+    <div class="brand-top">Volvo Car Stor Oslo</div>
+    <div class="brand-main">SELEKT CUP</div>
+    <div class="brand-sub">Bruktbil &nbsp;&middot;&nbsp; Mai 2025</div>
+  </div>
+
+  <div class="headline-wrap">
+    <div class="headline">
+      <span>Kampen</span>
+      <span>er i gang</span>
+      <span class="sub-word">hvem tar tittelen?</span>
+    </div>
+  </div>
+
+  <div class="date-row">
+    <div class="date-box">
+      <div class="date-n">11</div>
+      <div class="date-l">Mai</div>
+    </div>
+    <div class="date-sep">—</div>
+    <div class="date-month">Starter mandag</div>
+  </div>
+
+  <div class="features">
+    <div class="feat"><span class="feat-icon">👑</span> MVP daglig</div>
+    <div class="feat"><span class="feat-icon">⭐</span> Hat-trick</div>
+    <div class="feat"><span class="feat-icon">🏆</span> Hall of Fame</div>
+    <div class="feat"><span class="feat-icon">🔥</span> Streak</div>
+    <div class="feat"><span class="feat-icon">🙌</span> Heia fra tilskuere</div>
+    <div class="feat"><span class="feat-icon">📊</span> Live leaderboard</div>
+  </div>
+
+  <div class="cta-wrap">
+    <div class="cta-text">Følg med live på</div>
+    <a class="url" href="https://jorsna.github.io/selekt-cup/" target="_blank">jorsna.github.io/selekt-cup</a>
+    <div class="pw">Passord: <span>selekt2026</span></div>
+  </div>
+
+  <div class="countdown" id="cd">
+    <div class="cd-box"><div class="cd-n" id="cd-d">–</div><div class="cd-l">dager</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box"><div class="cd-n" id="cd-h">–</div><div class="cd-l">timer</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box"><div class="cd-n" id="cd-m">–</div><div class="cd-l">min</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box"><div class="cd-n" id="cd-s">–</div><div class="cd-l">sek</div></div>
+  </div>
+  <div class="cd-label">Nedtelling til kickoff</div>
+
+  <div class="tagline">Volvo Car Stor Oslo &nbsp;&middot;&nbsp; Selekt Bruktbil &nbsp;&middot;&nbsp; Mai 2025</div>
+
+</div>
+
+<script>
+var target = new Date('2026-05-11T08:00:00');
+function tick() {
+  var now = new Date();
+  var diff = target - now;
+  if (diff <= 0) {
+    document.getElementById('cd-d').textContent = '0';
+    document.getElementById('cd-h').textContent = '00';
+    document.getElementById('cd-m').textContent = '00';
+    document.getElementById('cd-s').textContent = '00';
+    return;
+  }
+  var d = Math.floor(diff/86400000);
+  var h = Math.floor((diff%86400000)/3600000);
+  var m = Math.floor((diff%3600000)/60000);
+  var s = Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent = d;
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

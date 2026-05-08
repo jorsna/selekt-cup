@@ -373,7 +373,7 @@ html, body {
         <div class="crest">&#9917;</div>
         <div>
           <div class="t1">VCSO SELEKT CUP</div>
-          <div class="t2">Bruktbil &middot; XC60 &amp; V90 gir +2 bonuspoeng
+          <div class="t2">Bruktbil &middot; Mai &amp; Juni 2026
             <span class="login-badge" id="role-badge"></span>
           </div>
         </div>
@@ -446,8 +446,8 @@ html, body {
 
 <!-- AVDELINGER VIEW -->
 <div class="view" id="view-team">
-  <div class="tbl-head" style="grid-template-columns:26px 28px 1fr 40px">
-    <div>#</div><div></div><div>Avdeling</div><div>P</div>
+  <div class="tbl-head" style="grid-template-columns:26px 28px 1fr 70px 40px">
+    <div>#</div><div></div><div>Avdeling</div><div>Salg/Mål</div><div>P</div>
   </div>
   <div id="tbl-team"></div>
   <div style="padding:10px 14px 4px;background:var(--card);border-top:1px solid var(--b1)">
@@ -1076,7 +1076,7 @@ function renderInd() {
   el.innerHTML = rows.map(function(r,i) {
     var rank = ranks[i];
     var isTied = rankCount[rank] > 1;
-    var rankLabel = isTied ? 'T'+rank : String(rank);
+    var rankLabel = isTied ? 'T '+rank : String(rank);
     var pc = rank===1?gold : rank===2?silver : rank===3?bronze : 'var(--muted)';
     var sk = streakCount(r.navn);
     var ht = hatTrickCount(r.navn, m);
@@ -1209,6 +1209,7 @@ function renderTeam() {
         + '<div class="name-sub">'+members+' selgere · '+r.g+' biler totalt</div>'
         + weekBarsHtml
       + '</div>'
+      + '<div style="text-align:center;font-size:11px;color:var(--txt);line-height:1.2">'+r.g+'<br><span style="color:var(--muted);font-size:9px">/'+teamGoal(r.id,m)+'</span></div>'
       + '<div class="sc pts">'+r.pts+'</div>'
     + '</div>';
   }).join('');

@@ -538,9 +538,9 @@ html, body {
         <option value="EX90">EX90</option>
         <option value="EC40">EC40</option>
         <option value="ES90">ES90</option>
-        <option value="XC60">&#11088; XC60 (+2p)</option>
+        <option value="XC60">&#11088; XC60</option>
         <option value="XC90">XC90</option>
-        <option value="V90">&#11088; V90 (+2p)</option>
+        <option value="V90">&#11088; V90</option>
       </select>
     </div>
     <div class="fin-label" id="fin-label" onclick="toggleFin()">
@@ -1488,7 +1488,7 @@ function buildSelgerDropdown() {
   sel.innerHTML = '<option value="">Selger...</option>';
   var groups = { ryen: [], fornebu: [], lillestrom: [], okern: [] };
   SELGERE.forEach(function(s) { if (groups[s.loc]) groups[s.loc].push(s); });
-  [['ryen','Ryen'],['fornebu','Fornebu'],['lillestrom','Lillestr\u00f8m']].forEach(function(pair) {
+  [['ryen','Ryen'],['fornebu','Fornebu'],['lillestrom','Lillestr\u00f8m'],['okern','\u00d8kern']].forEach(function(pair) {
     var og = document.createElement('optgroup');
     og.label = pair[1];
     groups[pair[0]].forEach(function(s) {

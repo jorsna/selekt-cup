@@ -538,9 +538,9 @@ html, body {
         <option value="EX90">EX90</option>
         <option value="EC40">EC40</option>
         <option value="ES90">ES90</option>
-        <option value="XC60">&#11088; XC60</option>
+        <option value="XC60">XC60</option>
         <option value="XC90">XC90</option>
-        <option value="V90">&#11088; V90</option>
+        <option value="V90">V90</option>
       </select>
     </div>
     <div class="fin-label" id="fin-label" onclick="toggleFin()">
@@ -726,8 +726,6 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var API = SUPABASE_URL + '/rest/v1/selekt_sales';
 
 var PTS = 3;
-var BONUS_MODELS = ['XC60','V90'];
-var BONUS_PTS = 2;
 var GOALS = {
   mai: { ryen: 48, fornebu: 64, lillestrom: 32, okern: 16 },
   jun: { ryen: 48, fornebu: 64, lillestrom: 32, okern: 16 }
@@ -1069,15 +1067,7 @@ function renderInd() {
   var m = curMonth;
   var rows = SELGERE.map(function(s) {
     var g = goalsFor(s.navn, m);
-    return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:(function(){
-      var p=0;
-      sales.forEach(function(x){
-        if(x.selger!==s.navn)return;
-        if(m!=='all'&&x.mnd!==m)return;
-        p+=PTS+(x.modell&&(x.modell.indexOf('XC60')>=0||x.modell.indexOf('V90')>=0)?BONUS_PTS:0);
-      });
-      return p;
-    })() };
+    return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:g*PTS };
   }).map(function(s) {
     // Tell finansierte salg for tiebreaker
     var fin = sales.filter(function(x) {
@@ -1567,6 +1557,7 @@ function reg() {
     launchKonfetti(LC[sObj.loc] || '#ffd700');
     sendPush(selger, modell, sObj.loc);
     renderAll();
+    if (document.getElementById('hof-container')) renderTeam();
     // Switch to scoringer tab
     setTimeout(function() {
       setTab('scoring', document.querySelectorAll('.tab')[3]);

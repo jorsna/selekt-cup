@@ -759,7 +759,10 @@ var SELGERE_RAW = [
 ];
 
 var SELGERE = SELGERE_RAW.map(function(s, i) {
-  var col = SCOLS[i % SCOLS.length];
+  var teamCol = {'ryen':'#e8001a','fornebu':'#22c55e','lillestrom':'#3b82f6','okern':'#8b5cf6'};
+  var teamBg  = {'ryen':'rgba(232,0,26,.18)','fornebu':'rgba(34,197,94,.18)','lillestrom':'rgba(59,130,246,.18)','okern':'rgba(139,92,246,.18)'};
+  var col = teamCol[s.loc] || SCOLS[i % SCOLS.length];
+  var bg2 = teamBg[s.loc] || ('rgba(128,128,128,.18)');
   var h = col.replace('#', '');
   var rv = parseInt(h.slice(0,2), 16);
   var gv = parseInt(h.slice(2,4), 16);
@@ -769,7 +772,7 @@ var SELGERE = SELGERE_RAW.map(function(s, i) {
     .replace(/\u00e6/g, 'ae').replace(/\u00f8/g, 'o').replace(/\u00e5/g, 'aa')
     .replace(/[^a-z0-9_]/g, '');
   var initials = s.navn.split(' ').map(function(x) { return x[0]; }).join('').slice(0,2).toUpperCase();
-  return { navn: s.navn, loc: s.loc, id: id, initials: initials, color: col, bg: 'rgba('+rv+','+gv+','+bv+',.18)' };
+  return { navn: s.navn, loc: s.loc, id: id, initials: initials, color: col, bg: bg2 || ('rgba('+rv+','+gv+','+bv+',.18)') };
 });
 
 var TEAMS = [

@@ -325,6 +325,43 @@ html, body {
   background-size: 200% auto !important;
   animation: goldShimmer 1.5s linear infinite, barGlow 1s ease-in-out infinite !important;
 }
+
+/* ── SPILLERKORT HOVER ─────────────────────────────── */
+.trow{position:relative}
+.player-card{
+  position:fixed;z-index:9999;
+  width:220px;
+  background:linear-gradient(160deg,#0f2014 0%,#0a1a0f 70%);
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:10px;overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 30px rgba(201,168,76,.1);
+  pointer-events:none;
+  opacity:0;transition:opacity .15s ease;
+}
+.player-card.show{opacity:1}
+.pc-top{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.03));
+        border-bottom:1px solid rgba(201,168,76,.15);
+        padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.pc-comp{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.6)}
+.pc-week{font-size:8px;color:#5a8a65}
+.pc-photo-wrap{padding:14px 0 0;display:flex;justify-content:center}
+.pc-photo{width:80px;height:80px;border-radius:50%;overflow:hidden;
+          border:3px solid var(--gold);
+          box-shadow:0 0 20px rgba(201,168,76,.25)}
+.pc-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%)}
+.pc-photo-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+             font-size:22px;font-weight:900;color:var(--gold);background:rgba(201,168,76,.08)}
+.pc-name{font-family:'Anton',sans-serif;font-size:17px;color:#fff;
+         text-align:center;padding:8px 12px 2px;line-height:1}
+.pc-avd{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+        text-align:center;margin-bottom:10px}
+.pc-stats{display:flex;border-top:1px solid rgba(201,168,76,.1)}
+.pc-stat{flex:1;padding:8px 4px;text-align:center;border-right:1px solid rgba(201,168,76,.08)}
+.pc-stat:last-child{border-right:none}
+.pc-stat-n{font-family:'Anton',sans-serif;font-size:20px;line-height:1}
+.pc-stat-l{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#5a8a65;margin-top:2px}
+.pc-form{display:flex;justify-content:center;gap:3px;padding:8px 12px 12px}
+.pc-dot{width:10px;height:10px;border-radius:50%}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6NJ95NHF98"></script>
@@ -1691,6 +1728,111 @@ setInterval(countdown, 1000);
 
 
 
+
+
+// ── SPILLERKORT HOVER ─────────────────────────────────────────────────────
+(function() {
+  var card = document.createElement('div');
+  card.className = 'player-card';
+  card.id = 'player-hover-card';
+  document.body.appendChild(card);
+
+  function getSelgerStats(navn) {
+    var per = 0, fin = 0, dmap = {}, hatTricks = 0;
+    sales.forEach(function(s) {
+      if (s.selger !== navn) return;
+      per++;
+      if (s.finansiert) fin++;
+      dmap[s.ts.slice(0,10)] = (dmap[s.ts.slice(0,10)]||0)+1;
+    });
+    var form = [];
+    var allDays = Object.keys(dmap).sort().reverse();
+    for (var i = 0; i < 5; i++) { form.unshift(allDays[i] ? dmap[allDays[i]] > 0 : false); }
+    Object.keys(dmap).forEach(function(d){ if(dmap[d]>=3) hatTricks++; });
+    // Bonus points
+    var pts = 0;
+    sales.forEach(function(s){
+      if(s.selger!==navn) return;
+      pts += PTS + (s.modell&&(s.modell.indexOf('XC60')>=0||s.modell.indexOf('V90')>=0)?BONUS_PTS:0);
+    });
+    return { per:per, fin:fin, form:form, hatTricks:hatTricks, pts:pts };
+  }
+
+  function showCard(navn, color, id, loc, e) {
+    var stats = getSelgerStats(navn);
+    var photos = typeof SELGER_PHOTOS !== 'undefined' ? SELGER_PHOTOS : {};
+    var ini = id.replace(/_/g,' ').split(' ').map(function(w){return w[0]?w[0].toUpperCase():''}).join('').slice(0,2);
+    var photoHtml = photos[id]
+      ? '<img src="'+photos[id]+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)">'
+      : '<div class="pc-photo-ph">'+ini+'</div>';
+    var locMap = {ryen:'Ryen',fornebu:'Fornebu',lillestrom:'Lillestrøm',okern:'Økern'};
+    var locStr = locMap[loc] || loc;
+    var formDots = stats.form.map(function(f){
+      return '<div class="pc-dot" style="background:'+(f?'#22c55e':'#ef4444')+'"></div>';
+    }).join('');
+
+    card.innerHTML =
+      '<div class="pc-top">'
+        +'<div class="pc-comp">Selekt Cup</div>'
+        +'<div class="pc-week">2026</div>'
+      +'</div>'
+      +'<div class="pc-photo-wrap"><div class="pc-photo">'+photoHtml+'</div></div>'
+      +'<div class="pc-name">'+navn+'</div>'
+      +'<div class="pc-avd" style="color:'+color+'">'+locStr+'</div>'
+      +'<div class="pc-stats">'
+        +'<div class="pc-stat">'
+          +'<div class="pc-stat-n" style="color:var(--gold)">'+stats.per+'</div>'
+          +'<div class="pc-stat-l">Salg</div>'
+        +'</div>'
+        +'<div class="pc-stat">'
+          +'<div class="pc-stat-n" style="color:var(--gold2)">'+stats.pts+'</div>'
+          +'<div class="pc-stat-l">Poeng</div>'
+        +'</div>'
+        +'<div class="pc-stat">'
+          +'<div class="pc-stat-n" style="color:#22c55e">'+stats.fin+'</div>'
+          +'<div class="pc-stat-l">Finansiert</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="pc-form">'+formDots+'</div>';
+
+    var x = e.clientX + 14, y = e.clientY - 60;
+    if (x + 220 > window.innerWidth) x = e.clientX - 234;
+    if (y + 320 > window.innerHeight) y = window.innerHeight - 330;
+    card.style.left = x+'px';
+    card.style.top  = y+'px';
+    card.classList.add('show');
+  }
+
+  function hideCard() { card.classList.remove('show'); }
+  function moveCard(e) {
+    var x = e.clientX+14, y = e.clientY-60;
+    if (x+220>window.innerWidth) x = e.clientX-234;
+    if (y+320>window.innerHeight) y = window.innerHeight-330;
+    card.style.left=x+'px'; card.style.top=y+'px';
+  }
+
+  function attachHovers() {
+    var tbl = document.getElementById('tbl-ind');
+    if (!tbl) return;
+    tbl.querySelectorAll('.trow').forEach(function(row) {
+      var nameEl = row.querySelector('.name-main');
+      if (!nameEl) return;
+      var navn = nameEl.textContent.replace(/[⭐🔥]/g,'').replace(/T\s*\d+/,'').trim();
+      var sObj = SELGERE.find(function(s){ return s.navn === navn; });
+      if (!sObj) return;
+      row.addEventListener('mouseenter', function(e){ showCard(sObj.navn, sObj.color, sObj.id, sObj.loc, e); });
+      row.addEventListener('mousemove', moveCard);
+      row.addEventListener('mouseleave', hideCard);
+    });
+  }
+
+  var origRenderAll = typeof renderAll === 'function' ? renderAll : null;
+  if (origRenderAll) {
+    window.renderAll = function() { origRenderAll(); setTimeout(attachHovers, 100); };
+  }
+  setTimeout(attachHovers, 2000);
+  document.addEventListener('click', function(){ setTimeout(attachHovers, 200); });
+})();
 
 </script>
 </body>

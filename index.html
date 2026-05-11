@@ -1748,12 +1748,7 @@ setInterval(countdown, 1000);
       form.push(dmap[ds] > 0);
     }
     Object.keys(dmap).forEach(function(d){ if(dmap[d]>=3) hatTricks++; });
-    // Bonus points
-    var pts = 0;
-    sales.forEach(function(s){
-      if(s.selger!==navn) return;
-      pts += PTS + (s.modell&&(s.modell.indexOf('XC60')>=0||s.modell.indexOf('V90')>=0)?BONUS_PTS:0);
-    });
+    var pts = per * PTS;
     return { per:per, fin:fin, form:form, hatTricks:hatTricks, pts:pts };
   }
 

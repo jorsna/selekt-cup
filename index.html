@@ -1262,9 +1262,26 @@ function renderTeam() {
     var weekKeys = Object.keys(allWeeks).sort(function(a,b){
       return parseInt(b.split('_')[0]) - parseInt(a.split('_')[0]);
     });
+    // Check hat-tricks this week
+    var curHatDays = {};
+    sales.forEach(function(x) {
+      if (getWeekNum(new Date(x.ts)) !== thisWeek) return;
+      var ds = tsDate(x.ts);
+      if (!curHatDays[x.selger]) curHatDays[x.selger] = {};
+      curHatDays[x.selger][ds] = (curHatDays[x.selger][ds]||0) + 1;
+    });
+    var curHatWinners = [];
+    Object.keys(curHatDays).forEach(function(navn) {
+      var hasHat = Object.keys(curHatDays[navn]).some(function(d){ return curHatDays[navn][d] >= 3; });
+      if (hasHat) curHatWinners.push(navn);
+    });
+    var curHatHtml = curHatWinners.length > 0
+      ? '<div style="margin-top:8px;font-size:11px;color:var(--gold)">&#11088; Hat-trick: '+curHatWinners.join(', ')+'</div>'
+      : '';
     var currentBox = '<div style="margin-bottom:14px;padding:10px 12px;background:var(--card2);border-radius:5px;border:1px solid var(--b1)">'
       + '<div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px">Vinner uke '+thisWeek+'</div>'
       + '<div style="font-size:11px;color:var(--muted);font-style:italic">Kåres søndag kl. 23:59</div>'
+      + curHatHtml
       + '</div>';
     var pastKeys = weekKeys.filter(function(k){ return parseInt(k.split('_')[0]) !== thisWeek; });
     if (!pastKeys.length) {

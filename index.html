@@ -1067,7 +1067,9 @@ function renderInd() {
   var m = curMonth;
   var rows = SELGERE.map(function(s) {
     var g = goalsFor(s.navn, m);
-    return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:g*PTS };
+    var thisWk = getWeekNum(new Date());
+      var wk = sales.filter(function(x){ return x.selger===s.navn && !x.deleted && getWeekNum(new Date(x.ts))===thisWk; }).length;
+      return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:g*PTS, wk:wk };
   }).map(function(s) {
     // Tell finansierte salg for tiebreaker
     var fin = sales.filter(function(x) {
@@ -1114,14 +1116,14 @@ function renderInd() {
     var avHtml = hasPhoto
       ? '<img src="'+SELGER_PHOTOS[r.id]+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)">'
       : r.initials;
-    return '<div class="trow zm" style="animation-delay:'+(i*0.03)+'s">'
+    return '<div class="trow zm" data-navn="'+r.navn+'" style="animation-delay:'+(i*0.03)+'s">'
       + '<div class="pos-n" style="color:'+pc+';font-size:'+(isTied?'11px':'13px')+'">'+(rankLabel)+'</div>'
       + '<div><div class="av" style="background:'+r.bg+';color:'+r.color+';overflow:hidden;padding:0">'+avHtml+'</div></div>'
       + '<div class="name-c">'
-        + '<div class="name-main">'+r.navn+(ht>0?' '+Array(Math.min(ht,5)+1).join('&#11088;'):'')+(sk>=3?' &#128293;':'')+'</div>'
+        + '<div class="name-main">'+r.navn+(r.wk>0?' <span style="opacity:.4;font-size:10px;font-weight:400">('+r.wk+')</span>':'')+(ht>0?' '+Array(Math.min(ht,5)+1).join('&#11088;'):'')+(sk>=3?' &#128293;':'')+'</div>'
         + '<div class="name-sub">'+(LL[r.loc]||r.loc)+'</div>'
       + '</div>'
-      + '<div class="sc">'+r.g+'</div>'
+      + '<div class="sc" style="line-height:1">'+r.g+(r.wk>0?'<br><span style="font-size:8px;opacity:.4;font-weight:400">('+r.wk+')</span>':'')+'</div>'
       + '<div class="sc pts">'+r.pts+'</div>'
       + '<div><div class="form-dots">'+selgerDots(r.navn)+'</div></div>'
       + (function(){
@@ -1231,7 +1233,7 @@ function renderTeam() {
       weekBarsHtml += '</div></div>';
     });
 
-    return '<div class="trow zm" style="animation-delay:'+(i*0.06)+'s">'
+    return '<div class="trow zm" data-navn="'+r.navn+'" style="animation-delay:'+(i*0.06)+'s">'
       + '<div class="pos-n" style="color:'+pc+'">'+(i+1)+'</div>'
       + '<div><div class="av" style="background:'+r.bg+';color:'+r.color+'">'+r.initials+'</div></div>'
       + '<div class="name-c" style="width:100%">'
@@ -1812,9 +1814,8 @@ setInterval(countdown, 1000);
     var tbl = document.getElementById('tbl-ind');
     if (!tbl) return;
     tbl.querySelectorAll('.trow').forEach(function(row) {
-      var nameEl = row.querySelector('.name-main');
-      if (!nameEl) return;
-      var navn = nameEl.textContent.replace(/[⭐🔥]/g,'').replace(/T\s*\d+/,'').trim();
+      var navn = row.getAttribute('data-navn');
+      if (!navn) return;
       var sObj = SELGERE.find(function(s){ return s.navn === navn; });
       if (!sObj) return;
       row.addEventListener('mouseenter', function(e){ showCard(sObj.navn, sObj.color, sObj.id, sObj.loc, e); });

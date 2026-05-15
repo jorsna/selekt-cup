@@ -3,32 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VCSO Selekt Cup – Ukesrecap</title>
+<title>VCSO Selekt – Ukesrecap</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:#070f0a; }
+  body { background:#0a1a0f; }
   @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
   @keyframes spin  { to{transform:rotate(360deg)} }
-  .spin { width:28px;height:28px;border:2px solid rgba(255,255,255,0.08);border-top-color:rgba(34,197,94,0.7);border-radius:50%;animation:spin 0.8s linear infinite; }
+  .spin { width:28px;height:28px;border:2px solid rgba(255,255,255,0.08);border-top-color:rgba(201,168,76,0.7);border-radius:50%;animation:spin 0.8s linear infinite; }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
+const SELGER_PHOTOS = {
+  "brian_kalvatn":      "photos/brian_kalvatn.jpg",
+  "joakim_ronneberg":   "photos/joakim_ronneberg.jpg",
+  "fabian_noraker":     "photos/fabian_noraker.jpg",
+  "marius_skaugard":    "photos/marius_skaugard.jpg",
+  "marius_skaugaard":   "photos/marius_skaugaard.jpg",
+  "vetle_braend_romo":  "photos/vetle_braend_romo.jpg",
+  "martin_ekmo":        "photos/martin_ekmo.jpg",
+  "jorgen_heggedal":    "photos/jorgen_heggedal.jpg",
+  "jonas_bakken":       "photos/jonas_bakken.jpg",
+  "sebastian_wang":     "photos/sebastian_wang.jpg",
+  "britt_robertsen":    "photos/britt_robertsen.jpg",
+};
+
 const { useState, useEffect } = React;
+function nameToId(n) {
+  return n.toLowerCase().replace(/\s+/g,'_')
+    .replace(/ae/g,'ae').replace(/o/g,'o').replace(/aa/g,'aa')
+    .replace(/æ/g,'ae').replace(/ø/g,'o').replace(/å/g,'aa')
+    .replace(/[^a-z0-9_]/g,'');
+}
 
 const SB_URL = "https://resrjvztsqdxzqgiffeg.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlc3Jqdnp0c3FkeHpxZ2lmZmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzg0MTMsImV4cCI6MjA5Mzc1NDQxM30.ouYcq-2hIUkqkn395Q5us5jYqa9JDVbOjJzORDBM72Y";
 
-const A  = "#22c55e";
-const AD = "rgba(34,197,94,0.13)";
-const BG = "#070f0a";
-const CK = "#0c1410";
-const BR = "rgba(34,197,94,0.12)";
+const GOLD  = "#c9a84c";
+const GOLD2 = "#f0c96e";
+const BG    = "#0a1a0f";
+const CK    = "#0f2014";
+const BR    = "rgba(201,168,76,0.12)";
+const AD    = "rgba(201,168,76,0.15)";
 
 const DEPT = {
   ryen:       { label:"Ryen",       color:"#e8001a", bg:"rgba(232,0,26,0.13)"   },
@@ -62,16 +83,35 @@ function getLastWeek() {
 function rankSales(sales) {
   const m = {};
   sales.forEach(s => {
-    if (!m[s.selger]) m[s.selger] = { salg:0, finansiert:0, loc:s.loc };
+    if (!m[s.selger]) m[s.selger] = { salg:0, finansiert:0, loc:s.loc, firstTs: s.ts };
     m[s.selger].salg++;
     if (s.finansiert) m[s.selger].finansiert++;
+    if (s.ts < m[s.selger].firstTs) m[s.selger].firstTs = s.ts;
   });
   return Object.entries(m)
     .map(([name,d]) => ({ name,...d, poeng:d.salg*3 }))
-    .sort((a,b) => b.poeng-a.poeng || b.finansiert-a.finansiert);
+    .sort((a,b) => b.poeng-a.poeng || b.finansiert-a.finansiert || a.firstTs.localeCompare(b.firstTs));
 }
 
-function getMVP(ws) {
+function getWeekWinners(ranked) {
+  if (!ranked.length) return [];
+  return [ranked[0]];
+}
+
+function getBestDept(ws) {
+  const deptSales = {};
+  ws.forEach(s => {
+    const loc = s.loc || '';
+    if (!loc) return;
+    deptSales[loc] = (deptSales[loc]||0) + 1;
+  });
+  if (Object.keys(deptSales).length === 0) return null;
+  const max = Math.max(...Object.values(deptSales));
+  const best = Object.keys(deptSales).filter(k => deptSales[k] === max);
+  return { locs: best, count: max };
+}
+
+function getMVPs(ws) {
   const bd = {};
   ws.forEach(s => {
     const day = s.ts.slice(0,10);
@@ -81,31 +121,41 @@ function getMVP(ws) {
   const days = Object.keys(bd).sort();
   const mc = {};
   days.forEach(day => {
-    const ds=bd[day], max=Math.max(...Object.values(ds));
-    Object.entries(ds).forEach(([n,c])=>{ if(c===max) mc[n]=(mc[n]||0)+1; });
+    const ds = bd[day], max = Math.max(...Object.values(ds));
+    Object.entries(ds).forEach(([n,c]) => { if(c===max) mc[n]=(mc[n]||0)+1; });
   });
-  if (!Object.keys(mc).length) return null;
-  const [name,count] = Object.entries(mc).sort((a,b)=>b[1]-a[1])[0];
-  const mvpDays = days.map(day=>{ const ds=bd[day],max=Math.max(...Object.values(ds)); return ds[name]===max&&max>0; });
-  return { name, count, loc:ws.find(s=>s.selger===name)?.loc||"", days, mvpDays };
+  if (!Object.keys(mc).length) return [];
+  const sorted = Object.entries(mc).sort((a,b)=>b[1]-a[1]);
+  const topCount = sorted[0][1];
+  return sorted
+    .filter(([,count]) => count === topCount)
+    .map(([name, count]) => {
+      const mvpDays = days.map(day => { const ds=bd[day],max=Math.max(...Object.values(ds)); return ds[name]===max&&max>0; });
+      return { name, count, loc:ws.find(s=>s.selger===name)?.loc||"", days, mvpDays };
+    });
 }
 
-const dc  = loc => DEPT[loc]?.color || A;
+const dc  = loc => DEPT[loc]?.color || GOLD;
 const dl  = loc => DEPT[loc]?.label || loc;
 const fmt = d   => d.toLocaleDateString("no-NO",{day:"numeric",month:"long"});
 
 function Avatar({ name, loc, size=48 }) {
-  const init = name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase();
+  const init  = name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase();
+  const id    = nameToId(name);
+  const photo = SELGER_PHOTOS[id];
   return (
-    <div style={{ width:size,height:size,borderRadius:"50%",background:DEPT[loc]?.bg||AD,border:`2px solid ${dc(loc)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',cursive",fontSize:size*.36,color:dc(loc),flexShrink:0,letterSpacing:"0.05em" }}>
-      {init}
+    <div style={{ width:size,height:size,borderRadius:"50%",overflow:"hidden",border:"2px solid "+dc(loc),flexShrink:0,background:DEPT[loc]?.bg||AD,display:"flex",alignItems:"center",justifyContent:"center" }}>
+      {photo
+        ? <img src={photo} style={{ width:"100%",height:"100%",objectFit:"cover",filter:"grayscale(100%)" }} />
+        : <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:size*.36,color:dc(loc),letterSpacing:"0.05em" }}>{init}</div>
+      }
     </div>
   );
 }
 
 function Card({ children, top, mb=12 }) {
   return (
-    <div style={{ background:CK,border:`1px solid ${BR}`,borderRadius:18,padding:"24px 26px",position:"relative",overflow:"hidden",marginBottom:mb }}>
+    <div style={{ background:CK,border:"1px solid "+BR,borderRadius:18,padding:"24px 26px",position:"relative",overflow:"hidden",marginBottom:mb }}>
       {top && <div style={{ position:"absolute",top:0,left:0,right:0,height:2,background:top,borderRadius:"18px 18px 0 0" }} />}
       {children}
     </div>
@@ -118,65 +168,93 @@ function Label({ children, mt=20 }) {
 
 function TrebleBanner({ name }) {
   return (
-    <div style={{ background:"linear-gradient(135deg,#070f0a,#060e08)",border:"1px solid rgba(34,197,94,0.3)",borderRadius:20,padding:"44px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden",marginBottom:36 }}>
-      <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 50% at 50% 0%,rgba(34,197,94,0.1),transparent 60%)",pointerEvents:"none" }} />
-      <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse 50% 60% at 10% 100%,rgba(245,200,66,0.07),transparent 55%)",pointerEvents:"none" }} />
+    <div style={{ background:"linear-gradient(135deg,#071a0c,#0a140a)",border:"1px solid rgba(201,168,76,0.3)",borderRadius:20,padding:"44px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden",marginBottom:36 }}>
+      <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,0.12),transparent 60%)",pointerEvents:"none" }} />
       <div style={{ fontSize:52,animation:"float 3s ease-in-out infinite",display:"inline-block",marginBottom:8 }}>👑</div>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",background:"linear-gradient(90deg,#f5c842,#22c55e,#3b82f6)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>Historisk prestasjon · The Treble</div>
-      <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(56px,10vw,96px)",letterSpacing:"0.04em",lineHeight:1,background:"linear-gradient(135deg,#f5c842 0%,#22c55e 50%,#3b82f6 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>{name}</div>
-      <div style={{ fontSize:13,color:"rgba(255,255,255,0.35)",fontStyle:"italic",marginBottom:28 }}>Ukens vinner · Flest MVP-dager · Totalledelse — i samme uke</div>
-      <div style={{ display:"flex",justifyContent:"center",gap:40 }}>
-        {[["🥇","Ukens vinner"],["⭐","MVP-leder"],["📈","Totalledelse"]].map(([ic,lb])=>(
-          <div key={lb} style={{ textAlign:"center" }}>
-            <div style={{ fontSize:22,marginBottom:5 }}>{ic}</div>
-            <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)" }}>{lb}</div>
-          </div>
-        ))}
+      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",background:"linear-gradient(90deg,"+GOLD2+",#22c55e,"+GOLD+")",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>Historisk prestasjon · The Treble</div>
+      <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(56px,10vw,96px)",letterSpacing:"0.04em",lineHeight:1,background:"linear-gradient(135deg,"+GOLD2+" 0%,#22c55e 50%,"+GOLD+" 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>{name}</div>
+      <div style={{ fontSize:13,color:"rgba(255,255,255,0.4)",lineHeight:1.6 }}>
+        Ukens vinner · Flest MVP-dager · Beste avdeling
       </div>
     </div>
   );
 }
 
-function WinnerCard({ w, label, top, goldVal }) {
+function WinnerCard({ winners, ranked, weekSales }) {
+  const isTied = winners.length > 1;
   return (
-    <Card top={top}>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>{label}</div>
-      <div style={{ display:"flex",alignItems:"center",gap:14,marginBottom:18 }}>
-        <Avatar name={w.name} loc={w.loc} size={54} />
-        <div>
-          <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(30px,5vw,46px)",letterSpacing:"0.03em",lineHeight:1,marginBottom:4 }}>{w.name}</div>
-          <div style={{ fontSize:11,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:dc(w.loc) }}>{dl(w.loc)}</div>
-        </div>
+    <Card top={"linear-gradient(90deg,"+dc(winners[0].loc)+","+dc(winners[0].loc)+"44)"} mb={16}>
+      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
+        {isTied ? "🤝 Delt ukens vinner" : "🏆 Ukens vinner"}
       </div>
-      <div style={{ display:"flex",gap:24 }}>
-        {[{v:w.poeng,l:"poeng",c:goldVal?"#f5c842":A},{v:w.salg,l:"salg"},{v:w.finansiert,l:"finansiert"}].map(({v,l,c})=>(
-          <div key={l}>
-            <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:32,lineHeight:1,color:c||"rgba(255,255,255,0.8)" }}>{v}</div>
-            <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",color:"rgba(255,255,255,0.25)",marginTop:2 }}>{l}</div>
+      {winners.map((w, i) => (
+        <div key={w.name}>
+          {i > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"16px 0" }} />}
+          <div style={{ display:"flex",alignItems:"center",gap:16,marginBottom:16 }}>
+            <Avatar name={w.name} loc={w.loc} size={64} />
+            <div style={{ flex:1 }}>
+              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(28px,6vw,44px)",letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{w.name}</div>
+              <div style={{ fontSize:11,color:dc(w.loc),fontWeight:600,marginTop:4,letterSpacing:"0.06em" }}>{dl(w.loc).toUpperCase()}</div>
+            </div>
           </div>
-        ))}
-      </div>
+          <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10 }}>
+            {[
+              { v: w.salg,      l: "Salg" },
+              { v: w.poeng,     l: "Poeng" },
+              { v: w.finansiert,l: "Finansiert" },
+            ].map(({v,l}) => (
+              <div key={l} style={{ background:"rgba(255,255,255,0.04)",borderRadius:10,padding:"12px 10px",textAlign:"center" }}>
+                <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:28,color:dc(w.loc),lineHeight:1 }}>{v}</div>
+                <div style={{ fontSize:9,color:"rgba(255,255,255,0.3)",marginTop:4,letterSpacing:"0.1em",textTransform:"uppercase" }}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      {ranked.length > winners.length && (
+        <>
+          <Label>Øvrig topp {Math.min(ranked.length, 5)}</Label>
+          {ranked.slice(winners.length, 5).map((r,i) => (
+            <div key={r.name} style={{ display:"flex",alignItems:"center",gap:12,padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
+              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:18,color:"rgba(255,255,255,0.2)",width:24,textAlign:"center" }}>{i+winners.length+1}</div>
+              <Avatar name={r.name} loc={r.loc} size={32} />
+              <div style={{ flex:1,fontSize:13,color:"rgba(255,255,255,0.7)",fontWeight:500 }}>{r.name}</div>
+              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:18,color:dc(r.loc) }}>{r.poeng}p</div>
+            </div>
+          ))}
+        </>
+      )}
     </Card>
   );
 }
 
-function Top5({ ranked }) {
-  const medals = ["🥇","🥈","🥉"];
+function MVPCard({ mvps }) {
+  if (!mvps.length) return null;
+  const isTied = mvps.length > 1;
   return (
-    <Card top={`linear-gradient(90deg,${A},rgba(34,197,94,0.4))`} mb={12}>
-      {ranked.slice(0,5).map((s,i)=>(
-        <div key={s.name} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 0",borderBottom:i<Math.min(ranked.length,5)-1?"1px solid rgba(34,197,94,0.08)":"none" }}>
-          <div style={{ display:"flex",alignItems:"center",gap:12 }}>
-            <div style={{ width:22,textAlign:"center",fontSize:i<3?16:12,color:"rgba(255,255,255,0.3)",fontFamily:"'Bebas Neue',cursive" }}>{medals[i]||`${i+1}`}</div>
-            <Avatar name={s.name} loc={s.loc} size={34} />
+    <Card top={"linear-gradient(90deg,rgba(201,168,76,0.6),rgba(201,168,76,0.1))"}>
+      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
+        {isTied ? "👑 Delt flest MVP-dager" : "👑 Flest MVP-dager"}
+      </div>
+      {mvps.map((mvp, idx) => (
+        <div key={mvp.name}>
+          {idx > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"14px 0" }} />}
+          <div style={{ display:"flex",alignItems:"center",gap:14,marginBottom:14 }}>
+            <Avatar name={mvp.name} loc={mvp.loc} size={52} />
             <div>
-              <div style={{ fontSize:14,fontWeight:600 }}>{s.name}</div>
-              <div style={{ fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:dc(s.loc),marginTop:1 }}>{dl(s.loc)}</div>
+              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:28,letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{mvp.name}</div>
+              <div style={{ fontSize:11,color:GOLD2,fontWeight:600,marginTop:3 }}>MVP {mvp.count} av {mvp.days.length} dag{mvp.days.length>1?"er":""}</div>
             </div>
           </div>
-          <div style={{ textAlign:"right" }}>
-            <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:22,lineHeight:1,color:i===0?"#f5c842":"#fff" }}>{s.poeng}</div>
-            <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(255,255,255,0.22)",marginTop:2 }}>{s.salg} salg · {s.finansiert} fin.</div>
+          <div style={{ display:"flex",gap:6 }}>
+            {mvp.days.map((day,i) => (
+              <div key={day} style={{ flex:1,background:mvp.mvpDays[i]?"rgba(201,168,76,0.18)":"rgba(255,255,255,0.04)",border:"1px solid "+(mvp.mvpDays[i]?"rgba(201,168,76,0.4)":"rgba(255,255,255,0.06)"),borderRadius:8,padding:"6px 4px",textAlign:"center" }}>
+                <div style={{ fontSize:8,color:mvp.mvpDays[i]?GOLD2:"rgba(255,255,255,0.2)",fontWeight:700,letterSpacing:"0.1em" }}>
+                  {new Date(day).toLocaleDateString("no-NO",{weekday:"short"}).toUpperCase().slice(0,3)}
+                </div>
+                {mvp.mvpDays[i] && <div style={{ fontSize:14,marginTop:2 }}>👑</div>}
+              </div>
+            ))}
           </div>
         </div>
       ))}
@@ -184,114 +262,164 @@ function Top5({ ranked }) {
   );
 }
 
-function MVPCard({ mvp }) {
+function HatTrickCard({ hatters, weekSales }) {
+  if (!hatters.length) return null;
   return (
-    <Card top="linear-gradient(90deg,#f5c842,#e8a820)" mb={12}>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:14 }}>⭐ Flest MVP-dager denne uken</div>
-      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap" }}>
-        <div style={{ display:"flex",alignItems:"center",gap:14 }}>
-          <Avatar name={mvp.name} loc={mvp.loc} size={50} />
-          <div>
-            <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(24px,4vw,38px)",letterSpacing:"0.03em",lineHeight:1,marginBottom:4 }}>{mvp.name}</div>
-            <div style={{ fontSize:11,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:dc(mvp.loc) }}>{dl(mvp.loc)}</div>
-            <div style={{ display:"flex",gap:5,marginTop:10,flexWrap:"wrap" }}>
-              {mvp.days.map((day,i)=>(
-                <div key={day} style={{ width:9,height:9,borderRadius:"50%",background:mvp.mvpDays[i]?"#f5c842":"rgba(255,255,255,0.1)",boxShadow:mvp.mvpDays[i]?"0 0 7px rgba(245,200,66,0.6)":"none" }} />
-              ))}
+    <Card top="linear-gradient(90deg,rgba(34,197,94,0.5),rgba(34,197,94,0.1))">
+      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
+        ⚽ Hat-trick denne uken
+      </div>
+      {hatters.map((h, idx) => {
+        const days = {};
+        weekSales.filter(s=>s.selger===h.name).forEach(s=>{
+          const d=s.ts.slice(0,10); days[d]=(days[d]||0)+1;
+        });
+        const htDays = Object.entries(days).filter(([,c])=>c>=3).map(([d,c])=>({d,c}));
+        return (
+          <div key={h.name}>
+            {idx > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"14px 0" }} />}
+            <div style={{ display:"flex",alignItems:"center",gap:14,marginBottom:12 }}>
+              <Avatar name={h.name} loc={h.loc} size={48} />
+              <div>
+                <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:26,letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{h.name} ⭐</div>
+                <div style={{ fontSize:11,color:"#22c55e",fontWeight:600,marginTop:3 }}>{htDays.length} hat-trick-dag{htDays.length>1?"er":""}</div>
+              </div>
             </div>
+            {htDays.map(({d,c}) => (
+              <div key={d} style={{ display:"flex",alignItems:"center",gap:8,padding:"6px 10px",background:"rgba(34,197,94,0.08)",borderRadius:8,marginBottom:6,fontSize:12,color:"rgba(255,255,255,0.6)" }}>
+                <span style={{ color:"#22c55e",fontWeight:700 }}>{c} salg</span>
+                <span>–</span>
+                <span>{new Date(d).toLocaleDateString("no-NO",{weekday:"long",day:"numeric",month:"long"})}</span>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </Card>
+  );
+}
+
+function DeptCard({ result }) {
+  if (!result) return null;
+  return (
+    <Card top="linear-gradient(90deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))">
+      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
+        🏟️ Beste forhandler denne uken
+      </div>
+      {result.locs.map((loc, i) => (
+        <div key={loc} style={{ display:"flex",alignItems:"center",gap:14,marginBottom: i < result.locs.length-1 ? 12 : 0 }}>
+          <div style={{ width:48,height:48,borderRadius:"50%",background:DEPT[loc]?.bg||AD,border:"2px solid "+dc(loc),display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',cursive",fontSize:16,color:dc(loc),flexShrink:0 }}>
+            {(DEPT[loc]?.label||loc).slice(0,2).toUpperCase()}
+          </div>
+          <div>
+            <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:32,letterSpacing:"0.03em",lineHeight:1,color:dc(loc) }}>{DEPT[loc]?.label||loc}</div>
+            <div style={{ fontSize:11,color:"rgba(255,255,255,0.3)",marginTop:2 }}>{result.count} salg denne uken</div>
           </div>
         </div>
-        <div style={{ textAlign:"right" }}>
-          <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:48,lineHeight:1,color:"#f5c842" }}>{mvp.count}</div>
-          <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)" }}>dager som MVP</div>
-        </div>
-      </div>
+      ))}
     </Card>
   );
 }
 
 function App() {
-  const [sales,   setSales]   = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-
-  const { year, week }  = getLastWeek();
-  const { start, end }  = weekDates(year, week);
-  const compStartWeek   = isoWeek(new Date("2026-05-11"));
-  const compStartYear   = new Date("2026-05-11").getFullYear();
-  const showTotal       = !(year===compStartYear && week===compStartWeek);
+  const [sales, setSales] = useState(null);
+  const [error, setError] = useState(null);
+  const lw = getLastWeek();
 
   useEffect(() => {
-    fetch(`${SB_URL}/rest/v1/selekt_sales?deleted=eq.false&select=*`, {
-      headers:{ apikey:SB_KEY, Authorization:`Bearer ${SB_KEY}` }
+    const { start, end } = weekDates(lw.year, lw.week);
+    const from = start.toISOString();
+    const to   = end.toISOString();
+    fetch(SB_URL+"/rest/v1/selekt_sales?select=*&ts=gte."+from+"&ts=lte."+to+"&deleted=is.null&order=ts.asc", {
+      headers: { apikey: SB_KEY, Authorization: "Bearer "+SB_KEY }
     })
-    .then(r=>r.json())
-    .then(d=>{ setSales(d); setLoading(false); })
-    .catch(e=>{ setError(e.message); setLoading(false); });
+      .then(r => r.ok ? r.json() : Promise.reject(r.statusText))
+      .then(setSales)
+      .catch(e => setError(String(e)));
   }, []);
 
-  const weekSales   = sales.filter(s=>s.ts&&new Date(s.ts)>=start&&new Date(s.ts)<=end);
-  const ranked      = rankSales(weekSales);
-  const winner      = ranked[0];
-  const mvp         = getMVP(weekSales);
-  const totalLeader = showTotal ? rankSales(sales)[0] : null;
-  const isTreble    = showTotal && mvp && winner && winner.name===mvp.name && winner.name===totalLeader?.name;
+  if (error) return (
+    <div style={{ minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:"#ef4444",fontFamily:"DM Sans",padding:24 }}>
+      Feil: {error}
+    </div>
+  );
+
+  if (!sales) return (
+    <div style={{ minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center" }}>
+      <div className="spin" />
+    </div>
+  );
+
+  const ranked   = rankSales(sales);
+  const winners  = getWeekWinners(ranked);
+  const mvps     = getMVPs(sales);
+  const bestDept = getBestDept(sales);
+
+  const htMap = {};
+  sales.forEach(s => {
+    const d = s.ts.slice(0,10);
+    if (!htMap[s.selger]) htMap[s.selger] = {};
+    htMap[s.selger][d] = (htMap[s.selger][d]||0)+1;
+  });
+  const hatters = Object.entries(htMap)
+    .filter(([,days]) => Object.values(days).some(c=>c>=3))
+    .map(([name]) => ({ name, loc: sales.find(s=>s.selger===name)?.loc||"" }));
+
+  const mvpNames      = new Set(mvps.map(m=>m.name));
+  const trebleWinners = winners.filter(w => mvpNames.has(w.name) && bestDept?.locs.includes(w.loc));
+  const hasTreble     = trebleWinners.length > 0;
+
+  const { start, end } = weekDates(lw.year, lw.week);
+  const fmt = d => d.toLocaleDateString("no-NO",{day:"numeric",month:"long"});
 
   return (
-    <div style={{ minHeight:"100vh",background:`radial-gradient(ellipse 100% 40% at 50% 0%,rgba(34,197,94,0.07),transparent 50%),${BG}`,color:"#fff",fontFamily:"'DM Sans',sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:"40px 16px 80px" }}>
-
-      {/* Header */}
-      <div style={{ textAlign:"center",marginBottom:36 }}>
-        <div style={{ display:"inline-flex",alignItems:"center",gap:6,background:AD,border:"1px solid rgba(34,197,94,0.25)",borderRadius:100,fontSize:10,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:A,padding:"5px 16px",marginBottom:18 }}>
-          🏆 VCSO Selekt Cup 2026
+    <div style={{ fontFamily:"'DM Sans',sans-serif",color:"#fff",background:BG,minHeight:"100vh",padding:"0 0 40px" }}>
+      <div style={{ background:"linear-gradient(180deg,#061209 0%,#0a1a0f 100%)",borderBottom:"1px solid rgba(201,168,76,0.12)",padding:"28px 24px 24px",textAlign:"center",position:"relative" }}>
+        <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(255,255,255,0.25)",marginBottom:8 }}>
+          VCSO SELEKT CUP 2026
         </div>
-
-        <div style={{ display:"flex",alignItems:"baseline",justifyContent:"center",gap:14,marginBottom:6 }}>
-          <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(44px,7vw,72px)",letterSpacing:"0.04em",lineHeight:1 }}>Ukesrecap</div>
-          <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(44px,7vw,72px)",letterSpacing:"0.04em",lineHeight:1,color:A }}>Uke {week}</div>
+        <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(32px,8vw,56px)",letterSpacing:"0.04em",lineHeight:1,marginBottom:6,background:"linear-gradient(135deg,"+GOLD2+","+GOLD+")",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent" }}>
+          Uke {lw.week} – Recap
         </div>
-
-        <div style={{ fontSize:12,color:"rgba(255,255,255,0.3)",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:10 }}>
+        <div style={{ fontSize:12,color:"rgba(255,255,255,0.3)" }}>
           {fmt(start)} – {fmt(end)}
         </div>
-
-        <div style={{ display:"inline-flex",alignItems:"center",gap:7,background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:100,padding:"4px 14px" }}>
-          <div style={{ width:6,height:6,borderRadius:"50%",background:"#22c55e",boxShadow:"0 0 6px rgba(34,197,94,0.7)" }} />
-          <span style={{ fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)" }}>Oppdateres neste mandag</span>
-        </div>
-      </div>
-
-      <div style={{ width:"100%",maxWidth:700 }}>
-        {loading && <div style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:16,padding:"80px 20px",color:"rgba(255,255,255,0.3)",fontSize:12,letterSpacing:"0.1em",textTransform:"uppercase" }}><div className="spin"/>Henter data...</div>}
-        {error   && <div style={{ textAlign:"center",padding:60,color:"#f87171",fontSize:13 }}>Feil: {error}</div>}
-
-        {!loading && !error && weekSales.length===0 && (
-          <div style={{ textAlign:"center",padding:60,color:"rgba(255,255,255,0.3)",fontStyle:"italic",fontSize:14 }}>Ingen salg registrert i uke {week}.</div>
+        {!sales.length && (
+          <div style={{ marginTop:16,fontSize:13,color:"rgba(255,255,255,0.35)",fontStyle:"italic" }}>
+            Ingen salg registrert denne uken.
+          </div>
         )}
-
-        {!loading && !error && weekSales.length>0 && <>
-          {isTreble && <TrebleBanner name={winner.name} />}
-
-          <Label mt={0}>🥇 Ukens vinner</Label>
-          <WinnerCard w={winner} label="Flest poeng denne uken" top="linear-gradient(90deg,#f5c842,#e8a820)" goldVal />
-
-          <Label>📊 Topp 5 denne uken</Label>
-          <Top5 ranked={ranked} />
-
-          {mvp && <><Label>⭐ Flest MVP-dager</Label><MVPCard mvp={mvp} /></>}
-
-          {showTotal && totalLeader && <>
-            <div style={{ height:1,background:"rgba(34,197,94,0.1)",margin:"24px 0 18px" }} />
-            <Label mt={0}>📈 Totalledelse hittil</Label>
-            <WinnerCard w={totalLeader} label="Leder sammenlagt" top={`linear-gradient(90deg,${A},rgba(34,197,94,0.4))`} goldVal={false} />
-          </>}
-        </>}
       </div>
+
+      {sales.length > 0 && (
+        <div style={{ maxWidth:480,margin:"0 auto",padding:"24px 16px 0" }}>
+          {hasTreble && <TrebleBanner name={trebleWinners[0].name} />}
+          {winners.length > 0 && <WinnerCard winners={winners} ranked={ranked} weekSales={sales} />}
+          {mvps.length > 0    && <MVPCard mvps={mvps} />}
+          {hatters.length > 0 && <HatTrickCard hatters={hatters} weekSales={sales} />}
+          {bestDept           && <DeptCard result={bestDept} />}
+
+          <div style={{ marginTop:8,padding:"16px 0 0" }}>
+            <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.22)",marginBottom:12 }}>
+              📋 Alle {sales.length} salg denne uken
+            </div>
+            {sales.slice().sort((a,b)=>b.ts.localeCompare(a.ts)).map((s,i) => (
+              <div key={i} style={{ display:"flex",alignItems:"center",gap:10,padding:"9px 14px",background:i%2===0?"rgba(255,255,255,0.025)":"transparent",borderRadius:8,marginBottom:2 }}>
+                <div style={{ width:6,height:6,borderRadius:"50%",background:dc(s.loc),flexShrink:0 }} />
+                <div style={{ flex:1,fontSize:13,color:"rgba(255,255,255,0.75)",fontWeight:500 }}>{s.selger}</div>
+                <div style={{ fontSize:12,color:"rgba(255,255,255,0.4)" }}>{s.modell}</div>
+                {s.finansiert && <div style={{ fontSize:9,fontWeight:700,color:GOLD2,letterSpacing:"0.1em" }}>◆ FIN</div>}
+                <div style={{ fontSize:11,color:"rgba(255,255,255,0.25)" }}>{s.ts.slice(5,10).replace("-",".")}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.render(<App />, document.getElementById("root"));
 </script>
 </body>
 </html>

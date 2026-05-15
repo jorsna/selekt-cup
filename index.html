@@ -111,16 +111,19 @@ html,body{background:var(--bg);font-family:'Barlow',sans-serif;color:var(--txt);
 .hdr-btn:hover{background:rgba(255,215,0,.2)}
 
 /* TABS */
-.tabs{display:flex;flex-direction:column;background:var(--card);border-bottom:1px solid var(--b1)}
-.tabs-row{display:flex;width:100%}
-.tabs-row+.tabs-row{border-top:1px solid var(--b1)}
-.tab{flex:1;padding:9px 0;font-size:11px;font-weight:700;border:none;background:transparent;
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--b1)}
+.tab{flex:1;padding:10px 0;font-size:11px;font-weight:700;border:none;background:transparent;
   color:var(--muted);cursor:pointer;font-family:'Barlow',sans-serif;
   border-bottom:3px solid transparent;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;
   display:flex;flex-direction:column;align-items:center;gap:3px}
 .tab.on{color:var(--gold);border-bottom-color:var(--gold)}
 .tab-icon{font-size:16px;line-height:1}
 .tab-label{font-size:10px}
+@media(max-width:520px){
+  .tab-label{display:none}
+  .tab{padding:10px 0}
+  .tab-icon{font-size:18px}
+}
 
 /* MATCHDAY BAR */
 .mbar{background:var(--card);border-bottom:1px solid var(--b1);padding:9px 16px;
@@ -469,16 +472,12 @@ html, body {
 
 <!-- TABS -->
 <div class="tabs">
-  <div class="tabs-row">
-    <button class="tab on" onclick="setTab('ind',this)"><span class="tab-icon">⚽</span><span class="tab-label">Selgere</span></button>
-    <button class="tab" onclick="setTab('team',this)"><span class="tab-icon">🏟️</span><span class="tab-label">Avdelinger</span></button>
-    <button class="tab" onclick="setTab('stats',this)"><span class="tab-icon">📊</span><span class="tab-label">Statistikk</span></button>
-    <button class="tab" onclick="setTab('scoring',this)"><span class="tab-icon">🚗</span><span class="tab-label">Scoringer</span></button>
-  </div>
-  <div class="tabs-row">
-    <button class="tab" onclick="setTab('hof',this)"><span class="tab-icon">🏆</span><span class="tab-label">Hall of Fame</span></button>
-    <button class="tab" onclick="setTab('tips',this)"><span class="tab-icon">💡</span><span class="tab-label">Salgsverktøy</span></button>
-  </div>
+  <button class="tab on" onclick="setTab('ind',this)"><span class="tab-icon">⚽</span><span class="tab-label">Selgere</span></button>
+  <button class="tab" onclick="setTab('team',this)"><span class="tab-icon">🏟️</span><span class="tab-label">Avdelinger</span></button>
+  <button class="tab" onclick="setTab('stats',this)"><span class="tab-icon">📊</span><span class="tab-label">Statistikk</span></button>
+  <button class="tab" onclick="setTab('scoring',this)"><span class="tab-icon">🚗</span><span class="tab-label">Scoringer</span></button>
+  <button class="tab" onclick="setTab('hof',this)"><span class="tab-icon">🏆</span><span class="tab-label">Hall of Fame</span></button>
+  <button class="tab" onclick="setTab('tips',this)"><span class="tab-icon">💡</span><span class="tab-label">Salgsverktøy</span></button>
 </div>
 
 <!-- MATCHDAY BAR -->
@@ -620,7 +619,7 @@ html, body {
 <div id="help-modal" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="modal" style="text-align:left;max-width:520px;max-height:85vh;overflow-y:auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--card);padding-bottom:10px;border-bottom:1px solid var(--b1)">
-      <div style="font-family:'Anton',sans-serif;font-size:20px;color:var(--gold)">&#9432; Slik bruker du VCSO Selekt Cup</div>
+      <div style="font-family:'Anton',sans-serif;font-size:20px;color:var(--gold)">&#9432; Slik bruker du VCSO Championship</div>
       <button onclick="document.getElementById('help-modal').classList.remove('show')" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;flex-shrink:0">&times;</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:0;font-size:13px;color:var(--muted);line-height:1.6">
@@ -1555,14 +1554,14 @@ var TIPS_DATA = [
     ],
     closer:'«Hva tror du er det viktigste for dem? Gi meg to minutter, så lager jeg et sammendrag dere kan se på sammen.»'
   },
-  { id:'levering', icon:'🚚', label:'For lang leveringstid', sub:'Vil ha bilen fortere',
+  { id:'service', icon:'🔧', label:'«Hva med service og reklamasjon?»', sub:'Kunden er usikker på oppfølging',
     args:[
-      { t:'Sjekk lager av demo-biler', b:'Vi har ofte demonstrasjonsbiler med lav kilometerstand som kan leveres innen få dager. Kunden får nesten ny bil til lavere pris – og slipper ventetiden.' },
-      { t:'Bruk ventetiden aktivt', b:'«Hva kjører du nå? Vil du ha lånebil i mellomtiden?» Mange lar seg overbevise av at vi løser overgangsperioden – den faktiske leveringstiden føles kortere.' },
-      { t:'Alternativ konfigurasjon kan komme raskere', b:'En bestemt farge eller utstyrspakke kan gi 3 måneder ekstra ventetid. Spør om de er fleksible på fargen – det kan halvere leveringstiden uten at de ofrer noe vesentlig.' },
-      { t:'Knytt ventetiden til et positivt mål', b:'«Bilen leveres i august – perfekt timing til sommerferien.» Ramm inn leveringen som et naturlig tidspunkt, ikke et problem.' }
+      { t:'Vi er her – bilen er ikke det', b:'Du kjøper ikke bare en bil, du kjøper en relasjon til et Volvo-verksted. Alle spørsmål, all service og eventuell reklamasjon håndteres av oss – ikke en anonym privatselger du aldri ser igjen.' },
+      { t:'Reklamasjonsrett i to år', b:'Som forhandler er vi lovpålagt å tilby reklamasjonsrett i to år. Oppstår det en feil vi burde ha avdekket, er det vår regning. Det er ikke tilfellet ved privatkjøp.' },
+      { t:'Selekt-gjennomgangen er dokumentert', b:'Bilen er prikket av Volvo-sertifiserte teknikere. Vi kan vise deg rapporten punkt for punkt – hva vi har sjekket, hva som er byttet og hva som er godkjent. Ingenting er gjemt.' },
+      { t:'Neste service vet vi når er', b:'Vi setter opp neste serviceintervall, minner deg når det nærmer seg og utfører det riktig. Det er én ting mindre å tenke på – og det holder verdien oppe når du en dag skal bytte igjen.' }
     ],
-    closer:'«La meg sjekke om vi har noe på lager nå – og hvilke konfigurasjoner som er klart innen [dato kunden ønsker].»'
+    closer:'«Vil du at jeg henter frem tilstandsrapporten, så kan vi gå gjennom den sammen?»'
   }
 ];
 
@@ -1919,7 +1918,7 @@ setInterval(countdown, 1000);
 
     card.innerHTML =
       '<div class="pc-top">'
-        +'<div class="pc-comp">VCSO Selekt Cup</div>'
+        +'<div class="pc-comp">VCSO Championship</div>'
         +'<div class="pc-week">2026</div>'
       +'</div>'
       +'<div class="pc-photo-wrap"><div class="pc-photo">'+photoHtml+'</div></div>'

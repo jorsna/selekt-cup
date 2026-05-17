@@ -332,8 +332,11 @@ function weekDates(year, week) {
   w1s.setUTCDate(jan4.getUTCDate() - ((jan4.getUTCDay() || 7) - 1));
   const s = new Date(w1s); s.setUTCDate(w1s.getUTCDate() + (week-1)*7);
   const e = new Date(s);   e.setUTCDate(s.getUTCDate() + 6);
-  const startUTC = new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), s.getUTCDate(), 0, 0, 0));
-  const endUTC   = new Date(Date.UTC(e.getUTCFullYear(), e.getUTCMonth(), e.getUTCDate(), 23, 59, 59, 999));
+  // Norsk sommertid (CEST) = UTC+2. Mandag 00:00 Oslo = søndag 22:00 UTC forrige dag.
+  // start = mandag 00:00 Oslo = UTC mandag 00:00 - 2t = søndag 22:00 UTC
+  const startUTC = new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), s.getUTCDate(), 0, 0, 0) - 2*60*60*1000);
+  // end = søndag 23:59:59 Oslo = UTC søndag 21:59:59
+  const endUTC   = new Date(Date.UTC(e.getUTCFullYear(), e.getUTCMonth(), e.getUTCDate(), 23, 59, 59, 999) - 2*60*60*1000);
   return { start: startUTC, end: endUTC };
 }
 function getDisplayWeek() {

@@ -7,17 +7,278 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:#0a1a0f; }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  @keyframes spin  { to{transform:rotate(360deg)} }
-  .spin { width:28px;height:28px;border:2px solid rgba(255,255,255,0.08);border-top-color:rgba(201,168,76,0.7);border-radius:50%;animation:spin 0.8s linear infinite; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  background:#050e07;
+  font-family:'Montserrat',sans-serif;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* Animated background */
+.bg-anim {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.bg-orb {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.18;
+  animation:orbFloat 12s ease-in-out infinite;
+}
+.bg-orb-1 { width:600px;height:600px;background:radial-gradient(circle,#c9a84c,transparent 70%);top:-200px;left:-150px;animation-delay:0s; }
+.bg-orb-2 { width:500px;height:500px;background:radial-gradient(circle,#22c55e,transparent 70%);bottom:-100px;right:-100px;animation-delay:-4s; }
+.bg-orb-3 { width:350px;height:350px;background:radial-gradient(circle,#e8001a,transparent 70%);top:40%;left:60%;animation-delay:-8s; }
+
+/* Gold grid lines */
+.grid-overlay {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+
+/* Grain texture */
+.grain {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+@keyframes orbFloat {
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-40px) scale(1.05);}
+  66%{transform:translate(-20px,20px) scale(0.95);}
+}
+@keyframes float { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)} }
+@keyframes shimmer { 0%{background-position:200% center;} 100%{background-position:-200% center;} }
+@keyframes revealUp { from{opacity:0;transform:translateY(40px);} to{opacity:1;transform:translateY(0);} }
+@keyframes revealScale { from{opacity:0;transform:scale(0.85);} to{opacity:1;transform:scale(1);} }
+@keyframes scanline { 0%{transform:translateY(-100%);} 100%{transform:translateY(100vh);} }
+@keyframes pulse { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+@keyframes spin { to{transform:rotate(360deg)} }
+@keyframes crownBounce { 0%,100%{transform:translateY(0) rotate(-5deg) scale(1);} 40%{transform:translateY(-18px) rotate(5deg) scale(1.08);} }
+@keyframes goldGlow {
+  0%,100%{box-shadow: 0 0 20px rgba(201,168,76,0.2), 0 0 60px rgba(201,168,76,0.05);}
+  50%{box-shadow: 0 0 40px rgba(201,168,76,0.4), 0 0 100px rgba(201,168,76,0.15);}
+}
+@keyframes borderRotate {
+  0%{background-position:0% 50%;}
+  100%{background-position:400% 50%;}
+}
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+@keyframes ticker { 0%{transform:translateX(100vw);} 100%{transform:translateX(-100%);} }
+
+.animate-reveal { animation:revealUp 0.8s cubic-bezier(.16,1,.3,1) both; }
+.animate-reveal-2 { animation:revealUp 0.8s cubic-bezier(.16,1,.3,1) 0.15s both; }
+.animate-reveal-3 { animation:revealUp 0.8s cubic-bezier(.16,1,.3,1) 0.3s both; }
+.animate-reveal-4 { animation:revealUp 0.8s cubic-bezier(.16,1,.3,1) 0.45s both; }
+.animate-scale { animation:revealScale 0.9s cubic-bezier(.16,1,.3,1) 0.1s both; }
+
+.spin { width:32px;height:32px;border:2px solid rgba(201,168,76,0.15);border-top-color:rgba(201,168,76,0.8);border-radius:50%;animation:spin 0.9s linear infinite; }
+
+/* Luxury card */
+.luxury-card {
+  position:relative;
+  border-radius:24px;
+  padding:2px;
+  margin-bottom:20px;
+  background:linear-gradient(135deg,rgba(201,168,76,0.5),rgba(201,168,76,0.05) 40%,rgba(201,168,76,0.05) 60%,rgba(201,168,76,0.3));
+  animation:goldGlow 4s ease-in-out infinite;
+}
+.luxury-card-inner {
+  background:linear-gradient(145deg,#0a1a0e,#061009);
+  border-radius:22px;
+  padding:32px 30px;
+  position:relative;
+  overflow:hidden;
+}
+.luxury-card-inner::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 40% at 50% -10%,rgba(201,168,76,0.06),transparent 60%);
+  pointer-events:none;
+}
+
+/* Winner hero card */
+.winner-card {
+  position:relative;
+  border-radius:28px;
+  padding:2px;
+  margin-bottom:24px;
+  background:linear-gradient(135deg,rgba(201,168,76,0.8),rgba(240,201,110,0.2) 30%,rgba(201,168,76,0.1) 60%,rgba(201,168,76,0.7));
+  animation:goldGlow 3s ease-in-out infinite;
+}
+.winner-card-inner {
+  background:linear-gradient(160deg,#0a1e0c 0%,#061009 50%,#0a1a0e 100%);
+  border-radius:26px;
+  padding:40px 32px;
+  position:relative;
+  overflow:hidden;
+}
+.winner-card-inner::before {
+  content:'';
+  position:absolute;
+  top:-60px;left:-60px;right:-60px;
+  height:280px;
+  background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(201,168,76,0.12),transparent 70%);
+  pointer-events:none;
+}
+
+/* Gold text */
+.gold-text {
+  background:linear-gradient(90deg,#8a6b1e,#c9a84c,#f0c96e,#e8b84b,#c9a84c,#8a6b1e);
+  background-size:300% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 6s linear infinite;
+}
+.gold-text-static {
+  background:linear-gradient(135deg,#c9a84c,#f0c96e,#c9a84c);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Separator */
+.gold-line {
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4),transparent);
+  margin:20px 0;
+}
+
+/* Stat box */
+.stat-box {
+  background:rgba(0,0,0,0.3);
+  border:1px solid rgba(201,168,76,0.15);
+  border-radius:16px;
+  padding:18px 12px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.3s;
+}
+.stat-box::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.06),transparent 60%);
+}
+.stat-box:hover { border-color:rgba(201,168,76,0.4); }
+
+/* Avatar ring */
+.avatar-ring {
+  padding:3px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#c9a84c,#f0c96e,#8a6b1e,#c9a84c);
+  background-size:300% 300%;
+  animation:borderRotate 3s linear infinite;
+  display:inline-block;
+}
+
+/* Rank badge */
+.rank-row {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 16px;
+  border-radius:14px;
+  margin-bottom:8px;
+  background:rgba(0,0,0,0.2);
+  border:1px solid rgba(201,168,76,0.07);
+  transition:all 0.2s;
+}
+.rank-row:hover {
+  background:rgba(201,168,76,0.05);
+  border-color:rgba(201,168,76,0.2);
+}
+
+/* Ticker tape */
+.ticker-wrap {
+  overflow:hidden;
+  white-space:nowrap;
+  padding:10px 0;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.05),transparent);
+  border-top:1px solid rgba(201,168,76,0.1);
+  border-bottom:1px solid rgba(201,168,76,0.1);
+}
+.ticker {
+  display:inline-block;
+  animation:ticker 30s linear infinite;
+  font-size:10px;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:rgba(201,168,76,0.5);
+}
+
+/* MVP day dots */
+.mvp-day {
+  flex:1;
+  border-radius:10px;
+  padding:8px 4px;
+  text-align:center;
+  transition:all 0.2s;
+}
+
+/* Scanline effect on load */
+.scanline {
+  position:fixed;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.6),transparent);
+  z-index:999;
+  animation:scanline 2s ease-out 0.2s forwards;
+  pointer-events:none;
+}
+
+/* Section label */
+.section-label {
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:rgba(201,168,76,0.5);
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-label::before,.section-label::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2));
+}
+.section-label::before { background:linear-gradient(90deg,rgba(201,168,76,0.2),transparent); }
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div class="bg-anim">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+<div class="grid-overlay"></div>
+<div class="grain"></div>
+<div class="scanline"></div>
+
+<div id="root" style="position:relative;z-index:2;"></div>
+
 <script type="text/babel">
 const SELGER_PHOTOS = {
   "brian_kalvatn":      "photos/brian_kalvatn.jpg",
@@ -34,9 +295,9 @@ const SELGER_PHOTOS = {
 };
 
 const { useState, useEffect } = React;
+
 function nameToId(n) {
   return n.toLowerCase().replace(/\s+/g,'_')
-    .replace(/ae/g,'ae').replace(/o/g,'o').replace(/aa/g,'aa')
     .replace(/æ/g,'ae').replace(/ø/g,'o').replace(/å/g,'aa')
     .replace(/[^a-z0-9_]/g,'');
 }
@@ -46,17 +307,17 @@ const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 const GOLD  = "#c9a84c";
 const GOLD2 = "#f0c96e";
-const BG    = "#0a1a0f";
-const CK    = "#0f2014";
-const BR    = "rgba(201,168,76,0.12)";
-const AD    = "rgba(201,168,76,0.15)";
+const BG    = "#050e07";
 
 const DEPT = {
-  ryen:       { label:"Ryen",       color:"#e8001a", bg:"rgba(232,0,26,0.13)"   },
-  fornebu:    { label:"Fornebu",    color:"#22c55e", bg:"rgba(34,197,94,0.13)"  },
-  lillestrom: { label:"Lillestrøm", color:"#3b82f6", bg:"rgba(59,130,246,0.13)" },
-  okern:      { label:"Økern",      color:"#8b5cf6", bg:"rgba(139,92,246,0.13)" },
+  ryen:       { label:"Ryen",       color:"#e8001a", bg:"rgba(232,0,26,0.12)"   },
+  fornebu:    { label:"Fornebu",    color:"#22c55e", bg:"rgba(34,197,94,0.12)"  },
+  lillestrom: { label:"Lillestrøm", color:"#3b82f6", bg:"rgba(59,130,246,0.12)" },
+  okern:      { label:"Økern",      color:"#8b5cf6", bg:"rgba(139,92,246,0.12)" },
 };
+
+const dc = loc => DEPT[loc]?.color || GOLD;
+const dl = loc => DEPT[loc]?.label || loc;
 
 function isoWeek(d) {
   const u = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -65,21 +326,25 @@ function isoWeek(d) {
   const y1 = new Date(Date.UTC(u.getUTCFullYear(), 0, 1));
   return Math.ceil((((u - y1) / 86400000) + 1) / 7);
 }
-
 function weekDates(year, week) {
   const jan4 = new Date(Date.UTC(year, 0, 4));
   const w1s  = new Date(jan4);
   w1s.setUTCDate(jan4.getUTCDate() - ((jan4.getUTCDay() || 7) - 1));
   const s = new Date(w1s); s.setUTCDate(w1s.getUTCDate() + (week-1)*7);
-  const e = new Date(s);   e.setUTCDate(s.getUTCDate() + 6); e.setUTCHours(23,59,59,999);
-  return { start:s, end:e };
+  const e = new Date(s);   e.setUTCDate(s.getUTCDate() + 6);
+  const startUTC = new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), s.getUTCDate(), 0, 0, 0));
+  const endUTC   = new Date(Date.UTC(e.getUTCFullYear(), e.getUTCMonth(), e.getUTCDate(), 23, 59, 59, 999));
+  return { start: startUTC, end: endUTC };
 }
-
-function getLastWeek() {
-  const d = new Date(); d.setDate(d.getDate() - 7);
+function getDisplayWeek() {
+  // Bruk norsk tid (Europe/Oslo) for å avgjøre hvilken uke som vises.
+  // Uken låses 23:59 søndag norsk tid → vis alltid forrige fullførte uke
+  // (dvs. trekk 7 dager fra "i dag norsk tid")
+  const nowOslo = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Oslo" }));
+  const d = new Date(nowOslo);
+  d.setDate(d.getDate() - 7);
   return { year: d.getFullYear(), week: isoWeek(d) };
 }
-
 function rankSales(sales) {
   const m = {};
   sales.forEach(s => {
@@ -92,25 +357,6 @@ function rankSales(sales) {
     .map(([name,d]) => ({ name,...d, poeng:d.salg*3 }))
     .sort((a,b) => b.poeng-a.poeng || b.finansiert-a.finansiert || a.firstTs.localeCompare(b.firstTs));
 }
-
-function getWeekWinners(ranked) {
-  if (!ranked.length) return [];
-  return [ranked[0]];
-}
-
-function getBestDept(ws) {
-  const deptSales = {};
-  ws.forEach(s => {
-    const loc = s.loc || '';
-    if (!loc) return;
-    deptSales[loc] = (deptSales[loc]||0) + 1;
-  });
-  if (Object.keys(deptSales).length === 0) return null;
-  const max = Math.max(...Object.values(deptSales));
-  const best = Object.keys(deptSales).filter(k => deptSales[k] === max);
-  return { locs: best, count: max };
-}
-
 function getMVPs(ws) {
   const bd = {};
   ws.forEach(s => {
@@ -134,97 +380,163 @@ function getMVPs(ws) {
       return { name, count, loc:ws.find(s=>s.selger===name)?.loc||"", days, mvpDays };
     });
 }
+function getBestDept(ws) {
+  const ds = {};
+  ws.forEach(s => { if(s.loc) ds[s.loc]=(ds[s.loc]||0)+1; });
+  if (!Object.keys(ds).length) return null;
+  const max = Math.max(...Object.values(ds));
+  return { locs: Object.keys(ds).filter(k=>ds[k]===max), count: max };
+}
 
-const dc  = loc => DEPT[loc]?.color || GOLD;
-const dl  = loc => DEPT[loc]?.label || loc;
-const fmt = d   => d.toLocaleDateString("no-NO",{day:"numeric",month:"long"});
-
-function Avatar({ name, loc, size=48 }) {
-  const init  = name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase();
+function Avatar({ name, loc, size=56 }) {
   const id    = nameToId(name);
   const photo = SELGER_PHOTOS[id];
-  return (
-    <div style={{ width:size,height:size,borderRadius:"50%",overflow:"hidden",border:"2px solid "+dc(loc),flexShrink:0,background:DEPT[loc]?.bg||AD,display:"flex",alignItems:"center",justifyContent:"center" }}>
+  const init  = name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase();
+  const inner = (
+    <div style={{
+      width:size, height:size, borderRadius:"50%", overflow:"hidden",
+      background:DEPT[loc]?.bg||"rgba(201,168,76,0.1)",
+      display:"flex",alignItems:"center",justifyContent:"center"
+    }}>
       {photo
-        ? <img src={photo} style={{ width:"100%",height:"100%",objectFit:"cover",filter:"grayscale(100%)" }} />
-        : <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:size*.36,color:dc(loc),letterSpacing:"0.05em" }}>{init}</div>
+        ? <img src={photo} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+        : <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:size*0.36,fontWeight:600,color:dc(loc),letterSpacing:"0.05em"}}>{init}</span>
       }
     </div>
   );
-}
-
-function Card({ children, top, mb=12 }) {
   return (
-    <div style={{ background:CK,border:"1px solid "+BR,borderRadius:18,padding:"24px 26px",position:"relative",overflow:"hidden",marginBottom:mb }}>
-      {top && <div style={{ position:"absolute",top:0,left:0,right:0,height:2,background:top,borderRadius:"18px 18px 0 0" }} />}
-      {children}
+    <div className="avatar-ring" style={{width:size+6,height:size+6,display:"flex",alignItems:"center",justifyContent:"center"}}>
+      {inner}
     </div>
   );
 }
 
-function Label({ children, mt=20 }) {
-  return <div style={{ fontSize:10,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.22)",marginTop:mt,marginBottom:10 }}>{children}</div>;
+function TickerContent({ sales, week }) {
+  const items = sales.map(s => `${s.selger} · ${s.modell}${s.finansiert?" ◆":""}`).join("   ·   ");
+  return (
+    <div className="ticker-wrap">
+      <span className="ticker">
+        ✦ UKE {week} · VCSO SELEKT CUP 2026 ✦ &nbsp;&nbsp;&nbsp; {items} &nbsp;&nbsp;&nbsp; ✦ VCSO SELEKT CUP 2026 ✦ &nbsp;&nbsp;&nbsp; {items} &nbsp;&nbsp;&nbsp;
+      </span>
+    </div>
+  );
 }
 
 function TrebleBanner({ name }) {
   return (
-    <div style={{ background:"linear-gradient(135deg,#071a0c,#0a140a)",border:"1px solid rgba(201,168,76,0.3)",borderRadius:20,padding:"44px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden",marginBottom:36 }}>
-      <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,0.12),transparent 60%)",pointerEvents:"none" }} />
-      <div style={{ fontSize:52,animation:"float 3s ease-in-out infinite",display:"inline-block",marginBottom:8 }}>👑</div>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",background:"linear-gradient(90deg,"+GOLD2+",#22c55e,"+GOLD+")",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>Historisk prestasjon · The Treble</div>
-      <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(56px,10vw,96px)",letterSpacing:"0.04em",lineHeight:1,background:"linear-gradient(135deg,"+GOLD2+" 0%,#22c55e 50%,"+GOLD+" 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:12 }}>{name}</div>
-      <div style={{ fontSize:13,color:"rgba(255,255,255,0.4)",lineHeight:1.6 }}>
-        Ukens vinner · Flest MVP-dager · Beste avdeling
+    <div className="animate-reveal" style={{
+      position:"relative",
+      background:"linear-gradient(160deg,#071a0c,#030d05)",
+      border:"2px solid transparent",
+      borderRadius:32,
+      padding:"56px 32px 48px",
+      textAlign:"center",
+      marginBottom:32,
+      backgroundClip:"padding-box",
+      boxShadow:"0 0 80px rgba(201,168,76,0.2), inset 0 0 60px rgba(201,168,76,0.03)",
+      overflow:"hidden",
+    }}>
+      <div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,rgba(201,168,76,0.1),transparent 40%,rgba(240,201,110,0.05))",pointerEvents:"none"}} />
+      <div style={{position:"absolute",top:0,left:0,right:0,height:"1px",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.7),transparent)"}} />
+      <div style={{position:"absolute",bottom:0,left:0,right:0,height:"1px",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.4),transparent)"}} />
+      <div style={{fontSize:64,animation:"crownBounce 2.5s ease-in-out infinite",display:"inline-block",marginBottom:12,filter:"drop-shadow(0 0 20px rgba(201,168,76,0.5))"}}>👑</div>
+      <div style={{fontSize:8,fontWeight:700,letterSpacing:"0.5em",textTransform:"uppercase",color:"rgba(201,168,76,0.6)",marginBottom:16}}>
+        — Historisk bragd — The Treble —
+      </div>
+      <div className="gold-text" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(52px,12vw,96px)",fontWeight:700,letterSpacing:"0.04em",lineHeight:1,marginBottom:16}}>
+        {name}
+      </div>
+      <div style={{fontFamily:"'Montserrat',sans-serif",fontSize:10,fontWeight:500,letterSpacing:"0.25em",textTransform:"uppercase",color:"rgba(255,255,255,0.3)"}}>
+        Ukens vinner &nbsp;·&nbsp; Flest MVP-dager &nbsp;·&nbsp; Beste avdeling
       </div>
     </div>
   );
 }
 
 function WinnerCard({ winners, ranked, weekSales }) {
-  const isTied = winners.length > 1;
+  const w = winners[0];
+  const deptColor = dc(w.loc);
   return (
-    <Card top={"linear-gradient(90deg,"+dc(winners[0].loc)+","+dc(winners[0].loc)+"44)"} mb={16}>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
-        {isTied ? "🤝 Delt ukens vinner" : "🏆 Ukens vinner"}
-      </div>
-      {winners.map((w, i) => (
-        <div key={w.name}>
-          {i > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"16px 0" }} />}
-          <div style={{ display:"flex",alignItems:"center",gap:16,marginBottom:16 }}>
-            <Avatar name={w.name} loc={w.loc} size={64} />
-            <div style={{ flex:1 }}>
-              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(28px,6vw,44px)",letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{w.name}</div>
-              <div style={{ fontSize:11,color:dc(w.loc),fontWeight:600,marginTop:4,letterSpacing:"0.06em" }}>{dl(w.loc).toUpperCase()}</div>
+    <div className="winner-card animate-reveal">
+      <div className="winner-card-inner">
+        {/* Top accent bar */}
+        <div style={{position:"absolute",top:0,left:0,right:0,height:"3px",background:"linear-gradient(90deg,transparent,"+deptColor+","+GOLD2+","+deptColor+",transparent)"}} />
+
+        <div style={{textAlign:"center",marginBottom:32}}>
+          <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.35em",textTransform:"uppercase",color:"rgba(201,168,76,0.55)",marginBottom:20}}>
+            ✦ &nbsp; Ukens vinner &nbsp; ✦
+          </div>
+          {/* Large avatar */}
+          <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
+            <div style={{
+              width:110,height:110,
+              borderRadius:"50%",
+              padding:3,
+              background:"linear-gradient(135deg,"+deptColor+","+GOLD2+","+GOLD+","+deptColor+")",
+              backgroundSize:"300% 300%",
+              animation:"borderRotate 3s linear infinite",
+              boxShadow:"0 0 40px "+deptColor+"44, 0 0 80px rgba(201,168,76,0.1)",
+              display:"inline-flex",alignItems:"center",justifyContent:"center",
+            }}>
+              <div style={{width:104,height:104,borderRadius:"50%",overflow:"hidden",background:DEPT[w.loc]?.bg||"#0a1a0e"}}>
+                {SELGER_PHOTOS[nameToId(w.name)]
+                  ? <img src={SELGER_PHOTOS[nameToId(w.name)]} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                  : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Cormorant Garamond',serif",fontSize:36,fontWeight:600,color:deptColor}}>
+                      {w.name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase()}
+                    </div>
+                }
+              </div>
             </div>
           </div>
-          <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10 }}>
-            {[
-              { v: w.salg,      l: "Salg" },
-              { v: w.poeng,     l: "Poeng" },
-              { v: w.finansiert,l: "Finansiert" },
-            ].map(({v,l}) => (
-              <div key={l} style={{ background:"rgba(255,255,255,0.04)",borderRadius:10,padding:"12px 10px",textAlign:"center" }}>
-                <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:28,color:dc(w.loc),lineHeight:1 }}>{v}</div>
-                <div style={{ fontSize:9,color:"rgba(255,255,255,0.3)",marginTop:4,letterSpacing:"0.1em",textTransform:"uppercase" }}>{l}</div>
-              </div>
-            ))}
+
+          <div className="gold-text" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(40px,9vw,64px)",fontWeight:700,lineHeight:1,letterSpacing:"0.02em",marginBottom:8}}>
+            {w.name}
+          </div>
+          <div style={{display:"inline-flex",alignItems:"center",gap:8,background:DEPT[w.loc]?.bg||"rgba(201,168,76,0.1)",border:"1px solid "+deptColor+"44",borderRadius:30,padding:"5px 16px"}}>
+            <div style={{width:7,height:7,borderRadius:"50%",background:deptColor,boxShadow:"0 0 8px "+deptColor}} />
+            <span style={{fontSize:10,fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",color:deptColor}}>{dl(w.loc)}</span>
           </div>
         </div>
-      ))}
-      {ranked.length > winners.length && (
-        <>
-          <Label>Øvrig topp {Math.min(ranked.length, 5)}</Label>
-          {ranked.slice(winners.length, 5).map((r,i) => (
-            <div key={r.name} style={{ display:"flex",alignItems:"center",gap:12,padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:18,color:"rgba(255,255,255,0.2)",width:24,textAlign:"center" }}>{i+winners.length+1}</div>
-              <Avatar name={r.name} loc={r.loc} size={32} />
-              <div style={{ flex:1,fontSize:13,color:"rgba(255,255,255,0.7)",fontWeight:500 }}>{r.name}</div>
-              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:18,color:dc(r.loc) }}>{r.poeng}p</div>
+
+        {/* Stats */}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:28}}>
+          {[
+            { v: w.salg,       l: "Salg",       icon:"📦" },
+            { v: w.poeng,      l: "Poeng",      icon:"⚡" },
+            { v: w.finansiert, l: "Finansiert", icon:"◆" },
+          ].map(({v,l,icon}) => (
+            <div className="stat-box" key={l}>
+              <div style={{fontSize:10,marginBottom:6,opacity:0.5}}>{icon}</div>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:42,fontWeight:700,lineHeight:1,color:GOLD2,marginBottom:4}}>{v}</div>
+              <div style={{fontSize:8,fontWeight:600,letterSpacing:"0.2em",textTransform:"uppercase",color:"rgba(255,255,255,0.25)"}}>{l}</div>
             </div>
           ))}
-        </>
-      )}
-    </Card>
+        </div>
+
+        {/* Rest of ranking */}
+        {ranked.length > 1 && (
+          <>
+            <div className="section-label">Resten av toppen</div>
+            <div style={{marginTop:14}}>
+              {ranked.slice(1, 6).map((r,i) => (
+                <div className="rank-row" key={r.name}>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,fontWeight:700,color:"rgba(255,255,255,0.12)",width:28,textAlign:"center",flexShrink:0}}>
+                    {i+2}
+                  </div>
+                  <Avatar name={r.name} loc={r.loc} size={36} />
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.7)"}}>{r.name}</div>
+                    <div style={{fontSize:9,color:dc(r.loc),fontWeight:600,letterSpacing:"0.1em",textTransform:"uppercase",marginTop:2}}>{dl(r.loc)}</div>
+                  </div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,fontWeight:700,color:dc(r.loc)}}>{r.poeng}</div>
+                  <div style={{fontSize:8,color:"rgba(255,255,255,0.2)",marginLeft:2,alignSelf:"flex-end",paddingBottom:3}}>p</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -232,105 +544,153 @@ function MVPCard({ mvps }) {
   if (!mvps.length) return null;
   const isTied = mvps.length > 1;
   return (
-    <Card top={"linear-gradient(90deg,rgba(201,168,76,0.6),rgba(201,168,76,0.1))"}>
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
-        {isTied ? "👑 Delt flest MVP-dager" : "👑 Flest MVP-dager"}
-      </div>
-      {mvps.map((mvp, idx) => (
-        <div key={mvp.name}>
-          {idx > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"14px 0" }} />}
-          <div style={{ display:"flex",alignItems:"center",gap:14,marginBottom:14 }}>
-            <Avatar name={mvp.name} loc={mvp.loc} size={52} />
-            <div>
-              <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:28,letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{mvp.name}</div>
-              <div style={{ fontSize:11,color:GOLD2,fontWeight:600,marginTop:3 }}>MVP {mvp.count} av {mvp.days.length} dag{mvp.days.length>1?"er":""}</div>
+    <div className="luxury-card animate-reveal-2">
+      <div className="luxury-card-inner">
+        <div className="section-label" style={{marginBottom:20}}>
+          {isTied ? "👑 Delt flest MVP-dager" : "👑 Flest MVP-dager"}
+        </div>
+        {mvps.map((mvp, idx) => (
+          <div key={mvp.name}>
+            {idx > 0 && <div className="gold-line" />}
+            <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:18}}>
+              <Avatar name={mvp.name} loc={mvp.loc} size={52} />
+              <div>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:30,fontWeight:700,lineHeight:1,color:"#fff"}}>{mvp.name}</div>
+                <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.15em",color:GOLD2,marginTop:5}}>
+                  MVP {mvp.count} av {mvp.days.length} dag{mvp.days.length>1?"er":""}
+                </div>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:6}}>
+              {mvp.days.map((day,i) => (
+                <div key={day} className="mvp-day" style={{
+                  background:mvp.mvpDays[i]?"rgba(201,168,76,0.15)":"rgba(255,255,255,0.03)",
+                  border:"1px solid "+(mvp.mvpDays[i]?"rgba(201,168,76,0.45)":"rgba(255,255,255,0.05)"),
+                  boxShadow:mvp.mvpDays[i]?"0 0 12px rgba(201,168,76,0.15)":"none",
+                }}>
+                  <div style={{fontSize:8,fontWeight:700,letterSpacing:"0.1em",color:mvp.mvpDays[i]?GOLD2:"rgba(255,255,255,0.2)"}}>
+                    {new Date(day).toLocaleDateString("no-NO",{weekday:"short"}).toUpperCase().slice(0,3)}
+                  </div>
+                  {mvp.mvpDays[i] && <div style={{fontSize:16,marginTop:4}}>👑</div>}
+                </div>
+              ))}
             </div>
           </div>
-          <div style={{ display:"flex",gap:6 }}>
-            {mvp.days.map((day,i) => (
-              <div key={day} style={{ flex:1,background:mvp.mvpDays[i]?"rgba(201,168,76,0.18)":"rgba(255,255,255,0.04)",border:"1px solid "+(mvp.mvpDays[i]?"rgba(201,168,76,0.4)":"rgba(255,255,255,0.06)"),borderRadius:8,padding:"6px 4px",textAlign:"center" }}>
-                <div style={{ fontSize:8,color:mvp.mvpDays[i]?GOLD2:"rgba(255,255,255,0.2)",fontWeight:700,letterSpacing:"0.1em" }}>
-                  {new Date(day).toLocaleDateString("no-NO",{weekday:"short"}).toUpperCase().slice(0,3)}
-                </div>
-                {mvp.mvpDays[i] && <div style={{ fontSize:14,marginTop:2 }}>👑</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </Card>
+        ))}
+      </div>
+    </div>
   );
 }
 
 function HatTrickCard({ hatters, weekSales }) {
   if (!hatters.length) return null;
   return (
-    <Card top="linear-gradient(90deg,rgba(34,197,94,0.5),rgba(34,197,94,0.1))">
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
-        ⚽ Hat-trick denne uken
-      </div>
-      {hatters.map((h, idx) => {
-        const days = {};
-        weekSales.filter(s=>s.selger===h.name).forEach(s=>{
-          const d=s.ts.slice(0,10); days[d]=(days[d]||0)+1;
-        });
-        const htDays = Object.entries(days).filter(([,c])=>c>=3).map(([d,c])=>({d,c}));
-        return (
-          <div key={h.name}>
-            {idx > 0 && <div style={{ borderTop:"1px solid "+BR,margin:"14px 0" }} />}
-            <div style={{ display:"flex",alignItems:"center",gap:14,marginBottom:12 }}>
-              <Avatar name={h.name} loc={h.loc} size={48} />
-              <div>
-                <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:26,letterSpacing:"0.03em",lineHeight:1,color:"#fff" }}>{h.name} ⭐</div>
-                <div style={{ fontSize:11,color:"#22c55e",fontWeight:600,marginTop:3 }}>{htDays.length} hat-trick-dag{htDays.length>1?"er":""}</div>
+    <div className="luxury-card animate-reveal-3">
+      <div className="luxury-card-inner" style={{position:"relative"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:"2px",background:"linear-gradient(90deg,transparent,rgba(34,197,94,0.6),transparent)"}} />
+        <div className="section-label" style={{marginBottom:20,color:"rgba(34,197,94,0.6)"}}>
+          ⭐ Hat-trick denne uken
+        </div>
+        {hatters.map((h, idx) => {
+          const days = {};
+          weekSales.filter(s=>s.selger===h.name).forEach(s=>{
+            const d=s.ts.slice(0,10); days[d]=(days[d]||0)+1;
+          });
+          const htDays = Object.entries(days).filter(([,c])=>c>=3).map(([d,c])=>({d,c}));
+          return (
+            <div key={h.name}>
+              {idx > 0 && <div className="gold-line" />}
+              <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:14}}>
+                <Avatar name={h.name} loc={h.loc} size={48} />
+                <div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:26,fontWeight:700,lineHeight:1,color:"#fff"}}>{h.name}</div>
+                  <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.12em",color:"#22c55e",marginTop:5}}>{htDays.length} hat-trick-dag{htDays.length>1?"er":""}</div>
+                </div>
               </div>
+              {htDays.map(({d,c}) => (
+                <div key={d} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(34,197,94,0.06)",border:"1px solid rgba(34,197,94,0.15)",borderRadius:12,marginBottom:8,fontSize:12}}>
+                  <div style={{width:8,height:8,borderRadius:"50%",background:"#22c55e",boxShadow:"0 0 8px #22c55e",flexShrink:0}} />
+                  <span style={{color:"#22c55e",fontWeight:700,fontSize:13}}>{c} salg</span>
+                  <span style={{color:"rgba(255,255,255,0.25)"}}>·</span>
+                  <span style={{color:"rgba(255,255,255,0.5)"}}>{new Date(d).toLocaleDateString("no-NO",{weekday:"long",day:"numeric",month:"long"})}</span>
+                </div>
+              ))}
             </div>
-            {htDays.map(({d,c}) => (
-              <div key={d} style={{ display:"flex",alignItems:"center",gap:8,padding:"6px 10px",background:"rgba(34,197,94,0.08)",borderRadius:8,marginBottom:6,fontSize:12,color:"rgba(255,255,255,0.6)" }}>
-                <span style={{ color:"#22c55e",fontWeight:700 }}>{c} salg</span>
-                <span>–</span>
-                <span>{new Date(d).toLocaleDateString("no-NO",{weekday:"long",day:"numeric",month:"long"})}</span>
-              </div>
-            ))}
-          </div>
-        );
-      })}
-    </Card>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
 function DeptCard({ result }) {
   if (!result) return null;
   return (
-    <Card top="linear-gradient(90deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))">
-      <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.28)",marginBottom:16 }}>
-        🏟️ Beste forhandler denne uken
+    <div className="luxury-card animate-reveal-4">
+      <div className="luxury-card-inner">
+        <div className="section-label" style={{marginBottom:20}}>🏟️ Beste forhandler denne uken</div>
+        {result.locs.map((loc, i) => {
+          const col = dc(loc);
+          return (
+            <div key={loc} style={{display:"flex",alignItems:"center",gap:16,marginBottom: i < result.locs.length-1 ? 16 : 0}}>
+              <div style={{
+                width:56,height:56,borderRadius:"50%",
+                background:DEPT[loc]?.bg||"rgba(201,168,76,0.1)",
+                border:"2px solid "+col,
+                display:"flex",alignItems:"center",justifyContent:"center",
+                boxShadow:"0 0 20px "+col+"33",
+                fontFamily:"'Cormorant Garamond',serif",fontSize:18,fontWeight:700,color:col,
+                flexShrink:0,
+              }}>
+                {(DEPT[loc]?.label||loc).slice(0,2).toUpperCase()}
+              </div>
+              <div>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:36,fontWeight:700,lineHeight:1,color:col,textShadow:"0 0 20px "+col+"55"}}>{DEPT[loc]?.label||loc}</div>
+                <div style={{fontSize:10,fontWeight:500,letterSpacing:"0.12em",color:"rgba(255,255,255,0.3)",marginTop:4}}>{result.count} salg denne uken</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
-      {result.locs.map((loc, i) => (
-        <div key={loc} style={{ display:"flex",alignItems:"center",gap:14,marginBottom: i < result.locs.length-1 ? 12 : 0 }}>
-          <div style={{ width:48,height:48,borderRadius:"50%",background:DEPT[loc]?.bg||AD,border:"2px solid "+dc(loc),display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',cursive",fontSize:16,color:dc(loc),flexShrink:0 }}>
-            {(DEPT[loc]?.label||loc).slice(0,2).toUpperCase()}
-          </div>
-          <div>
-            <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:32,letterSpacing:"0.03em",lineHeight:1,color:dc(loc) }}>{DEPT[loc]?.label||loc}</div>
-            <div style={{ fontSize:11,color:"rgba(255,255,255,0.3)",marginTop:2 }}>{result.count} salg denne uken</div>
-          </div>
+    </div>
+  );
+}
+
+function AllSales({ sales }) {
+  return (
+    <div className="luxury-card" style={{marginTop:8}}>
+      <div className="luxury-card-inner">
+        <div className="section-label" style={{marginBottom:18}}>
+          📋 Alle {sales.length} salg denne uken
         </div>
-      ))}
-    </Card>
+        {sales.slice().sort((a,b)=>b.ts.localeCompare(a.ts)).map((s,i) => (
+          <div key={i} style={{
+            display:"flex",alignItems:"center",gap:12,
+            padding:"10px 14px",
+            background:i%2===0?"rgba(255,255,255,0.02)":"transparent",
+            borderRadius:10,marginBottom:3,
+            borderLeft:"2px solid "+dc(s.loc)+"55",
+          }}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:dc(s.loc),boxShadow:"0 0 6px "+dc(s.loc),flexShrink:0}} />
+            <div style={{flex:1,fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.72)"}}>{s.selger}</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontStyle:"italic"}}>{s.modell}</div>
+            {s.finansiert && <div style={{fontSize:8,fontWeight:700,color:GOLD2,letterSpacing:"0.15em"}}>◆ FIN</div>}
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.2)",fontWeight:500}}>{s.ts.slice(5,10).replace("-",".")}</div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
 function App() {
   const [sales, setSales] = useState(null);
   const [error, setError] = useState(null);
-  const lw = getLastWeek();
+  const lw = getDisplayWeek();
 
   useEffect(() => {
     const { start, end } = weekDates(lw.year, lw.week);
-    const from = start.toISOString();
-    const to   = end.toISOString();
-    fetch(SB_URL+"/rest/v1/selekt_sales?select=*&ts=gte."+from+"&ts=lte."+to+"&deleted=is.null&order=ts.asc", {
+    fetch(SB_URL+"/rest/v1/selekt_sales?select=*&ts=gte."+start.toISOString()+"&ts=lte."+end.toISOString()+"&deleted=is.null&order=ts.asc", {
       headers: { apikey: SB_KEY, Authorization: "Bearer "+SB_KEY }
     })
       .then(r => r.ok ? r.json() : Promise.reject(r.statusText))
@@ -339,23 +699,26 @@ function App() {
   }, []);
 
   if (error) return (
-    <div style={{ minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:"#ef4444",fontFamily:"DM Sans",padding:24 }}>
-      Feil: {error}
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:"#ef4444",fontFamily:"Montserrat",padding:24,textAlign:"center",fontSize:13}}>
+      <div>
+        <div style={{fontSize:32,marginBottom:12}}>⚠️</div>
+        Feil ved lasting: {error}
+      </div>
     </div>
   );
 
   if (!sales) return (
-    <div style={{ minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center" }}>
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}>
       <div className="spin" />
+      <div style={{fontSize:9,letterSpacing:"0.3em",textTransform:"uppercase",color:"rgba(201,168,76,0.4)"}}>Laster inn data...</div>
     </div>
   );
 
   const ranked   = rankSales(sales);
-  const winners  = getWeekWinners(ranked);
+  const winners  = ranked.length ? [ranked[0]] : [];
   const mvps     = getMVPs(sales);
   const bestDept = getBestDept(sales);
-
-  const htMap = {};
+  const htMap    = {};
   sales.forEach(s => {
     const d = s.ts.slice(0,10);
     if (!htMap[s.selger]) htMap[s.selger] = {};
@@ -373,47 +736,68 @@ function App() {
   const fmt = d => d.toLocaleDateString("no-NO",{day:"numeric",month:"long"});
 
   return (
-    <div style={{ fontFamily:"'DM Sans',sans-serif",color:"#fff",background:BG,minHeight:"100vh",padding:"0 0 40px" }}>
-      <div style={{ background:"linear-gradient(180deg,#061209 0%,#0a1a0f 100%)",borderBottom:"1px solid rgba(201,168,76,0.12)",padding:"28px 24px 24px",textAlign:"center",position:"relative" }}>
-        <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",color:"rgba(255,255,255,0.25)",marginBottom:8 }}>
+    <div style={{minHeight:"100vh",color:"#fff"}}>
+      {/* Header */}
+      <div style={{
+        padding:"48px 24px 36px",
+        textAlign:"center",
+        position:"relative",
+        borderBottom:"1px solid rgba(201,168,76,0.08)",
+        background:"linear-gradient(180deg,rgba(201,168,76,0.04) 0%,transparent 100%)",
+      }}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:"1px",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)"}} />
+
+        <div style={{fontSize:8,fontWeight:700,letterSpacing:"0.5em",textTransform:"uppercase",color:"rgba(201,168,76,0.45)",marginBottom:16}}>
           VCSO SELEKT CUP 2026
         </div>
-        <div style={{ fontFamily:"'Bebas Neue',cursive",fontSize:"clamp(32px,8vw,56px)",letterSpacing:"0.04em",lineHeight:1,marginBottom:6,background:"linear-gradient(135deg,"+GOLD2+","+GOLD+")",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent" }}>
-          Uke {lw.week} – Recap
+
+        <div className="gold-text" style={{
+          fontFamily:"'Cormorant Garamond',serif",
+          fontSize:"clamp(40px,10vw,72px)",
+          fontWeight:700,lineHeight:1,
+          letterSpacing:"0.03em",
+          marginBottom:10,
+        }}>
+          Uke {lw.week}
         </div>
-        <div style={{ fontSize:12,color:"rgba(255,255,255,0.3)" }}>
-          {fmt(start)} – {fmt(end)}
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(16px,4vw,24px)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,0.3)",letterSpacing:"0.05em",marginBottom:20}}>
+          Ukesrecap
         </div>
+
+        <div style={{display:"inline-flex",alignItems:"center",gap:10,background:"rgba(201,168,76,0.06)",border:"1px solid rgba(201,168,76,0.15)",borderRadius:40,padding:"7px 20px"}}>
+          <div style={{width:5,height:5,borderRadius:"50%",background:GOLD,animation:"pulse 2s ease-in-out infinite"}} />
+          <span style={{fontSize:10,fontWeight:500,letterSpacing:"0.12em",color:"rgba(201,168,76,0.7)"}}>
+            {fmt(start)} – {fmt(end)}
+          </span>
+        </div>
+
         {!sales.length && (
-          <div style={{ marginTop:16,fontSize:13,color:"rgba(255,255,255,0.35)",fontStyle:"italic" }}>
+          <div style={{marginTop:24,fontSize:13,color:"rgba(255,255,255,0.25)",fontStyle:"italic",fontFamily:"'Cormorant Garamond',serif"}}>
             Ingen salg registrert denne uken.
           </div>
         )}
       </div>
 
       {sales.length > 0 && (
-        <div style={{ maxWidth:480,margin:"0 auto",padding:"24px 16px 0" }}>
-          {hasTreble && <TrebleBanner name={trebleWinners[0].name} />}
-          {winners.length > 0 && <WinnerCard winners={winners} ranked={ranked} weekSales={sales} />}
-          {mvps.length > 0    && <MVPCard mvps={mvps} />}
-          {hatters.length > 0 && <HatTrickCard hatters={hatters} weekSales={sales} />}
-          {bestDept           && <DeptCard result={bestDept} />}
+        <>
+          <TickerContent sales={sales} week={lw.week} />
+          <div style={{maxWidth:500,margin:"0 auto",padding:"28px 16px 0"}}>
+            {hasTreble && <TrebleBanner name={trebleWinners[0].name} />}
+            {winners.length > 0 && <WinnerCard winners={winners} ranked={ranked} weekSales={sales} />}
+            {mvps.length > 0    && <MVPCard mvps={mvps} />}
+            {hatters.length > 0 && <HatTrickCard hatters={hatters} weekSales={sales} />}
+            {bestDept           && <DeptCard result={bestDept} />}
+            <AllSales sales={sales} />
 
-          <div style={{ marginTop:8,padding:"16px 0 0" }}>
-            <div style={{ fontSize:9,fontWeight:700,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.22)",marginBottom:12 }}>
-              📋 Alle {sales.length} salg denne uken
-            </div>
-            {sales.slice().sort((a,b)=>b.ts.localeCompare(a.ts)).map((s,i) => (
-              <div key={i} style={{ display:"flex",alignItems:"center",gap:10,padding:"9px 14px",background:i%2===0?"rgba(255,255,255,0.025)":"transparent",borderRadius:8,marginBottom:2 }}>
-                <div style={{ width:6,height:6,borderRadius:"50%",background:dc(s.loc),flexShrink:0 }} />
-                <div style={{ flex:1,fontSize:13,color:"rgba(255,255,255,0.75)",fontWeight:500 }}>{s.selger}</div>
-                <div style={{ fontSize:12,color:"rgba(255,255,255,0.4)" }}>{s.modell}</div>
-                {s.finansiert && <div style={{ fontSize:9,fontWeight:700,color:GOLD2,letterSpacing:"0.1em" }}>◆ FIN</div>}
-                <div style={{ fontSize:11,color:"rgba(255,255,255,0.25)" }}>{s.ts.slice(5,10).replace("-",".")}</div>
+            {/* Footer */}
+            <div style={{textAlign:"center",padding:"32px 0 8px"}}>
+              <div style={{height:"1px",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent)",marginBottom:24}} />
+              <div style={{fontSize:8,letterSpacing:"0.4em",textTransform:"uppercase",color:"rgba(201,168,76,0.25)"}}>
+                VCSO Selekt Cup 2026 &nbsp;·&nbsp; Mai – Juni
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

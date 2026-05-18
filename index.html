@@ -801,7 +801,7 @@ var SELGERE_RAW = [
   { navn: 'Marius Skaugård',    loc: 'fornebu'    },
   { navn: 'Vetle Brænd Rømo',   loc: 'fornebu'    },
   { navn: 'Martin Ekmo',        loc: 'fornebu'    },
-  { navn: 'Jørgen Heggedal',    loc: 'okern'      },
+  { navn: 'Jørgen Heggedal',    loc: 'fornebu'    },
   { navn: 'Jonas Bakken',       loc: 'lillestrom' },
   { navn: 'Sebastian Wang',     loc: 'lillestrom' },
   { navn: 'Britt Robertsen',    loc: 'okern'      },
@@ -917,8 +917,7 @@ function goalsFor(navn, m) {
 function teamGoalsFor(teamId, m) {
   return sales.filter(function(s) {
     if (m !== 'all' && s.mnd !== m) return false;
-    var sObj = SELGERE.find(function(x) { return x.navn === s.selger; });
-    return sObj && sObj.loc === teamId;
+    return s.loc === teamId;
   }).length;
 }
 function teamGoal(teamId, m) {
@@ -940,8 +939,7 @@ function teamDots(teamId) {
     var mo = parseInt(d.split('-')[1]) === 5 ? 'mai' : 'jun';
     var goal = (DAILY[mo] && DAILY[mo][teamId]) || 1;
     var n = sales.filter(function(s) {
-      var sObj = SELGERE.find(function(x) { return x.navn === s.selger; });
-      return sObj && sObj.loc === teamId && tsDate(s.ts) === d;
+      return s.loc === teamId && tsDate(s.ts) === d;
     }).length;
     var cls = n >= Math.ceil(goal) ? 'pace-good' : n > 0 ? 'pace-partial' : 'pace-miss';
     return '<div class="fd ' + cls + '" title="' + lbl + ': ' + (n ? n + ' bil' : 'Ingen') + '"></div>';
@@ -1233,8 +1231,7 @@ function getWeeksForMonth(mnd) {
 
 function teamSalesInWeek(teamId, weekNum) {
   return sales.filter(function(s) {
-    var sObj = SELGERE.find(function(x) { return x.navn === s.selger; });
-    if (!sObj || sObj.loc !== teamId) return false;
+    if (s.loc !== teamId) return false;
     return getWeekNum(new Date(s.ts)) === weekNum;
   }).length;
 }
@@ -1492,8 +1489,7 @@ function renderStats() {
 }
 function renderScoring() {
   var all = locFilter === 'all' ? sales : sales.filter(function(s) {
-    var sObj = SELGERE.find(function(x) { return x.navn === s.selger; });
-    return sObj && sObj.loc === locFilter;
+    return s.loc === locFilter;
   });
   var cnt = document.getElementById('scoring-count');
   if (cnt) cnt.textContent = all.length;
@@ -1504,8 +1500,8 @@ function renderScoring() {
   var sorted = all.slice().sort(function(a,b) { return (b.ts||'').localeCompare(a.ts||''); });
   grid.innerHTML = sorted.map(function(s, i) {
     var sObj = SELGERE.find(function(x) { return x.navn === s.selger; }) || {};
-    var col = LC[sObj.loc] || '#3b82f6';
-    var lbl = LL[sObj.loc] || sObj.loc || '';
+    var col = LC[s.loc] || LC[sObj.loc] || '#3b82f6';
+    var lbl = LL[s.loc] || LL[sObj.loc] || s.loc || '';
     var isNew = tsDate(s.ts) === today;
     var dp = (s.ts||'').substring(0,10), tp = (s.ts||'').substring(11,16);
     var dArr = dp.split('-');

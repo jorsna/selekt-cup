@@ -778,12 +778,12 @@ var API = SUPABASE_URL + '/rest/v1/selekt_sales';
 
 var PTS = 3;
 var GOALS = {
-  mai: { ryen: 48, fornebu: 64, lillestrom: 32, okern: 16 },
-  jun: { ryen: 48, fornebu: 64, lillestrom: 32, okern: 16 }
+  mai: { ryen: 48, fornebu: 48, lillestrom: 32, okern: 32 },
+  jun: { ryen: 48, fornebu: 48, lillestrom: 32, okern: 32 }
 };
 var DAILY = {
-  mai: { ryen: 80/22,  lillestrom: 40/22,  fornebu: 80/22  },
-  jun: { ryen: 112/22, lillestrom: 96/22,  fornebu: 112/22 }
+  mai: { ryen: 80/22, lillestrom: 40/22, fornebu: 48/22, okern: 32/22 },
+  jun: { ryen: 80/22, lillestrom: 40/22, fornebu: 48/22, okern: 32/22 }
 };
 var LC = { ryen: '#3b82f6', lillestrom: '#f59e0b', fornebu: '#10b981' };
 var LL = { ryen: 'Ryen', fornebu: 'Fornebu', lillestrom: 'Lillestrøm', okern: 'Økern' };
@@ -1193,8 +1193,8 @@ function renderInd() {
 // ─── RENDER: AVDELINGER ──────────────────────────────────────────────
 // ─── UKEMÅL ───────────────────────────────────────────────────────────
 var WEEKLY_GOALS = {
-  mai: { ryen: 12, fornebu: 16, lillestrom: 8, okern: 4 },
-  jun: { ryen: 12, fornebu: 16, lillestrom: 8, okern: 4 },
+  mai: { ryen: 12, fornebu: 12, lillestrom: 8, okern: 8 },
+  jun: { ryen: 12, fornebu: 12, lillestrom: 8, okern: 8 },
 };
 
 function getWeekNum(d) {

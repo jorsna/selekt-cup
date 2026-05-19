@@ -597,14 +597,17 @@ function genererTekst(salg, dato) {
   })
   .then(function(data) {
     console.log('Edge Function svar:', JSON.stringify(data));
-    // Edge function kan returnere direkte eller pakket
     var content = data.content || (data.data && data.data.content);
     var raw = content && content[0] ? content[0].text : null;
     if (!raw) throw new Error('Tomt svar fra AI. Full respons: ' + JSON.stringify(data));
-    var clean = raw.replace(/```json|```/g,'').trim();
-    console.log('AI tekst:', clean);
+    console.log('AI tekst:', raw);
+    // Finn JSON-blokk i svaret
+    var clean = raw;
+    var jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) clean = jsonMatch[0];
+    else clean = raw.replace(/```json|```/g,'').trim();
     var parsed = JSON.parse(clean);
-    if (!parsed.overskrift) throw new Error('AI returnerte ikke overskrift. Svar: ' + clean);
+    if (!parsed.overskrift) throw new Error('Mangler overskrift. Svar: ' + clean);
     parsed.stats = stats;
     return parsed;
   });

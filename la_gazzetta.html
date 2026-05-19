@@ -357,7 +357,7 @@ function tryAdminLogin() {
     isAdmin = (pw === ADMIN_PW);
     document.getElementById('login-overlay').style.display = 'none';
     if (isAdmin) document.getElementById('admin-bar').style.display = 'flex';
-    sessionStorage.setItem('gaz-role', isAdmin ? 'admin' : 'selger');
+    localStorage.setItem('gaz-role', isAdmin ? 'admin' : 'selger');
     loadGazzetta();
   } else {
     var e = document.getElementById('pw-err');
@@ -369,7 +369,7 @@ function tryAdminLogin() {
 
 function enterAsReader() {
   document.getElementById('login-overlay').style.display = 'none';
-  sessionStorage.setItem('gaz-role', 'tilskuer');
+  localStorage.setItem('gaz-role', 'tilskuer');
   loadGazzetta();
 }
 
@@ -396,20 +396,20 @@ function loadGazzetta() {
   var dato = idag();
   document.getElementById('edition-label').textContent = norskDato(dato);
 
-  // Hent fra Supabase-tabellen selekt_gazzetta
-  fetch(SB_URL + '/rest/v1/selekt_gazzetta?dato=eq.' + dato + '&order=created_at.desc&limit=1', { headers: sbH() })
+  // Hent nyeste artikkel (ikke nødvendigvis dagens dato)
+  fetch(SB_URL + '/rest/v1/selekt_gazzetta?order=dato.desc&limit=1', { headers: sbH() })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (Array.isArray(data) && data.length > 0) {
         visTekst(data[0]);
         if (isAdmin) {
-          document.getElementById('admin-status').textContent = 'Utgave for ' + norskDato(dato) + ' er generert.';
-          document.getElementById('gen-btn').textContent = '&#9997; Generer på nytt';
+          document.getElementById('admin-status').textContent = 'Siste utgave: ' + norskDato(data[0].dato) + '. Generer ny for i dag?';
+          document.getElementById('gen-btn').textContent = '✎ Generer dagens utgave';
         }
       } else {
         visIngen();
         if (isAdmin) {
-          document.getElementById('admin-status').textContent = 'Ingen utgave for i dag ennå. Generer nå:';
+          document.getElementById('admin-status').textContent = 'Ingen utgave generert ennå. Generer nå:';
         }
       }
     })
@@ -485,8 +485,8 @@ function genererGazzetta() {
 
   // Hent gårsdagens salg fra Supabase
   var igaar = igar();
-  var fraTs = igaar + 'T00:00:00';
-  var tilTs = igaar + 'T23:59:59';
+  var fraTs = igaar + 'T00:00:00+02:00';
+  var tilTs = igaar + 'T23:59:59+02:00';
 
   fetch(SB_URL + '/rest/v1/selekt_sales?ts=gte.' + fraTs + '&ts=lte.' + tilTs + '&deleted=eq.false&order=ts.asc', { headers: sbH() })
     .then(function(r) { return r.json(); })
@@ -581,7 +581,11 @@ function genererTekst(salg, dato) {
     });
   }
 
-  var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026, en intern bruktbilsalgskonkurranse hos Volvo Car Service Oslo.\n\nHer er tallene fra ' + norskDato(dato) + ':\n- Totalt solgte biler: ' + totalt + '\n- MVP: ' + (mvp || 'ingen') + ' (' + (selgerTelling[mvp]||0) + ' biler)\n- Ledende avdeling: ' + (topAvd ? avdNavn[topAvd] + ' (' + avdTelling[topAvd] + ' biler)' : 'ingen') + '\n- Alle avdelinger: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\n- Populæreste modell: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' solgt)\n- Finansierte salg: ' + finTelling + '\n' + (hatTrickNavn.length ? '- Hat-trick (3+ biler på én dag): ' + hatTrickNavn.join(', ') + '\n' : '') + '\nSkriv en dramatisk avisartikkel på NORSK i gammel sportsjournalistisk stil. Den skal:\n1. Ha en dramatisk overskrift (maks 12 ord)\n2. Ha en kort ingress (1 setning, kursiv-stil)\n3. Ha en artikkeltekst på 4-5 avsnitt (ca 250-350 ord totalt). Avsnittsene skilles av to linjeskift (\\n\\n). Inkluder gjerne et dramatisk sitat/pull-quote i anførselstegn som eget avsnitt.\n\nSvar KUN med gyldig JSON i dette formatet, ingen annen tekst:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat her\\"\\n\\navsnitt3"}';
+  var selgerListe = Object.keys(selgerTelling).sort(function(a,b){ return selgerTelling[b]-selgerTelling[a]; }).map(function(n) {
+    return n + ': ' + selgerTelling[n] + ' bil' + (selgerTelling[n]>1?'er':'');
+  }).join(', ');
+
+  var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026, en intern bruktbilsalgskonkurranse hos Volvo Car Service Oslo.\n\nHer er de EKSAKTE tallene fra ' + norskDato(dato) + ':\n- Totalt solgte biler denne dagen: ' + totalt + '\n- Salg per selger denne dagen: ' + selgerListe + '\n- MVP (flest salg denne dagen): ' + (mvp || 'ingen') + ' med ' + (selgerTelling[mvp]||0) + ' biler\n- Avdelinger denne dagen: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\n- Populæreste modell: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' solgt)\n- Finansierte salg: ' + finTelling + '\n' + (hatTrickNavn.length ? '- Hat-trick denne dagen (3+ biler): ' + hatTrickNavn.join(', ') + '\n' : '') + '\nVIKTIG: Bruk KUN tallene ovenfor. Ikke bland tallene – MVP hadde ' + (selgerTelling[mvp]||0) + ' salg DENNE DAGEN, ikke ' + totalt + '.\n\nSkriv en dramatisk avisartikkel på NORSK i gammel sportsjournalistisk stil. Den skal:\n1. Ha en dramatisk overskrift (maks 12 ord)\n2. Ha en kort ingress (1 setning)\n3. Ha artikkeltekst på 4-5 avsnitt (ca 250-350 ord). Avsnitt skilles av \\n\\n. Inkluder gjerne et dramatisk sitat i anførselstegn som eget avsnitt.\n\nSvar KUN med gyldig JSON, ingen annen tekst:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat\\"\\n\\navsnitt3"}';
 
   return fetch('https://resrjvztsqdxzqgiffeg.supabase.co/functions/v1/swift-api', {
     method: 'POST',
@@ -615,7 +619,7 @@ function genererTekst(salg, dato) {
 
 // ── INIT ─────────────────────────────────────────────────────────────
 (function() {
-  var saved = sessionStorage.getItem('gaz-role');
+  var saved = localStorage.getItem('gaz-role');
   if (saved === 'admin') {
     isAdmin = true;
     document.getElementById('login-overlay').style.display = 'none';

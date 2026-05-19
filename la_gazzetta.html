@@ -486,7 +486,7 @@ function genererGazzetta() {
   // Hent gårsdagens salg fra Supabase
   var igaar = igar();
 
-  fetch(SB_URL + '/rest/v1/selekt_sales?ts=gte.' + igaar + 'T00:00:00&ts=lt.' + idag() + 'T00:00:00&deleted=is.false&order=ts.asc', { headers: sbH() })
+  fetch(SB_URL + '/rest/v1/selekt_sales?select=*&ts=gte.' + igaar + 'T00:00:00&ts=lt.' + igaar + 'T23:59:59.999&deleted=eq.false&order=ts.asc', { headers: sbH() })
     .then(function(r) { return r.json(); })
     .then(function(salg) {
       if (!Array.isArray(salg)) salg = [];
@@ -584,7 +584,7 @@ function genererTekst(salg, dato) {
     return n + ': ' + selgerTelling[n] + ' bil' + (selgerTelling[n]>1?'er':'');
   }).join(', ');
 
-  var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026, en intern bruktbilsalgskonkurranse hos Volvo Car Service Oslo.\n\nHer er de EKSAKTE tallene fra ' + norskDato(dato) + ':\n- Totalt solgte biler denne dagen: ' + totalt + '\n- Salg per selger denne dagen: ' + selgerListe + '\n- MVP (flest salg denne dagen): ' + (mvp || 'ingen') + ' med ' + (selgerTelling[mvp]||0) + ' biler\n- Avdelinger denne dagen: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\n- Populæreste modell: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' solgt)\n- Finansierte salg: ' + finTelling + '\n' + (hatTrickNavn.length ? '- Hat-trick denne dagen (3+ biler): ' + hatTrickNavn.join(', ') + '\n' : '') + '\nVIKTIG: Bruk KUN tallene ovenfor. Ikke bland tallene – MVP hadde ' + (selgerTelling[mvp]||0) + ' salg DENNE DAGEN, ikke ' + totalt + '.\n\nSkriv en dramatisk avisartikkel på NORSK i gammel sportsjournalistisk stil. Den skal:\n1. Ha en dramatisk overskrift (maks 12 ord)\n2. Ha en kort ingress (1 setning)\n3. Ha artikkeltekst på 4-5 avsnitt (ca 250-350 ord). Avsnitt skilles av \\n\\n. Inkluder gjerne et dramatisk sitat i anførselstegn som eget avsnitt.\n\nSvar KUN med gyldig JSON, ingen annen tekst:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat\\"\\n\\navsnitt3"}';
+  var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026.\n\nDAGENS KAMPRAPPORT – ' + norskDato(dato) + ':\n\nSALG DENNE DAGEN (kun disse tallene gjelder):\n' + selgerListe + '\n\nTotalt denne dagen: ' + totalt + ' biler\nMVP denne dagen: ' + (mvp || 'ingen') + ' (' + (selgerTelling[mvp]||0) + ' biler denne dagen)\nAvdelinger denne dagen: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\nBestselger-modell denne dagen: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' stk)\nFinansierte salg denne dagen: ' + finTelling + '\n' + (hatTrickNavn.length ? 'Hat-trick denne dagen: ' + hatTrickNavn.join(', ') + ' (3+ biler på én dag)\n' : '') + '\nSkriv en dramatisk avisartikkel på NORSK. Bruk KUN tallene fra listen over. Pass på at du refererer til riktige tall for hver selger.\n\n1. Dramatisk overskrift (maks 10 ord)\n2. Kort ingress (1 setning med korrekte tall)\n3. Artikkeltekst 4-5 avsnitt (ca 250 ord). Avsnitt skilles av \\n\\n. Inkluder et sitat i anførselstegn.\n\nSvar KUN med gyldig JSON:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat\\"\\n\\navsnitt3"}';
 
   return fetch('https://resrjvztsqdxzqgiffeg.supabase.co/functions/v1/swift-api', {
     method: 'POST',

@@ -485,13 +485,12 @@ function genererGazzetta() {
 
   // Hent gårsdagens salg fra Supabase
   var igaar = igar();
-  var fraTs = igaar + 'T00:00:00+02:00';
-  var tilTs = igaar + 'T23:59:59+02:00';
 
-  fetch(SB_URL + '/rest/v1/selekt_sales?ts=gte.' + fraTs + '&ts=lte.' + tilTs + '&deleted=eq.false&order=ts.asc', { headers: sbH() })
+  fetch(SB_URL + '/rest/v1/selekt_sales?ts=gte.' + igaar + 'T00:00:00&ts=lt.' + idag() + 'T00:00:00&deleted=is.false&order=ts.asc', { headers: sbH() })
     .then(function(r) { return r.json(); })
     .then(function(salg) {
       if (!Array.isArray(salg)) salg = [];
+      console.log('Salg hentet for ' + igaar + ':', salg.length, salg.map(function(s){ return s.selger + ' ' + s.modell; }));
       btn.innerHTML = '<span class="spinner"></span>Skriver artikkel...';
       statusEl.textContent = 'Henter salgsdata og sender til AI...';
       return genererTekst(salg, igaar);

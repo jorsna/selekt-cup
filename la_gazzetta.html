@@ -505,6 +505,7 @@ function genererGazzetta() {
         tekst: resultat.tekst,
         stats: resultat.stats
       };
+      console.log('Sender til Supabase:', JSON.stringify(row));
       return fetch(SB_URL + '/rest/v1/selekt_gazzetta', {
         method: 'POST',
         headers: sbH(),

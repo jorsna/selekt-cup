@@ -434,7 +434,7 @@ function visTekst(row) {
   var tekst = row.tekst || '';
   var avsnitt = tekst.split('\n\n').filter(function(a){ return a.trim(); });
 
-  var stats = row.stats ? JSON.parse(row.stats) : null;
+  var stats = row.stats ? (typeof row.stats === 'string' ? JSON.parse(row.stats) : row.stats) : null;
 
   var statsHtml = '';
   if (stats) {

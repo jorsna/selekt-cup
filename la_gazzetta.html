@@ -510,7 +510,9 @@ function genererGazzetta() {
         headers: sbH(),
         body: JSON.stringify(row)
       }).then(function(r) {
-        if (!r.ok) throw new Error('Lagring feilet: ' + r.status);
+        if (!r.ok) return r.text().then(function(txt) {
+          throw new Error('Lagring feilet ' + r.status + ': ' + txt);
+        });
         return row;
       });
     })

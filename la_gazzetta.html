@@ -151,7 +151,7 @@ body {
   column-span: all;
   border-top: 2px solid #1a1a1a;
   border-bottom: 2px solid #1a1a1a;
-  padding: 14px 0;
+  padding: 14px 0 10px;
   margin: 20px 0;
   font-family: 'Playfair Display', serif;
   font-size: 18px;
@@ -159,6 +159,15 @@ body {
   font-weight: 700;
   color: #1a1a1a;
   text-align: center;
+}
+.article-pull-disclaimer {
+  font-family: 'Barlow', sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  color: #999;
+  margin-top: 6px;
+  letter-spacing: 0.3px;
 }
 
 .stats-box {
@@ -448,7 +457,7 @@ function visTekst(row) {
 
   var avsnittsHtml = avsnitt.map(function(a, i) {
     if (a.startsWith('«') || a.startsWith('"')) {
-      return '<div class="article-pull">'+a+'</div>';
+      return '<div class="article-pull">'+a+'<div class="article-pull-disclaimer">(Sitat generert etter beste evne basert på resultater av AI)</div></div>';
     }
     return '<p>'+a+'</p>';
   }).join('');
@@ -456,7 +465,7 @@ function visTekst(row) {
   // Sett inn stats etter andre avsnitt
   if (avsnitt.length > 2) {
     var deler = avsnitt.map(function(a, i) {
-      if (a.startsWith('«') || a.startsWith('"')) return '<div class="article-pull">'+a+'</div>';
+      if (a.startsWith('«') || a.startsWith('"')) return '<div class="article-pull">'+a+'<div class="article-pull-disclaimer">(Sitat generert etter beste evne basert på resultater av AI)</div></div>';
       return '<p>'+a+'</p>';
     });
     deler.splice(2, 0, statsHtml);

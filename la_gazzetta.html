@@ -337,7 +337,7 @@ var SB_URL = 'https://resrjvztsqdxzqgiffeg.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlc3Jqdnp0c3FkeHpxZ2lmZmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzg0MTMsImV4cCI6MjA5Mzc1NDQxM30.ouYcq-2hIUkqkn395Q5us5jYqa9JDVbOjJzORDBM72Y';
 var ADMIN_PW = 'vcso-admin';
 var SELGER_PW = 'selekt2026';
-window._ANTHROPIC_KEY = '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';
+
 
 var isAdmin = false;
 
@@ -580,22 +580,16 @@ function genererTekst(salg, dato) {
 
   var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026, en intern bruktbilsalgskonkurranse hos Volvo Car Service Oslo.\n\nHer er tallene fra ' + norskDato(dato) + ':\n- Totalt solgte biler: ' + totalt + '\n- MVP: ' + (mvp || 'ingen') + ' (' + (selgerTelling[mvp]||0) + ' biler)\n- Ledende avdeling: ' + (topAvd ? avdNavn[topAvd] + ' (' + avdTelling[topAvd] + ' biler)' : 'ingen') + '\n- Alle avdelinger: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\n- Populæreste modell: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' solgt)\n- Finansierte salg: ' + finTelling + '\n' + (hatTrickNavn.length ? '- Hat-trick (3+ biler på én dag): ' + hatTrickNavn.join(', ') + '\n' : '') + '\nSkriv en dramatisk avisartikkel på NORSK i gammel sportsjournalistisk stil. Den skal:\n1. Ha en dramatisk overskrift (maks 12 ord)\n2. Ha en kort ingress (1 setning, kursiv-stil)\n3. Ha en artikkeltekst på 4-5 avsnitt (ca 250-350 ord totalt). Avsnittsene skilles av to linjeskift (\\n\\n). Inkluder gjerne et dramatisk sitat/pull-quote i anførselstegn som eget avsnitt.\n\nSvar KUN med gyldig JSON i dette formatet, ingen annen tekst:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat her\\"\\n\\navsnitt3"}';
 
-  return fetch('https://api.anthropic.com/v1/messages', {
+  return fetch('https://resrjvztsqdxzqgiffeg.supabase.co/functions/v1/swift-api', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': window._ANTHROPIC_KEY || '',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
+      'Authorization': 'Bearer ' + SB_KEY
     },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
+    body: JSON.stringify({ prompt: prompt })
   })
   .then(function(r) {
-    if (!r.ok) throw new Error('AI-feil: ' + r.status + '. Sjekk at API-nøkkelen er satt i koden (window._ANTHROPIC_KEY).');
+    if (!r.ok) throw new Error('AI-feil: ' + r.status + '. Sjekk Edge Function og secret i Supabase.');
     return r.json();
   })
   .then(function(data) {

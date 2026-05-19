@@ -399,7 +399,7 @@ html, body {
   border:1px solid rgba(255,215,0,.35);
   border-radius:10px;overflow:hidden;
   box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 30px rgba(255,215,0,.1);
-  pointer-events:none;
+  pointer-events:all;
   opacity:0;transition:opacity .15s ease;
 }
 .player-card.show{opacity:1}
@@ -2144,6 +2144,9 @@ setInterval(countdown, 1000);
   card.id = 'player-hover-card';
   document.body.appendChild(card);
 
+  var hideTimer = null;
+  var frozen = false; // stopp bevegelse når mus er over kortet
+
   function getSelgerStats(navn) {
     var per = 0, fin = 0, form = [], hatTricks = 0;
     var dmap = {};
@@ -2153,28 +2156,35 @@ setInterval(countdown, 1000);
       if (s.finansiert) fin++;
       dmap[s.ts.slice(0,10)] = (dmap[s.ts.slice(0,10)]||0)+1;
     });
-    // Form: same as selgerDots - last 5 calendar days
     for (var i = 0; i <= 4; i++) {
       var d = new Date(); d.setDate(d.getDate() - i);
       var ds = d.getFullYear() + '-' + (d.getMonth()+1<10?'0':'') + (d.getMonth()+1) + '-' + (d.getDate()<10?'0':'') + d.getDate();
       form.push(dmap[ds] > 0);
     }
-    // Hat tricks
     Object.keys(dmap).forEach(function(d){ if(dmap[d]>=3) hatTricks++; });
     return { per:per, fin:fin, form:form, hatTricks:hatTricks };
   }
 
+  function positionCard(e) {
+    var x = e.clientX + 14, y = e.clientY - 60;
+    if (x + 228 > window.innerWidth) x = e.clientX - 242;
+    if (y + 340 > window.innerHeight) y = window.innerHeight - 350;
+    if (y < 10) y = 10;
+    card.style.left = x + 'px';
+    card.style.top  = y + 'px';
+  }
+
   function showCard(navn, color, id, loc, e) {
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    frozen = false;
     var stats = getSelgerStats(navn);
     var photos = typeof SELGER_PHOTOS !== 'undefined' ? SELGER_PHOTOS : {};
     var ini = id.replace(/_/g,' ').split(' ').map(function(w){return w[0]?w[0].toUpperCase():''}).join('').slice(0,2);
     var photoHtml = photos[id]
       ? '<img src="'+photos[id]+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)">'
       : '<div class="pc-photo-ph">'+ini+'</div>';
-
     var locMap = {ryen:'Ryen',fornebu:'Fornebu',lillestrom:'Lillestrøm',okern:'Økern'};
     var locStr = locMap[loc] || loc;
-
     var formDots = stats.form.map(function(f){
       return '<div class="pc-dot" style="background:'+(f?'#22c55e':'#ef4444')+'"></div>';
     }).join('');
@@ -2206,44 +2216,46 @@ setInterval(countdown, 1000);
         +'</div>':'')
       +'</div>'
       +'<div class="pc-form">'+formDots+'</div>'
-      +'<button class="pc-skjerf-btn" onmousedown="event.stopPropagation()" onclick="visSkjerf(\''+navn+'\',\''+id+'\',\''+loc+'\','+stats.per+','+stats.per*3+','+stats.fin+','+stats.hatTricks+')">🧣 Del skjerf</button>';
+      +'<button class="pc-skjerf-btn" onclick="visSkjerf(\''+navn+'\',\''+id+'\',\''+loc+'\','+stats.per+','+stats.per*3+','+stats.fin+','+stats.hatTricks+')">&#x1F9E3; Del skjerf</button>';
 
-    // Position
-    var x = e.clientX + 14, y = e.clientY - 60;
-    if (x + 220 > window.innerWidth) x = e.clientX - 234;
-    if (y + 320 > window.innerHeight) y = window.innerHeight - 330;
-    card.style.left = x + 'px';
-    card.style.top  = y + 'px';
+    positionCard(e);
     card.classList.add('show');
+
+    // Når mus er over kortet: frys posisjon og ikke skjul
+    card.onmouseenter = function() {
+      frozen = true;
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    };
+    card.onmouseleave = function() {
+      frozen = false;
+      hideTimer = setTimeout(function() { card.classList.remove('show'); }, 80);
+    };
   }
 
-  function hideCard() {
-    card.classList.remove('show');
+  function scheduleHide() {
+    hideTimer = setTimeout(function() {
+      if (!frozen) card.classList.remove('show');
+    }, 120);
   }
 
   function moveCard(e) {
-    var x = e.clientX + 14, y = e.clientY - 60;
-    if (x + 220 > window.innerWidth) x = e.clientX - 234;
-    if (y + 320 > window.innerHeight) y = window.innerHeight - 330;
-    card.style.left = x + 'px';
-    card.style.top  = y + 'px';
+    if (!frozen) positionCard(e);
   }
-
-  // Attach to trows after render
-  var origRenderInd = typeof renderInd === 'function' ? renderInd : null;
 
   function attachHovers() {
     var tbl = document.getElementById('tbl-ind');
     if (!tbl) return;
     var rows = tbl.querySelectorAll('.trow');
     rows.forEach(function(row) {
+      if (row._hoverAttached) return;
+      row._hoverAttached = true;
       var navn = row.getAttribute('data-navn');
       if (!navn) return;
       var sObj = SELGERE.find(function(s){ return s.navn === navn; });
       if (!sObj) return;
       row.addEventListener('mouseenter', function(e){ showCard(sObj.navn, sObj.color, sObj.id, sObj.loc, e); });
       row.addEventListener('mousemove', moveCard);
-      row.addEventListener('mouseleave', hideCard);
+      row.addEventListener('mouseleave', scheduleHide);
     });
   }
 
@@ -2256,7 +2268,6 @@ setInterval(countdown, 1000);
     };
   }
 
-  // Also try on load
   setTimeout(attachHovers, 2000);
   document.addEventListener('click', function(){ setTimeout(attachHovers, 200); });
 })();

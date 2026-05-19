@@ -596,9 +596,15 @@ function genererTekst(salg, dato) {
     return r.json();
   })
   .then(function(data) {
-    var raw = data.content && data.content[0] ? data.content[0].text : '{}';
+    console.log('Edge Function svar:', JSON.stringify(data));
+    // Edge function kan returnere direkte eller pakket
+    var content = data.content || (data.data && data.data.content);
+    var raw = content && content[0] ? content[0].text : null;
+    if (!raw) throw new Error('Tomt svar fra AI. Full respons: ' + JSON.stringify(data));
     var clean = raw.replace(/```json|```/g,'').trim();
+    console.log('AI tekst:', clean);
     var parsed = JSON.parse(clean);
+    if (!parsed.overskrift) throw new Error('AI returnerte ikke overskrift. Svar: ' + clean);
     parsed.stats = stats;
     return parsed;
   });

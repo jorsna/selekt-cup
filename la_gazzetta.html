@@ -495,10 +495,17 @@ function genererGazzetta() {
   // Hent gårsdagens salg fra Supabase
   var igaar = igar();
 
-  fetch(SB_URL + '/rest/v1/selekt_sales?select=*&ts=gte.' + igaar + 'T00:00:00&ts=lt.' + igaar + 'T23:59:59.999&deleted=eq.false&order=ts.asc', { headers: sbH() })
+  fetch(SB_URL + '/rest/v1/selekt_sales?select=*&deleted=eq.false&order=ts.asc', { headers: Object.assign({}, sbH(), {'Range-Unit': 'items'}) })
     .then(function(r) { return r.json(); })
-    .then(function(salg) {
-      if (!Array.isArray(salg)) salg = [];
+    .then(function(allSalg) {
+      if (!Array.isArray(allSalg)) allSalg = [];
+      // Filtrer på dato i norsk tid klientsiden – sikrest
+      var salg = allSalg.filter(function(s) {
+        if (!s.ts) return false;
+        var d = new Date(s.ts);
+        var norskDatoStr = d.toLocaleDateString('sv-SE', {timeZone: 'Europe/Oslo'});
+        return norskDatoStr === igaar;
+      });
       console.log('Salg hentet for ' + igaar + ':', salg.length, salg.map(function(s){ return s.selger + ' ' + s.modell; }));
       btn.innerHTML = '<span class="spinner"></span>Skriver artikkel...';
       statusEl.textContent = 'Henter salgsdata og sender til AI...';

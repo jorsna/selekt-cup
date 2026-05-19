@@ -503,7 +503,7 @@ function genererGazzetta() {
         overskrift: resultat.overskrift,
         ingress: resultat.ingress,
         tekst: resultat.tekst,
-        stats: JSON.stringify(resultat.stats)
+        stats: resultat.stats
       };
       return fetch(SB_URL + '/rest/v1/selekt_gazzetta', {
         method: 'POST',

@@ -636,6 +636,10 @@ function genererTekst(salg, dato, alleSalg) {
   })
   .then(function(data) {
     console.log('Edge Function svar:', JSON.stringify(data));
+    // Sjekk om Anthropic er overbelastet
+    if (data.type === 'error' && data.error && data.error.type === 'overloaded_error') {
+      throw new Error('Anthropic er overbelastet akkurat nå. Vent 1-2 minutter og prøv igjen.');
+    }
     var content = data.content || (data.data && data.data.content);
     var raw = content && content[0] ? content[0].text : null;
     if (!raw) throw new Error('Tomt svar fra AI. Full respons: ' + JSON.stringify(data));

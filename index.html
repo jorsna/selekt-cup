@@ -1366,38 +1366,20 @@ function renderTeam() {
   }).join('');
 
   // ─── HALL OF FAME ────────────────────────────────────────────────
+  // Inneværende uke vises live fra sales-arrayet.
+  // Avsluttede uker hentes fra weekly_winners-tabellen (permanent).
   var hof = document.getElementById('hof-container');
   if (hof) {
-    var allWeeks = {};
-    sales.forEach(function(s) {
-      var d = new Date(s.ts);
-      var wn = getWeekNum(d);
-      var key = wn + '_' + d.getFullYear();
-      if (!allWeeks[key]) allWeeks[key] = { week: wn, sales: {}, fin: {}, firstTs: {} };
-      allWeeks[key].sales[s.selger] = (allWeeks[key].sales[s.selger]||0) + 1;
-      if (s.finansiert) allWeeks[key].fin[s.selger] = (allWeeks[key].fin[s.selger]||0) + 1;
-      // Track earliest timestamp per selger per week
-      if (!allWeeks[key].firstTs[s.selger] || s.ts < allWeeks[key].firstTs[s.selger]) {
-        allWeeks[key].firstTs[s.selger] = s.ts;
-      }
-    });
     var thisWeek = getWeekNum(new Date());
-    var weekKeys = Object.keys(allWeeks).sort(function(a,b){
-      return parseInt(b.split('_')[0]) - parseInt(a.split('_')[0]);
-    });
+
+    // ── Hjelpefunksjoner (beholder eksisterende CSS-klasser) ──
     function hofAvImg(s, cssClass) {
       var hasPhoto = typeof SELGER_PHOTOS!=='undefined' && SELGER_PHOTOS[s.id];
       if (hasPhoto) return '<img src="'+SELGER_PHOTOS[s.id]+'" style="width:100%;height:100%;object-fit:cover">';
       return '<div class="'+cssClass+'-initials" style="color:'+s.color+'">'+s.initials+'</div>';
     }
-    function getHatWinners(hatDays) {
-      var hw = [];
-      Object.keys(hatDays).forEach(function(navn) {
-        var hasHat = Object.keys(hatDays[navn]).some(function(d){ return hatDays[navn][d] >= 3; });
-        if (hasHat) { var sObj = SELGERE.find(function(x){ return x.navn===navn; }); if (sObj) hw.push(sObj); }
-      });
-      return hw;
-    }
+
+    // ── Live: hat-trick inneværende uke ──
     var curHatDays = {};
     sales.forEach(function(x) {
       var d = new Date(x.ts);
@@ -1406,7 +1388,11 @@ function renderTeam() {
       if (!curHatDays[x.selger]) curHatDays[x.selger] = {};
       curHatDays[x.selger][ds] = (curHatDays[x.selger][ds]||0) + 1;
     });
-    var curHatWinners = getHatWinners(curHatDays);
+    var curHatWinners = [];
+    Object.keys(curHatDays).forEach(function(navn) {
+      var hasHat = Object.keys(curHatDays[navn]).some(function(d){ return curHatDays[navn][d] >= 3; });
+      if (hasHat) { var sObj = SELGERE.find(function(x){ return x.navn===navn; }); if (sObj) curHatWinners.push(sObj); }
+    });
     var curHatHtml = '';
     if (curHatWinners.length) {
       curHatHtml = '<div class="hof-hat-section">'
@@ -1420,6 +1406,8 @@ function renderTeam() {
           }).join('')
       + '</div>';
     }
+
+    // ── Inneværende uke-boks ──
     var currentBox = '<div class="hof-week-card hof-current">'
       + '<div class="hof-gold-stripe" style="opacity:.4"></div>'
       + '<div class="hof-deco">&#127942;</div>'
@@ -1427,76 +1415,80 @@ function renderTeam() {
       + '<div class="hof-current-pending">Vinner k&#229;res s&#248;ndag kl. 23:59</div>'
       + curHatHtml
     + '</div>';
-    var pastKeys = weekKeys.filter(function(k){ return parseInt(k.split('_')[0]) !== thisWeek; });
-    function buildPastCard(key) {
-      var wd = allWeeks[key];
-      var WEEK19_WINNERS = ['Norman Elton', 'Linn Askmann-Olsen', 'Simen Olsen'];
-      var isWeek19 = (wd.week === 19 && key.indexOf('2026') !== -1);
-      var winners;
-      if (isWeek19) {
-        winners = WEEK19_WINNERS.map(function(n){ return SELGERE.find(function(s){ return s.navn === n; }); }).filter(Boolean);
-      } else {
-        var bestN = 0;
-        Object.keys(wd.sales).forEach(function(n){ if(wd.sales[n]>bestN) bestN=wd.sales[n]; });
-        var tied = SELGERE.filter(function(s){ return (wd.sales[s.navn]||0)===bestN; });
-        var bestFin = 0;
-        tied.forEach(function(s){ if((wd.fin[s.navn]||0)>bestFin) bestFin=(wd.fin[s.navn]||0); });
-        var finTied = tied.filter(function(s){ return (wd.fin[s.navn]||0)===bestFin; });
-        finTied.sort(function(a,b){
-          var ta = wd.firstTs[a.navn]||''; var tb = wd.firstTs[b.navn]||'';
-          return ta < tb ? -1 : ta > tb ? 1 : 0;
-        });
-        winners = [finTied[0]].filter(Boolean);
+
+    // ── Vis skeleton mens vi henter fra DB ──
+    hof.innerHTML = currentBox
+      + '<div id="hof-past-weeks" style="display:flex;flex-direction:column;gap:0">'
+      + '<div class="hof-current-pending" style="margin-top:8px">Laster avsluttede uker...</div>'
+      + '</div>';
+
+    // ── Hent avsluttede uker fra weekly_winners ──
+    fetch(SUPABASE_URL + '/rest/v1/weekly_winners?order=week_year.desc,week_nr.desc&limit=30', {
+      mode:'cors', headers: sbH()
+    }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(data){
+      var el = document.getElementById('hof-past-weeks');
+      if (!el) return;
+      var past = (data||[]).filter(function(w){ return w.week_nr !== thisWeek; });
+      if (!past.length) {
+        el.innerHTML = '<div class="hof-current-pending" style="margin-top:8px">Avsluttede uker vises her fra og med neste mandag.</div>';
+        return;
       }
-      var hatDays = {};
-      sales.forEach(function(x) {
-        var d = new Date(x.ts);
-        if (getWeekNum(d) !== wd.week) return;
-        var ds = tsDate(x.ts);
-        if (!hatDays[x.selger]) hatDays[x.selger] = {};
-        hatDays[x.selger][ds] = (hatDays[x.selger][ds]||0) + 1;
+      // Grupper per uke
+      var byWeek = {};
+      past.forEach(function(w){
+        var k = w.week_year + '-' + w.week_nr;
+        if (!byWeek[k]) byWeek[k] = { weekNr:w.week_nr, weekYear:w.week_year, weekEnd:w.week_end, rows:[] };
+        byWeek[k].rows.push(w);
       });
-      var hatWinners = getHatWinners(hatDays);
-      var winnersHtml = winners.map(function(s) {
-        var sold = wd.sales[s.navn]||0;
-        return '<div class="hof-winner-section">'
+      var weeks = Object.values(byWeek).sort(function(a,b){
+        return b.weekYear - a.weekYear || b.weekNr - a.weekNr;
+      });
+      el.innerHTML = weeks.map(function(wk){
+        var w = wk.rows[0];
+        var sObj = SELGERE.find(function(s){ return s.navn===w.selger; }) || { navn:w.selger, initials:w.selger.slice(0,2).toUpperCase(), color:'var(--gold)', loc:w.loc };
+
+        var winnersHtml = '<div class="hof-winner-section">'
           + '<div class="hof-avatar-wrap">'
-            + '<div class="hof-avatar">'+hofAvImg(s,'hof-avatar')+'</div>'
+            + '<div class="hof-avatar">'+hofAvImg(sObj,'hof-avatar')+'</div>'
             + '<div class="hof-avatar-crown">&#128081;</div>'
           + '</div>'
           + '<div>'
-            + '<div class="hof-winner-name">'+s.navn+'</div>'
-            + '<div class="hof-winner-count">'+sold+'<span class="hof-winner-unit">BIL'+(sold===1?'':'ER')+'</span></div>'
-            + '<div class="hof-winner-loc">'+(LL[s.loc]||s.loc)+'</div>'
+            + '<div class="hof-winner-name">'+w.selger+'</div>'
+            + '<div class="hof-winner-count">'+w.salg+'<span class="hof-winner-unit">BIL'+(w.salg===1?'':'ER')+'</span></div>'
+            + '<div class="hof-winner-loc">'+(LL[sObj.loc]||w.loc||'')+'</div>'
           + '</div>'
         + '</div>';
-      }).join('');
-      var hatHtml = '';
-      if (hatWinners.length) {
-        hatHtml = '<div class="hof-hat-section">'
-          + '<div class="hof-hat-label">&#11088; Hat-trick</div>'
-          + hatWinners.map(function(s) {
-              return '<div class="hof-hat-row">'
-                + '<div class="hof-hat-avatar">'+hofAvImg(s,'hof-hat')+'</div>'
-                + '<div><div class="hof-hat-name">'+s.navn+'</div>'
-                + '<div class="hof-hat-sub">'+(LL[s.loc]||s.loc)+'</div></div>'
-              + '</div>';
-            }).join('')
+
+        var hatHtml = '';
+        if (w.hat_tricks && w.hat_tricks.length) {
+          hatHtml = '<div class="hof-hat-section">'
+            + '<div class="hof-hat-label">&#11088; Hat-trick</div>'
+            + w.hat_tricks.map(function(navn){
+                var s = SELGERE.find(function(x){ return x.navn===navn; }) || { navn:navn, initials:navn.slice(0,2).toUpperCase(), color:'var(--gold)', loc:'' };
+                return '<div class="hof-hat-row">'
+                  + '<div class="hof-hat-avatar">'+hofAvImg(s,'hof-hat')+'</div>'
+                  + '<div><div class="hof-hat-name">'+s.navn+'</div>'
+                  + '<div class="hof-hat-sub">'+(LL[s.loc]||s.loc||'')+'</div></div>'
+                + '</div>';
+              }).join('')
+          + '</div>';
+        }
+
+        return '<div class="hof-week-card">'
+          + '<div class="hof-gold-stripe"></div>'
+          + '<div class="hof-deco">&#127942;</div>'
+          + '<div class="hof-week-label">Uke '+wk.weekNr+'</div>'
+          + winnersHtml
+          + hatHtml
         + '</div>';
-      }
-      return '<div class="hof-week-card">'
-        + '<div class="hof-gold-stripe"></div>'
-        + '<div class="hof-deco">&#127942;</div>'
-        + '<div class="hof-week-label">Uke '+wd.week+'</div>'
-        + winnersHtml
-        + hatHtml
-      + '</div>';
-    }
-    if (!pastKeys.length) {
-      hof.innerHTML = currentBox;
-    } else {
-      hof.innerHTML = currentBox + pastKeys.map(buildPastCard).join('');
-    }
+      }).join('');
+    }).catch(function(){
+      var el = document.getElementById('hof-past-weeks');
+      if (el) el.innerHTML = '<div class="hof-current-pending" style="margin-top:8px">Avsluttede uker vises her fra og med neste mandag.</div>';
+    });
   }
 }
 

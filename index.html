@@ -1447,26 +1447,41 @@ function renderTeam() {
         return b.weekYear - a.weekYear || b.weekNr - a.weekNr;
       });
       el.innerHTML = weeks.map(function(wk){
-        var w = wk.rows[0];
-        var sObj = SELGERE.find(function(s){ return s.navn===w.selger; }) || { navn:w.selger, initials:w.selger.slice(0,2).toUpperCase(), color:'var(--gold)', loc:w.loc };
+        // Sorter: høyest pts, deretter finansiert
+        wk.rows.sort(function(a,b){ return b.pts-a.pts || b.finansiert-a.finansiert; });
 
-        var winnersHtml = '<div class="hof-winner-section">'
-          + '<div class="hof-avatar-wrap">'
-            + '<div class="hof-avatar">'+hofAvImg(sObj,'hof-avatar')+'</div>'
-            + '<div class="hof-avatar-crown">&#128081;</div>'
-          + '</div>'
-          + '<div>'
-            + '<div class="hof-winner-name">'+w.selger+'</div>'
-            + '<div class="hof-winner-count">'+w.salg+'<span class="hof-winner-unit">BIL'+(w.salg===1?'':'ER')+'</span></div>'
-            + '<div class="hof-winner-loc">'+(LL[sObj.loc]||w.loc||'')+'</div>'
-          + '</div>'
-        + '</div>';
+        // Finn alle vinnere med samme pts og finansiert som toppen
+        var bestPts = wk.rows[0].pts;
+        var bestFin = 0;
+        wk.rows.filter(function(r){ return r.pts===bestPts; })
+          .forEach(function(r){ if(r.finansiert>bestFin) bestFin=r.finansiert; });
+        var winners = wk.rows.filter(function(r){
+          return r.pts===bestPts && r.finansiert===bestFin;
+        });
+
+        // Hat tricks fra første rad
+        var hatTricks = wk.rows[0].hat_tricks || [];
+
+        var winnersHtml = winners.map(function(w){
+          var sObj = SELGERE.find(function(s){ return s.navn===w.selger; }) || { navn:w.selger, initials:w.selger.slice(0,2).toUpperCase(), color:'var(--gold)', loc:w.loc };
+          return '<div class="hof-winner-section">'
+            + '<div class="hof-avatar-wrap">'
+              + '<div class="hof-avatar">'+hofAvImg(sObj,'hof-avatar')+'</div>'
+              + '<div class="hof-avatar-crown">&#128081;</div>'
+            + '</div>'
+            + '<div>'
+              + '<div class="hof-winner-name">'+w.selger+'</div>'
+              + '<div class="hof-winner-count">'+w.salg+'<span class="hof-winner-unit">BIL'+(w.salg===1?'':'ER')+'</span></div>'
+              + '<div class="hof-winner-loc">'+(w.finansiert>0?'&#128176; '+w.finansiert+' fin &nbsp;· &nbsp;':'')+(LL[sObj.loc]||w.loc||'')+'</div>'
+            + '</div>'
+          + '</div>';
+        }).join('');
 
         var hatHtml = '';
-        if (w.hat_tricks && w.hat_tricks.length) {
+        if (hatTricks.length) {
           hatHtml = '<div class="hof-hat-section">'
             + '<div class="hof-hat-label">&#11088; Hat-trick</div>'
-            + w.hat_tricks.map(function(navn){
+            + hatTricks.map(function(navn){
                 var s = SELGERE.find(function(x){ return x.navn===navn; }) || { navn:navn, initials:navn.slice(0,2).toUpperCase(), color:'var(--gold)', loc:'' };
                 return '<div class="hof-hat-row">'
                   + '<div class="hof-hat-avatar">'+hofAvImg(s,'hof-hat')+'</div>'

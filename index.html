@@ -325,9 +325,6 @@ select:focus,input[type=text]:focus{border-color:var(--gold)}
 .hof-week-label{font-family:Anton,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);padding:12px 16px 0;opacity:.8}
 .hof-winner-section{padding:12px 16px 14px;display:flex;align-items:center;gap:14px}
 .hof-avatar-wrap{position:relative;flex-shrink:0}
-.hof-avatar{width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);box-shadow:0 0 18px rgba(201,168,76,.25)}
-.hof-avatar img{width:100%;height:100%;object-fit:cover}
-.hof-avatar-initials{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
 .hof-avatar-crown{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:17px;filter:drop-shadow(0 1px 5px rgba(201,168,76,.9))}
 .hof-winner-name{font-family:Anton,sans-serif;font-size:20px;letter-spacing:1px;color:#fff;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 .hof-winner-count{font-family:Anton,sans-serif;font-size:32px;color:var(--gold2);line-height:1;text-shadow:0 0 20px rgba(240,201,110,.4)}
@@ -336,13 +333,20 @@ select:focus,input[type=text]:focus{border-color:var(--gold)}
 .hof-hat-section{border-top:1px solid #1e3a22;padding:10px 16px 14px;display:flex;flex-direction:column;gap:7px}
 .hof-hat-label{font-family:Anton,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2px;opacity:.7}
 .hof-hat-row{display:flex;align-items:center;gap:10px}
-.hof-hat-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;border:1.5px solid var(--gold);flex-shrink:0;box-shadow:0 0 10px rgba(201,168,76,.15)}
-.hof-hat-avatar img{width:100%;height:100%;object-fit:cover}
-.hof-hat-initials{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 .hof-hat-name{font-size:12px;font-weight:700;color:var(--txt);letter-spacing:.3px}
 .hof-hat-sub{font-size:9px;color:var(--muted);margin-top:1px}
 .hof-current-pending{padding:14px 16px 16px;font-size:11px;color:var(--muted);font-style:italic;letter-spacing:.3px}
 .hof-deco{position:absolute;right:12px;top:8px;font-size:40px;opacity:.05;pointer-events:none;user-select:none;line-height:1}
+@keyframes goldSpin{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes hofGlow{0%,100%{box-shadow:0 0 8px 2px rgba(255,215,0,.4),0 0 20px 4px rgba(255,180,0,.15)}50%{box-shadow:0 0 14px 4px rgba(255,215,0,.7),0 0 32px 8px rgba(255,180,0,.3)}}
+.hof-avatar-ring{width:68px;height:68px;border-radius:50%;padding:2px;background:linear-gradient(135deg,#f5e642,#ffd700,#c8960c,#ffd700,#f5e642);background-size:300% 300%;animation:goldSpin 3s ease infinite,hofGlow 2.5s ease-in-out infinite;flex-shrink:0}
+.hof-avatar-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:1.5px solid #0a0a14}
+.hof-avatar-inner img{width:100%;height:100%;object-fit:cover}
+.hof-avatar-initials{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.hof-hat-ring{width:44px;height:44px;border-radius:50%;padding:2px;background:linear-gradient(135deg,#fff,#ffd700,#fff);background-size:300% 300%;animation:goldSpin 4s ease infinite;flex-shrink:0;opacity:.9}
+.hof-hat-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:1.5px solid #0a0a14}
+.hof-hat-inner img{width:100%;height:100%;object-fit:cover}
+.hof-hat-initials{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 
 /* MOBIL-FIKS */
 html, body {
@@ -1399,7 +1403,7 @@ function renderTeam() {
         + '<div class="hof-hat-label">&#11088; Hat-trick denne uken</div>'
         + curHatWinners.map(function(s) {
             return '<div class="hof-hat-row">'
-              + '<div class="hof-hat-avatar">'+hofAvImg(s,'hof-hat')+'</div>'
+              + '<div class="hof-hat-ring"><div class="hof-hat-inner">'+hofAvImg(s,'hof-hat')+'</div></div>'
               + '<div><div class="hof-hat-name">'+s.navn+' &#11088;</div>'
               + '<div class="hof-hat-sub">'+(LL[s.loc]||s.loc)+'</div></div>'
             + '</div>';
@@ -1466,7 +1470,7 @@ function renderTeam() {
           var sObj = SELGERE.find(function(s){ return s.navn===w.selger; }) || { navn:w.selger, initials:w.selger.slice(0,2).toUpperCase(), color:'var(--gold)', loc:w.loc };
           return '<div class="hof-winner-section">'
             + '<div class="hof-avatar-wrap">'
-              + '<div class="hof-avatar">'+hofAvImg(sObj,'hof-avatar')+'</div>'
+              + '<div class="hof-avatar-ring"><div class="hof-avatar-inner">'+hofAvImg(sObj,'hof-avatar')+'</div></div>'
               + '<div class="hof-avatar-crown">&#128081;</div>'
             + '</div>'
             + '<div>'
@@ -1484,7 +1488,7 @@ function renderTeam() {
             + hatTricks.map(function(navn){
                 var s = SELGERE.find(function(x){ return x.navn===navn; }) || { navn:navn, initials:navn.slice(0,2).toUpperCase(), color:'var(--gold)', loc:'' };
                 return '<div class="hof-hat-row">'
-                  + '<div class="hof-hat-avatar">'+hofAvImg(s,'hof-hat')+'</div>'
+                  + '<div class="hof-hat-ring"><div class="hof-hat-inner">'+hofAvImg(s,'hof-hat')+'</div></div>'
                   + '<div><div class="hof-hat-name">'+s.navn+'</div>'
                   + '<div class="hof-hat-sub">'+(LL[s.loc]||s.loc||'')+'</div></div>'
                 + '</div>';

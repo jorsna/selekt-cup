@@ -174,7 +174,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:#fff;overflow-
 </script>
 <script type="text/babel">
 const SB_URL="https://resrjvztsqdxzqgiffeg.supabase.co";
-const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlc3Jqdnp0c3FkeHpxZ2lmZmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTcxNDIsImV4cCI6MjA2MjYzMzE0Mn0.aBZ4rEtFMODWdOCOlkGgfEVl9x0kBv36E03w8SUoBNA";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlc3Jqdnp0c3FkeHpxZ2lmZmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzg0MTMsImV4cCI6MjA5Mzc1NDQxM30.ouYcq-2hIUkqkn395Q5us5jYqa9JDVbOjJzORDBM72Y";
 
 const SELGER_PHOTOS={
   "brian_kalvatn":"photos/brian_kalvatn.jpg","joakim_ronneberg":"photos/joakim_ronneberg.jpg",
@@ -415,9 +415,10 @@ function App(){
   const dm=getDisplayMonth();
   useEffect(()=>{
     const{start,end}=monthRange(dm.year,dm.month);const fmt=d=>d.toISOString().replace('Z','');
-    fetch(SB_URL+"/rest/v1/selekt_sales?select=*&ts=gte."+fmt(start)+"&ts=lte."+fmt(end)+"&deleted=eq.false&order=ts.asc",
+    fetch(SB_URL+"/rest/v1/selekt_sales?select=*&ts=gte."+fmt(start)+"&ts=lte."+fmt(end)+"&deleted=is.false&order=ts.asc",
       {headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY}})
-    .then(r=>r.ok?r.json():Promise.reject(r.statusText)).then(setSales).catch(e=>setError(String(e)));
+    .then(r=>r.ok?r.json():r.text().then(t=>{throw new Error(r.status+': '+t.slice(0,200));}))
+    .then(setSales).catch(e=>setError(String(e)));
   },[]);
   if(error)return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',color:'#ef4444',fontFamily:'Rajdhani',padding:24,textAlign:'center'}}><div><div style={{fontSize:36,marginBottom:12}}>⚠️</div>Feil: {error}</div></div>;
   if(!sales)return<div className="loading"><div className="spin-ring"/><div className="loading-lbl">Laster inn månedstall...</div></div>;

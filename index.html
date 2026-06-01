@@ -964,15 +964,17 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var API = SUPABASE_URL + '/rest/v1/selekt_sales';
 
 var PTS = 3;
-var SALG_PR_SELGER = 4;
+var SALG_PR_UKE = 4;
+var UKER = { mai: 4, jun: 5 };
 var ARBEIDSDAGER = { mai: 22, jun: 22 };
 // Beregn månedsmål automatisk fra SELGERE_RAW (kjøres etter SELGERE_RAW er definert)
 function calcGoalsFromSelgere() {
   var counts = {};
   SELGERE_RAW.forEach(function(s) { counts[s.loc] = (counts[s.loc] || 0) + 1; });
-  var g = {};
-  Object.keys(counts).forEach(function(loc) { g[loc] = counts[loc] * SALG_PR_SELGER; });
-  return g;
+  return {
+    mai: (function(){ var g={}; Object.keys(counts).forEach(function(loc){ g[loc]=counts[loc]*SALG_PR_UKE*UKER.mai; }); return g; })(),
+    jun: (function(){ var g={}; Object.keys(counts).forEach(function(loc){ g[loc]=counts[loc]*SALG_PR_UKE*UKER.jun; }); return g; })()
+  };
 }
 // GOALS og DAILY beregnes nedenfor, etter SELGERE_RAW er definert
 var LC = { ryen: '#3b82f6', lillestrom: '#f59e0b', fornebu: '#10b981' };
@@ -997,11 +999,10 @@ var SELGERE_RAW = [
   { navn: 'Britt Robertsen',    loc: 'okern'      },
   { navn: 'Adrian Kjærstad Lund', loc: 'lillestrom' },
 ];
-var _g = calcGoalsFromSelgere();
-var GOALS = { mai: _g, jun: _g };
+var GOALS = calcGoalsFromSelgere();
 var DAILY = {
-  mai: (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=_g[loc]/ARBEIDSDAGER.mai; }); return d; })(),
-  jun: (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=_g[loc]/ARBEIDSDAGER.jun; }); return d; })()
+  mai: (function(){ var d={}; Object.keys(GOALS.mai).forEach(function(loc){ d[loc]=GOALS.mai[loc]/ARBEIDSDAGER.mai; }); return d; })(),
+  jun: (function(){ var d={}; Object.keys(GOALS.jun).forEach(function(loc){ d[loc]=GOALS.jun[loc]/ARBEIDSDAGER.jun; }); return d; })()
 };
 
 var SELGERE = SELGERE_RAW.map(function(s, i) {
@@ -1473,10 +1474,11 @@ function renderInd() {
 
 // ─── RENDER: AVDELINGER ──────────────────────────────────────────────
 // ─── UKEMÅL ───────────────────────────────────────────────────────────
-// Ukemål = månedsmål / antall uker i måneden (ca 4)
-var UKER_I_MAANED = 4;
-var _wg = (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=Math.round(_g[loc]/UKER_I_MAANED); }); return d; })();
-var WEEKLY_GOALS = { mai: _wg, jun: _wg };
+// Ukemål = selgere × SALG_PR_UKE (fast, uavhengig av måned)
+var WEEKLY_GOALS = {
+  mai: (function(){ var d={}; Object.keys(GOALS.mai).forEach(function(loc){ d[loc]=Math.round(GOALS.mai[loc]/UKER.mai); }); return d; })(),
+  jun: (function(){ var d={}; Object.keys(GOALS.jun).forEach(function(loc){ d[loc]=Math.round(GOALS.jun[loc]/UKER.jun); }); return d; })()
+};
 
 function getWeekNum(d) {
   var date = new Date(d);

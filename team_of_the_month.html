@@ -197,17 +197,20 @@ const SELGERE_RAW=[
   {navn:"Jonas Bakken",loc:"lillestrom"},{navn:"Sebastian Wang",loc:"lillestrom"},
   {navn:"Adrian Kjærstad Lund",loc:"lillestrom"},
 ];
-const SALG_PR_SELGER=4;
-// Mål beregnes automatisk: antall selgere per avdeling × SALG_PR_SELGER
+const SALG_PR_UKE=4;
+const UKER={mai:4,juni:5};
+// Mål beregnes automatisk: antall selgere × salg per uke × uker i måneden
 function calcGoals(){
   const counts={};
   SELGERE_RAW.forEach(s=>{counts[s.loc]=(counts[s.loc]||0)+1;});
-  const g={};Object.keys(counts).forEach(loc=>{g[loc]=counts[loc]*SALG_PR_SELGER;});
-  return g;
+  const mai={},juni={};
+  Object.keys(counts).forEach(loc=>{
+    mai[loc]=counts[loc]*SALG_PR_UKE*UKER.mai;
+    juni[loc]=counts[loc]*SALG_PR_UKE*UKER.juni;
+  });
+  return {mai,juni};
 }
-const MONTH_GOAL=calcGoals();
-// GOALS bruker samme mål for alle måneder (endres automatisk om selgere legges til/fjernes)
-const GOALS={mai:MONTH_GOAL,juni:MONTH_GOAL};
+const GOALS=calcGoals();
 const dc=loc=>DEPT[loc]?.color||"#c9a84c";
 const dl=loc=>DEPT[loc]?.label||loc;
 const {useState,useEffect}=React;

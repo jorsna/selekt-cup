@@ -953,6 +953,7 @@ const SELGER_PHOTOS = {
   "jonas_bakken":        "photos/jonas_bakken.jpg",
   "sebastian_wang":      "photos/sebastian_wang.jpg",
   "britt_robertsen":     "photos/britt_robertsen.jpg",
+  "adrian_kjaerstad_lund": null,
 };
 
 
@@ -963,14 +964,17 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var API = SUPABASE_URL + '/rest/v1/selekt_sales';
 
 var PTS = 3;
-var GOALS = {
-  mai: { ryen: 48, fornebu: 48, lillestrom: 32, okern: 32 },
-  jun: { ryen: 48, fornebu: 48, lillestrom: 32, okern: 32 }
-};
-var DAILY = {
-  mai: { ryen: 80/22, lillestrom: 40/22, fornebu: 48/22, okern: 32/22 },
-  jun: { ryen: 80/22, lillestrom: 40/22, fornebu: 48/22, okern: 32/22 }
-};
+var SALG_PR_SELGER = 4;
+var ARBEIDSDAGER = { mai: 22, jun: 22 };
+// Beregn månedsmål automatisk fra SELGERE_RAW (kjøres etter SELGERE_RAW er definert)
+function calcGoalsFromSelgere() {
+  var counts = {};
+  SELGERE_RAW.forEach(function(s) { counts[s.loc] = (counts[s.loc] || 0) + 1; });
+  var g = {};
+  Object.keys(counts).forEach(function(loc) { g[loc] = counts[loc] * SALG_PR_SELGER; });
+  return g;
+}
+// GOALS og DAILY beregnes nedenfor, etter SELGERE_RAW er definert
 var LC = { ryen: '#3b82f6', lillestrom: '#f59e0b', fornebu: '#10b981' };
 var LL = { ryen: 'Ryen', fornebu: 'Fornebu', lillestrom: 'Lillestrøm', okern: 'Økern' };
 var SCOLS = [
@@ -991,7 +995,14 @@ var SELGERE_RAW = [
   { navn: 'Jonas Bakken',       loc: 'lillestrom' },
   { navn: 'Sebastian Wang',     loc: 'lillestrom' },
   { navn: 'Britt Robertsen',    loc: 'okern'      },
+  { navn: 'Adrian Kjærstad Lund', loc: 'lillestrom' },
 ];
+var _g = calcGoalsFromSelgere();
+var GOALS = { mai: _g, jun: _g };
+var DAILY = {
+  mai: (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=_g[loc]/ARBEIDSDAGER.mai; }); return d; })(),
+  jun: (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=_g[loc]/ARBEIDSDAGER.jun; }); return d; })()
+};
 
 var SELGERE = SELGERE_RAW.map(function(s, i) {
   var teamCol = {'ryen':'#e8001a','fornebu':'#22c55e','lillestrom':'#3b82f6','okern':'#8b5cf6'};
@@ -1462,10 +1473,10 @@ function renderInd() {
 
 // ─── RENDER: AVDELINGER ──────────────────────────────────────────────
 // ─── UKEMÅL ───────────────────────────────────────────────────────────
-var WEEKLY_GOALS = {
-  mai: { ryen: 12, fornebu: 12, lillestrom: 8, okern: 8 },
-  jun: { ryen: 12, fornebu: 12, lillestrom: 8, okern: 8 },
-};
+// Ukemål = månedsmål / antall uker i måneden (ca 4)
+var UKER_I_MAANED = 4;
+var _wg = (function(){ var d={}; Object.keys(_g).forEach(function(loc){ d[loc]=Math.round(_g[loc]/UKER_I_MAANED); }); return d; })();
+var WEEKLY_GOALS = { mai: _wg, jun: _wg };
 
 function getWeekNum(d) {
   var date = new Date(d);

@@ -181,7 +181,7 @@ const SELGER_PHOTOS={
   "fabian_noraker":"photos/fabian_noraker.jpg","marius_skaugard":"photos/marius_skaugard.jpg","marius_skaugaard":"photos/marius_skaugaard.jpg",
   "vetle_braend_romo":"photos/vetle_braend_romo.jpg","martin_ekmo":"photos/martin_ekmo.jpg",
   "jorgen_heggedal":"photos/jorgen_heggedal.jpg","jonas_bakken":"photos/jonas_bakken.jpg",
-  "sebastian_wang":"photos/sebastian_wang.jpg","britt_robertsen":"photos/britt_robertsen.jpg",
+  "sebastian_wang":"photos/sebastian_wang.jpg","britt_robertsen":"photos/britt_robertsen.jpg","adrian_kjaerstad_lund":null,
 };
 
 const DEPT={
@@ -190,7 +190,24 @@ const DEPT={
   lillestrom:{label:"Lillestrøm", color:"#3b82f6",bg:"rgba(59,130,246,0.12)"},
   okern:     {label:"Økern",      color:"#8b5cf6",bg:"rgba(139,92,246,0.12)"},
 };
-const GOALS={mai:{ryen:48,fornebu:48,lillestrom:32,okern:32},juni:{ryen:48,fornebu:48,lillestrom:32,okern:32}};
+const SELGERE_RAW=[
+  {navn:"Brian Kalvatn",loc:"ryen"},{navn:"Joakim Rønneberg",loc:"ryen"},{navn:"Fabian Noraker",loc:"ryen"},
+  {navn:"Marius Skaugård",loc:"fornebu"},{navn:"Vetle Brænd Rømo",loc:"fornebu"},{navn:"Martin Ekmo",loc:"fornebu"},
+  {navn:"Jørgen Heggedal",loc:"okern"},{navn:"Britt Robertsen",loc:"okern"},
+  {navn:"Jonas Bakken",loc:"lillestrom"},{navn:"Sebastian Wang",loc:"lillestrom"},
+  {navn:"Adrian Kjærstad Lund",loc:"lillestrom"},
+];
+const SALG_PR_SELGER=4;
+// Mål beregnes automatisk: antall selgere per avdeling × SALG_PR_SELGER
+function calcGoals(){
+  const counts={};
+  SELGERE_RAW.forEach(s=>{counts[s.loc]=(counts[s.loc]||0)+1;});
+  const g={};Object.keys(counts).forEach(loc=>{g[loc]=counts[loc]*SALG_PR_SELGER;});
+  return g;
+}
+const MONTH_GOAL=calcGoals();
+// GOALS bruker samme mål for alle måneder (endres automatisk om selgere legges til/fjernes)
+const GOALS={mai:MONTH_GOAL,juni:MONTH_GOAL};
 const dc=loc=>DEPT[loc]?.color||"#c9a84c";
 const dl=loc=>DEPT[loc]?.label||loc;
 const {useState,useEffect}=React;

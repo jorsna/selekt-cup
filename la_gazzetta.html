@@ -617,9 +617,9 @@ function genererTekst(salg, dato, alleSalg) {
 
   var SELGER_AVD = {
     'Brian Kalvatn':'Ryen','Joakim Rønneberg':'Ryen','Fabian Noraker':'Ryen',
-    'Marius Skaugård':'Fornebu','Vetle Brænd Rømo':'Fornebu','Martin Ekmo':'Fornebu','Jørgen Heggedal':'Fornebu',
+    'Marius Skaugård':'Fornebu','Vetle Brænd Rømo':'Fornebu','Martin Ekmo':'Fornebu',
     'Jonas Bakken':'Lillestrøm','Sebastian Wang':'Lillestrøm',
-    'Britt Robertsen':'Økern'
+    'Britt Robertsen':'Økern','Jørgen Heggedal':'Økern'
   };
 
   var selgerListe = Object.keys(selgerTelling).sort(function(a,b){return selgerTelling[b]-selgerTelling[a];}).map(function(n){
@@ -634,8 +634,9 @@ function genererTekst(salg, dato, alleSalg) {
 
   var hatTrickTekst = hatTrickNavn.map(function(n){return n+' ('+(SELGER_AVD[n]||'ukjent')+')';}).join(', ');
 
+  var totalSelgerListe = Object.keys(totalSelger).sort(function(a,b){return totalSelger[b]-totalSelger[a];}).map(function(n){return '  '+n+': '+totalSelger[n]+' biler';}).join('\n');
   var totalOppsummering = alleSalg && alleSalg.length > 0
-    ? '\nSESONGTOTAL (til og med i går):\n- Totalt solgt hele sesongen: '+totalSesongen+' biler\n- Avdelinger totalt: Ryen '+totalAvd.ryen+', Fornebu '+totalAvd.fornebu+', Lillestrøm '+totalAvd.lillestrom+', Økern '+totalAvd.okern+'\n- Ledende selger totalt: '+(totalLeder||'ingen')+' ('+(totalSelger[totalLeder]||0)+' biler)' : '';
+    ? '\nSESONGTOTAL (kun til og med i går – IKKE dagens tall):\n- Totalt solgt hele sesongen: '+totalSesongen+' biler\n- Avdelinger totalt: Ryen '+totalAvd.ryen+', Fornebu '+totalAvd.fornebu+', Lillestrøm '+totalAvd.lillestrom+', Økern '+totalAvd.okern+'\n- Ledende selger totalt: '+(totalLeder||'ingen')+' ('+(totalSelger[totalLeder]||0)+' biler)\n- Alle selgere sesongtotal:\n'+totalSelgerListe : '';
 
   var prompt = 'Du er La Gazzetta dello VCSO – en dramatisk italiensk-inspirert sportsavis for VCSO Selekt Cup 2026.\n\nKAMPRAPPORT – ' + norskDato(dato) + '\n\nSALG PER SELGER DENNE DAGEN:\n' + selgerListe + '\n\nSAMMENDRAG DENNE DAGEN:\n- Totalt: ' + totalt + ' biler\n- ' + mvpTekst + '\n- Avdelinger: Ryen ' + avdTelling.ryen + ', Fornebu ' + avdTelling.fornebu + ', Lillestrøm ' + avdTelling.lillestrom + ', Økern ' + avdTelling.okern + '\n- Bestselger-modell: ' + (topModell||'ukjent') + ' (' + (modellTelling[topModell]||0) + ' stk)\n- Finansierte salg: ' + finTelling + '\n' + (hatTrickNavn.length?'- HAT-TRICK: '+hatTrickTekst+'\n':'') + totalOppsummering + '\n\nVIKTIG: Bruk eksakt riktig avdeling per selger. Skriv hovedsakelig om DENNE DAGEN, men avslutt siste avsnitt med en kort sesongtotal-oppsummering.\n\nSkriv en dramatisk avisartikkel på NORSK:\n1. Dramatisk overskrift (maks 10 ord)\n2. Kort ingress (1 setning)\n3. 4-5 avsnitt ca 270 ord. Avsnitt skilles av \\n\\n. Siste avsnitt = sesongtotal. Inkluder et sitat i anførselstegn.\n\nSvar KUN med gyldig JSON:\n{"overskrift":"...","ingress":"...","tekst":"avsnitt1\\n\\navsnitt2\\n\\n\\"Sitat\\"\\n\\navsnitt3\\n\\nSesongtotal-avsnitt"}';
 

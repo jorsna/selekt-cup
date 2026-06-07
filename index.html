@@ -579,8 +579,8 @@ html, body {
 .race-track{position:relative;flex:1;height:26px;background:repeating-linear-gradient(90deg,var(--faint) 0,var(--faint) 14px,transparent 14px,transparent 28px);border-radius:13px;overflow:visible;border:1px solid var(--b1)}
 .race-trail{position:absolute;top:0;bottom:0;left:0;border-radius:13px;opacity:.5;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
 .race-car{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left 1.4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;z-index:2}
-.race-car-svg{display:block;animation:ballRoll 1.4s cubic-bezier(.4,0,.2,1)}
-@keyframes ballRoll{from{transform:rotate(-220deg)}to{transform:rotate(0)}}
+.race-car-svg{display:block;animation:orbPulse 2.2s ease-in-out infinite}
+@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 .race-car-body{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;color:#fff;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .race-crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:11px}
 .race-finish{position:absolute;right:-1px;top:-3px;bottom:-3px;width:7px;background:repeating-linear-gradient(45deg,#fff 0,#fff 3px,#000 3px,#000 6px);border-radius:2px;opacity:.7}
@@ -1547,22 +1547,24 @@ function teamSalesInWeek(teamId, weekNum) {
 
 
 
-// Fotball (SVG) \u2013 ren minimalistisk stil med farget komethale i avdelingsfarge
+// Lysende orb (SVG) i avdelingsfarge \u2013 glødende kule med kjerne
 function raceCarSvg(color, isLeader) {
+  var glow = isLeader ? 'var(--gold)' : color;
   return ''
-    + '<svg class="race-car-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
-    // hvit ball med tynn kant
-    + '<circle cx="12" cy="12" r="10" fill="#fcfcfc" stroke="#c8c8c8" stroke-width="0.7"/>'
-    // sentral femkant
-    + '<path d="M12 7.2 L15.3 9.6 L14 13.4 L10 13.4 L8.7 9.6 Z" fill="#1c1c1c"/>'
-    // tre korte streker ut fra femkanten (antydet m\u00f8nster, rent)
-    + '<path d="M12 7.2 L12 4" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
-    + '<path d="M8.7 9.6 L5.6 8.3" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
-    + '<path d="M15.3 9.6 L18.4 8.3" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
-    + '<path d="M10 13.4 L8.4 16.6" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
-    + '<path d="M14 13.4 L15.6 16.6" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
-    // glans
-    + '<ellipse cx="9" cy="8.5" rx="2.2" ry="1.4" fill="#fff" opacity="0.5"/>'
+    + '<svg class="race-car-svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    + '<defs>'
+      + '<radialGradient id="orb-'+color.replace("#","")+(isLeader?"-L":"")+'" cx="40%" cy="38%" r="65%">'
+        + '<stop offset="0%" stop-color="#ffffff"/>'
+        + '<stop offset="35%" stop-color="'+glow+'"/>'
+        + '<stop offset="100%" stop-color="'+glow+'" stop-opacity="0.85"/>'
+      + '</radialGradient>'
+    + '</defs>'
+    // ytre glød
+    + '<circle cx="11" cy="11" r="9" fill="'+glow+'" opacity="0.25"/>'
+    // selve kulen
+    + '<circle cx="11" cy="11" r="6.5" fill="url(#orb-'+color.replace("#","")+(isLeader?"-L":"")+')"/>'
+    // skarp highlight
+    + '<circle cx="8.8" cy="8.6" r="1.8" fill="#fff" opacity="0.9"/>'
     + '</svg>';
 }
 
@@ -1603,8 +1605,8 @@ function renderRace() {
     if (pos > 92) pos = 92;
     var isLeader = i === 0;
     var trail = isLeader
-      ? 'linear-gradient(90deg, transparent, '+r.color+'33, var(--gold))'
-      : 'linear-gradient(90deg, transparent, '+r.color+'22, '+r.color+'dd)';
+      ? 'linear-gradient(90deg, transparent, var(--gold)22, var(--gold)dd)'
+      : 'linear-gradient(90deg, transparent, '+r.color+'22, '+r.color+'ee)';
 
     return ''
       + '<div class="race-lane" style="animation-delay:'+(i*0.12)+'s">'

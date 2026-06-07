@@ -888,7 +888,7 @@ html, body {
             <div>Individuell rangering for alle 15 selgere sortert etter poeng. Viser m&#229;l, poeng og form siste 5 dager. Hold musepekeren over en selger for &#229; se spillerkort.</div>
           </div><div style="display:flex;gap:10px">
             <div style="background:var(--b1);color:var(--gold);font-family:'Anton',sans-serif;font-size:10px;padding:2px 8px;border-radius:3px;flex-shrink:0;white-space:nowrap;height:fit-content;margin-top:2px">AVDELINGER</div>
-            <div><strong style="color:var(--txt)">Nytt:</strong> Avdelingsrace! Hver avdeling er en lysende orb som kj&#248;rer mot m&#229;lstreken (m&#229;nedsslutt). Rangeringen er <strong style="color:var(--txt)">poeng per selger</strong> &#8211; s&#229; en liten avdeling kan sl&#229; en stor. Lederen ligger forrest med gull. Under racet vises full tabell med ukefremgang.</div>
+            <div>Avdelingsrace! Hver avdeling er en lysende orb som kj&#248;rer mot m&#229;lstreken (m&#229;nedsslutt). Rangeringen er <strong style="color:var(--txt)">poeng per selger</strong> &#8211; s&#229; en liten avdeling kan sl&#229; en stor. Lederen ligger forrest med gull. Under racet vises full tabell med ukefremgang.</div>
           </div><div style="display:flex;gap:10px">
             <div style="background:var(--b1);color:var(--gold);font-family:'Anton',sans-serif;font-size:10px;padding:2px 8px;border-radius:3px;flex-shrink:0;white-space:nowrap;height:fit-content;margin-top:2px">STATISTIKK</div>
             <div>Toppscorerliste, aktivitet siste 5 dager og avdelingens fremgang mot m&#229;let.</div>
@@ -1606,7 +1606,7 @@ function renderRace() {
     if (pos < 10) pos = 10;
     var isLeader = i === 0;
     var trail = isLeader
-      ? 'linear-gradient(90deg, transparent, var(--gold)55, var(--gold))'
+      ? 'linear-gradient(90deg, transparent, rgba(255,210,74,.4), #ffd24a)'
       : 'linear-gradient(90deg, transparent, '+r.color+'44, '+r.color+')';
 
     return ''
@@ -1616,7 +1616,7 @@ function renderRace() {
           + '<span style="color:'+r.color+';font-weight:700">'+r.initials+'</span>'
         + '</div>'
         + '<div class="race-track">'
-          + '<div class="race-trail" style="width:'+pos+'%;background:'+trail+'"></div>'
+          + '<div class="race-trail" style="width:'+pos+'%;background:'+trail+';'+(isLeader?'box-shadow:0 0 12px rgba(255,210,74,.5);opacity:.9':'')+'"></div>'
           + '<div class="race-car" style="left:'+pos+'%;'+(isLeader?'filter:drop-shadow(0 0 10px var(--gold))':'filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))')+'">'
             + (isLeader?'<span class="race-crown">&#128081;</span>':'')
             + raceCarSvg(r.color, isLeader)

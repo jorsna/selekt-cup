@@ -1547,21 +1547,22 @@ function teamSalesInWeek(teamId, weekNum) {
 
 
 
-// Fotball (SVG) med farget komethale i avdelingsfarge
+// Fotball (SVG) \u2013 ren minimalistisk stil med farget komethale i avdelingsfarge
 function raceCarSvg(color, isLeader) {
   return ''
-    + '<svg class="race-car-svg" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">'
-    // ball-base
-    + '<circle cx="13" cy="13" r="9.5" fill="#fff" stroke="#d0d0d0" stroke-width="0.6"/>'
-    // svarte paneler (forenklet fotballm\u00f8nster)
-    + '<polygon points="13,7 16.2,9.3 15,13 11,13 9.8,9.3" fill="#1a1a1a"/>'
-    + '<polygon points="13,7 9.8,9.3 6.7,8 8,5.2 13,4.3" fill="#1a1a1a" opacity="0.85"/>'
-    + '<polygon points="13,7 16.2,9.3 19.3,8 18,5.2 13,4.3" fill="#1a1a1a" opacity="0.85"/>'
-    + '<polygon points="11,13 15,13 16,17 13,19 10,17" fill="#1a1a1a" opacity="0.9"/>'
-    + '<polygon points="9.8,9.3 6.7,8 5,11 6.5,14.5 9.5,13.2" fill="#1a1a1a" opacity="0.7"/>'
-    + '<polygon points="16.2,9.3 19.3,8 21,11 19.5,14.5 16.5,13.2" fill="#1a1a1a" opacity="0.7"/>'
+    + '<svg class="race-car-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    // hvit ball med tynn kant
+    + '<circle cx="12" cy="12" r="10" fill="#fcfcfc" stroke="#c8c8c8" stroke-width="0.7"/>'
+    // sentral femkant
+    + '<path d="M12 7.2 L15.3 9.6 L14 13.4 L10 13.4 L8.7 9.6 Z" fill="#1c1c1c"/>'
+    // tre korte streker ut fra femkanten (antydet m\u00f8nster, rent)
+    + '<path d="M12 7.2 L12 4" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
+    + '<path d="M8.7 9.6 L5.6 8.3" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
+    + '<path d="M15.3 9.6 L18.4 8.3" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
+    + '<path d="M10 13.4 L8.4 16.6" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
+    + '<path d="M14 13.4 L15.6 16.6" stroke="#1c1c1c" stroke-width="1.1" stroke-linecap="round"/>'
     // glans
-    + '<ellipse cx="10" cy="9.5" rx="2.4" ry="1.6" fill="#fff" opacity="0.45"/>'
+    + '<ellipse cx="9" cy="8.5" rx="2.2" ry="1.4" fill="#fff" opacity="0.5"/>'
     + '</svg>';
 }
 

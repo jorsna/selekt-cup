@@ -578,7 +578,9 @@ html, body {
 .race-pos-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Anton',sans-serif}
 .race-track{position:relative;flex:1;height:26px;background:repeating-linear-gradient(90deg,var(--faint) 0,var(--faint) 14px,transparent 14px,transparent 28px);border-radius:13px;overflow:visible;border:1px solid var(--b1)}
 .race-trail{position:absolute;top:0;bottom:0;left:0;border-radius:13px;opacity:.5;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
-.race-car{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left 1.4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;z-index:2}
+.race-car{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left 1.4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;z-index:2}
+.race-car-svg{display:block;animation:ballRoll 1.4s cubic-bezier(.4,0,.2,1)}
+@keyframes ballRoll{from{transform:rotate(-220deg)}to{transform:rotate(0)}}
 .race-car-body{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;color:#fff;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .race-crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:11px}
 .race-finish{position:absolute;right:-1px;top:-3px;bottom:-3px;width:7px;background:repeating-linear-gradient(45deg,#fff 0,#fff 3px,#000 3px,#000 6px);border-radius:2px;opacity:.7}
@@ -1544,6 +1546,25 @@ function teamSalesInWeek(teamId, weekNum) {
 }
 
 
+
+// Fotball (SVG) med farget komethale i avdelingsfarge
+function raceCarSvg(color, isLeader) {
+  return ''
+    + '<svg class="race-car-svg" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    // ball-base
+    + '<circle cx="13" cy="13" r="9.5" fill="#fff" stroke="#d0d0d0" stroke-width="0.6"/>'
+    // svarte paneler (forenklet fotballm\u00f8nster)
+    + '<polygon points="13,7 16.2,9.3 15,13 11,13 9.8,9.3" fill="#1a1a1a"/>'
+    + '<polygon points="13,7 9.8,9.3 6.7,8 8,5.2 13,4.3" fill="#1a1a1a" opacity="0.85"/>'
+    + '<polygon points="13,7 16.2,9.3 19.3,8 18,5.2 13,4.3" fill="#1a1a1a" opacity="0.85"/>'
+    + '<polygon points="11,13 15,13 16,17 13,19 10,17" fill="#1a1a1a" opacity="0.9"/>'
+    + '<polygon points="9.8,9.3 6.7,8 5,11 6.5,14.5 9.5,13.2" fill="#1a1a1a" opacity="0.7"/>'
+    + '<polygon points="16.2,9.3 19.3,8 21,11 19.5,14.5 16.5,13.2" fill="#1a1a1a" opacity="0.7"/>'
+    // glans
+    + '<ellipse cx="10" cy="9.5" rx="2.4" ry="1.6" fill="#fff" opacity="0.45"/>'
+    + '</svg>';
+}
+
 // ─── AVDELINGSRACE ───────────────────────────────────────────────────
 // Race relativt til lederen: lederen ligger ved målstreken, de andre
 // plasseres i forhold til lederens poeng-per-selger. Banelengden gir
@@ -1581,8 +1602,8 @@ function renderRace() {
     if (pos > 92) pos = 92;
     var isLeader = i === 0;
     var trail = isLeader
-      ? 'linear-gradient(90deg, transparent, '+r.color+'00, var(--gold))'
-      : 'linear-gradient(90deg, transparent, '+r.color+'00, '+r.color+'cc)';
+      ? 'linear-gradient(90deg, transparent, '+r.color+'33, var(--gold))'
+      : 'linear-gradient(90deg, transparent, '+r.color+'22, '+r.color+'dd)';
 
     return ''
       + '<div class="race-lane" style="animation-delay:'+(i*0.12)+'s">'
@@ -1592,9 +1613,9 @@ function renderRace() {
         + '</div>'
         + '<div class="race-track">'
           + '<div class="race-trail" style="width:'+pos+'%;background:'+trail+'"></div>'
-          + '<div class="race-car" style="left:'+pos+'%;color:'+r.color+(isLeader?';filter:drop-shadow(0 0 8px var(--gold))':'')+'">'
+          + '<div class="race-car" style="left:'+pos+'%;'+(isLeader?'filter:drop-shadow(0 0 10px var(--gold))':'filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))')+'">'
             + (isLeader?'<span class="race-crown">&#128081;</span>':'')
-            + '<span class="race-car-body" style="background:'+r.color+'">&#9654;</span>'
+            + raceCarSvg(r.color, isLeader)
           + '</div>'
           + '<div class="race-finish"></div>'
         + '</div>'

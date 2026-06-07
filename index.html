@@ -577,7 +577,7 @@ html, body {
 .race-lane-label{display:flex;align-items:center;gap:5px;width:42px;flex-shrink:0}
 .race-pos-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Anton',sans-serif}
 .race-track{position:relative;flex:1;height:26px;background:repeating-linear-gradient(90deg,var(--faint) 0,var(--faint) 14px,transparent 14px,transparent 28px);border-radius:13px;overflow:visible;border:1px solid var(--b1)}
-.race-trail{position:absolute;top:0;bottom:0;left:0;border-radius:13px;opacity:.5;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.race-trail{position:absolute;top:0;bottom:0;left:0;border-radius:13px;opacity:.7;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
 .race-car{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left 1.4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;z-index:2}
 .race-car-svg{display:block;animation:orbPulse 2.2s ease-in-out infinite}
 @keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
@@ -888,7 +888,7 @@ html, body {
             <div>Individuell rangering for alle 15 selgere sortert etter poeng. Viser m&#229;l, poeng og form siste 5 dager. Hold musepekeren over en selger for &#229; se spillerkort.</div>
           </div><div style="display:flex;gap:10px">
             <div style="background:var(--b1);color:var(--gold);font-family:'Anton',sans-serif;font-size:10px;padding:2px 8px;border-radius:3px;flex-shrink:0;white-space:nowrap;height:fit-content;margin-top:2px">AVDELINGER</div>
-            <div>Ryen, Fornebu og Lillestr&#248;m med fremgangsbar mot m&#229;let. Gr&#248;nn = i rute, gul = bak, r&#248;d = langt bak.</div>
+            <div><strong style="color:var(--txt)">Nytt:</strong> Avdelingsrace! Hver avdeling er en lysende orb som kj&#248;rer mot m&#229;lstreken (m&#229;nedsslutt). Rangeringen er <strong style="color:var(--txt)">poeng per selger</strong> &#8211; s&#229; en liten avdeling kan sl&#229; en stor. Lederen ligger forrest med gull. Under racet vises full tabell med ukefremgang.</div>
           </div><div style="display:flex;gap:10px">
             <div style="background:var(--b1);color:var(--gold);font-family:'Anton',sans-serif;font-size:10px;padding:2px 8px;border-radius:3px;flex-shrink:0;white-space:nowrap;height:fit-content;margin-top:2px">STATISTIKK</div>
             <div>Toppscorerliste, aktivitet siste 5 dager og avdelingens fremgang mot m&#229;let.</div>
@@ -1601,12 +1601,13 @@ function renderRace() {
     // Relativ posisjon: leder = 100%, andre i forhold til leder
     var rel = leaderPps > 0 ? (r.pps / leaderPps) : 0;
     // Plasser bilen: jo nærmere leder, jo nærmere mål. Skaler med månedsprogresjon.
-    var pos = 6 + rel * 84 * fieldSpread + (84 * (1-fieldSpread)) * (rel); // %
-    if (pos > 92) pos = 92;
+    var pos = 10 + rel * 80 * fieldSpread + (80 * (1-fieldSpread)) * (rel); // %
+    if (pos > 90) pos = 90;
+    if (pos < 10) pos = 10;
     var isLeader = i === 0;
     var trail = isLeader
-      ? 'linear-gradient(90deg, transparent, var(--gold)22, var(--gold)dd)'
-      : 'linear-gradient(90deg, transparent, '+r.color+'22, '+r.color+'ee)';
+      ? 'linear-gradient(90deg, transparent, var(--gold)55, var(--gold))'
+      : 'linear-gradient(90deg, transparent, '+r.color+'44, '+r.color+')';
 
     return ''
       + '<div class="race-lane" style="animation-delay:'+(i*0.12)+'s">'
@@ -1633,7 +1634,7 @@ function renderRace() {
     + '<div class="race-wrap">'
       + '<div class="race-header">'
         + '<div class="race-title">&#127937; AVDELINGSRACE</div>'
-        + '<div class="race-sub">Mot m&#229;lstreken &middot; rangert p&#229; poeng per selger</div>'
+        + '<div class="race-sub">M&#229;lstreken = m&#229;nedsslutt &middot; rangert p&#229; poeng per selger</div>'
       + '</div>'
       + carsHtml
       + '<div class="race-legend">'

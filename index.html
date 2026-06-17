@@ -102,6 +102,10 @@ html,body{background:var(--bg);font-family:'Barlow',sans-serif;color:var(--txt);
   .hdr-cd{flex-direction:row}
   .hdr-cd-label{display:none}
 }
+@media(max-width:519px){
+  .t1{font-size:17px;letter-spacing:1.5px}
+  .crest{width:46px;height:46px;font-size:22px}
+}
 .login-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;
   border-radius:8px;vertical-align:middle;margin-left:6px}
 .badge-selger{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid rgba(255,215,0,.3)}
@@ -141,12 +145,12 @@ html,body{background:var(--bg);font-family:'Barlow',sans-serif;color:var(--txt);
   border-bottom:1px solid rgba(255,215,0,.2);align-items:center;gap:12px}
 
 /* TABLE */
-.tbl-head{display:grid;grid-template-columns:26px 38px 1fr 36px 40px 90px 40px;
+.tbl-head{display:grid;grid-template-columns:26px 40px 1fr 36px 40px 90px 40px;
   padding:7px 12px;font-size:8.5px;font-weight:700;color:var(--muted);
   text-transform:uppercase;letter-spacing:.6px;background:var(--card2);border-bottom:1px solid var(--b1)}
 .tbl-head>*{text-align:center}
 .tbl-head>*:nth-child(3){text-align:left}
-.trow{display:grid;grid-template-columns:26px 38px 1fr 36px 40px 90px 40px;
+.trow{display:grid;grid-template-columns:26px 40px 1fr 36px 40px 90px 40px;
   padding:8px 12px;align-items:center;border-bottom:1px solid var(--b1);
   transition:background .15s;animation:fadeIn .35s ease both}
 .trow>*{text-align:center}
@@ -365,11 +369,11 @@ html, body {
 }
 /* Prevent table overflow on mobile */
 .tbl-head, .trow {
-  grid-template-columns: 22px 36px 1fr 32px 36px 80px 36px;
+  grid-template-columns: 22px 40px 1fr 32px 36px 80px 36px;
 }
 @media (max-width: 400px) {
   .tbl-head, .trow {
-    grid-template-columns: 20px 32px 1fr 28px 32px 70px 32px;
+    grid-template-columns: 20px 40px 1fr 28px 32px 70px 32px;
   }
   .name-main { font-size: 12px; }
   .cd-n { font-size: 14px; }
@@ -679,7 +683,7 @@ html, body {
       </div>
       <div class="hdr-right">
         <button id="news-btn" onclick="openNews()" aria-label="Nyheter fra Podium" title="Nyheter fra Podium" style="position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);background:rgba(201,168,76,.08);font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center">📣<span id="news-dot" style="display:none;position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--card)"></span></button>
-        <button class="hdr-btn" onclick="showHelp()">? Slik fungerer det</button>
+        <button onclick="showHelp()" aria-label="Slik fungerer det" title="Slik fungerer det" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);background:rgba(201,168,76,.08);font-size:18px;font-weight:700;color:var(--gold);cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">?</button>
   <div id="export-btn" style="display:none"></div>
       </div>
     </div>
@@ -741,7 +745,7 @@ html, body {
 <!-- MVP BANNER -->
 <div id="mvp-banner" style="display:none;padding:10px 16px;background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,215,0,.04));border-bottom:1px solid rgba(255,215,0,.2);align-items:center;gap:12px">
   <div style="font-size:22px">&#128081;</div>
-  <div id="mvp-av" style="width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700"></div>
+  <div id="mvp-av" style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700"></div>
   <div>
     <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold)">Dagens MVP</div>
     <div id="mvp-name" style="font-size:15px;font-weight:700;color:var(--txt)">&#8211;</div>
@@ -1341,7 +1345,7 @@ function updateMVP() {
     }
     banner.innerHTML +=
       '<div style="display:flex;align-items:center;gap:8px;margin-right:14px;flex-shrink:0">'+
-        '<div style="width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex-shrink:0">'+avHtml+'</div>'+
+        '<div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex-shrink:0">'+avHtml+'</div>'+
         '<div>'+
           '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold)">'+(delt?'Delt MVP':'Dagens MVP')+'</div>'+
           '<div style="font-size:14px;font-weight:700;color:var(--txt)">'+navn+'</div>'+

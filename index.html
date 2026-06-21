@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>VCSO Selekt Cup</title>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 <style>
 @font-face {
   font-family: 'VolvoBroad';
@@ -110,6 +110,129 @@ html,body{background:var(--bg);font-family:'Barlow',sans-serif;color:var(--txt);
   border-radius:8px;vertical-align:middle;margin-left:6px}
 .badge-selger{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid rgba(255,215,0,.3)}
 .badge-tilskuer{background:rgba(90,120,152,.15);color:var(--muted);border:1px solid var(--b1)}
+.badge-admin{background:rgba(201,168,76,.15);color:var(--gold);border:1px solid var(--gold)}
+/* ── SPOTLIGHT BANNER ── */
+.sp-banner{display:flex;align-items:center;gap:12px;padding:11px 16px;position:relative;overflow:hidden;
+  background:linear-gradient(100deg,var(--card) 0%,#1a2438 45%,var(--card) 100%);border-bottom:1px solid var(--b1)}
+.sp-banner::before{content:"";position:absolute;inset:0;background-size:220% 100%;animation:spShine 4.5s linear infinite;
+  background:linear-gradient(100deg,transparent 30%,rgba(201,168,76,.13) 50%,transparent 70%)}
+@keyframes spShine{to{background-position:-220% 0}}
+.sp-ico{width:34px;height:34px;border-radius:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative;z-index:1}
+.sp-txt{position:relative;z-index:1;flex:1;min-width:0}
+.sp-lbl{font-size:8.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px}
+.sp-mod{font-family:'Anton',sans-serif;font-size:20px;letter-spacing:1px;line-height:1.05;margin-top:1px;color:var(--txt)}
+.sp-my{font-size:12px;color:#000;background:var(--gold);border-radius:4px;padding:1px 6px;vertical-align:middle;margin-left:5px;letter-spacing:.5px}
+.sp-sub{font-size:9.5px;color:var(--muted);margin-top:2px}
+.sp-pts{position:relative;z-index:1;font-family:'Anton',sans-serif;font-size:22px;color:#000;background:var(--gold);border-radius:7px;padding:5px 11px;line-height:1;flex-shrink:0}
+/* ── SPOTLIGHT ADMIN ── */
+.sp-admin{margin:0 14px 14px;background:var(--card2);border:1px solid var(--b1);border-radius:10px;padding:13px}
+.sp-admin-h{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.sp-admin-h span{color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0}
+.sp-admin-status{font-size:11px;color:var(--silver);background:var(--bg);border:1px solid var(--b1);border-radius:6px;padding:7px 9px;margin-bottom:10px}
+.sp-admin-row{display:flex;gap:8px;margin-bottom:9px}
+.sp-admin-row select,.sp-admin-row input{flex:1;min-width:0;background:var(--bg);color:var(--txt);border:1px solid var(--b1);border-radius:6px;padding:9px;font-family:'Barlow',sans-serif;font-size:13px}
+.sp-admin-row2{display:flex;gap:8px;align-items:stretch}
+.sp-bonus-seg{display:flex;border:1px solid var(--b1);border-radius:6px;overflow:hidden;flex:0 0 96px}
+.sp-bonus-seg button{flex:1;background:var(--bg);color:var(--muted);border:none;font-family:'Anton',sans-serif;font-size:14px;cursor:pointer}
+.sp-bonus-seg button.on{background:var(--gold);color:#000}
+.sp-save{flex:1;background:var(--gold);color:#000;border:none;border-radius:6px;font-family:'Anton',sans-serif;font-size:13px;letter-spacing:.5px;cursor:pointer;text-transform:uppercase;padding:9px}
+.sp-clear{width:100%;margin-top:9px;background:transparent;color:var(--muted);border:1px solid var(--b1);border-radius:6px;padding:8px;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;text-transform:uppercase}
+/* ── BONUS POPUP ── */
+.sp-pop-bd{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:10000;display:none;align-items:center;justify-content:center;padding:24px}
+.sp-pop-bd.open{display:flex}
+.sp-pop{width:100%;max-width:330px;background:var(--card);border:1px solid var(--b1);border-top:3px solid var(--gold);border-radius:14px;padding:20px 18px;text-align:center}
+.sp-pop-ico{font-size:30px}
+.sp-pop-q{font-family:'Anton',sans-serif;font-size:20px;margin-top:8px;letter-spacing:.5px;color:var(--txt)}
+.sp-pop-ctx{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+.sp-pop-ctx b{color:var(--gold)}
+.sp-pop-btns{display:flex;gap:10px;margin-top:18px}
+.sp-pop-btns button{flex:1;padding:13px;border-radius:8px;font-family:'Anton',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer;border:none}
+.sp-pop-yes{background:var(--gold);color:#000}
+.sp-pop-no{background:transparent;color:var(--muted);border:1px solid var(--b1)!important}
+/* ── MILEPÆL-GLØD ── */
+.av-wrap{position:relative;display:inline-block}
+.av-wrap.fresh .av{border:2px solid var(--gold)!important;animation:mileGlow 1.8s ease-in-out infinite}
+@keyframes mileGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 10px 2px rgba(201,168,76,.6),0 0 20px 5px rgba(255,180,0,.2)}}
+.mile-dot{position:absolute;top:-3px;right:-3px;width:15px;height:15px;border-radius:50%;background:var(--gold);
+  color:#000;border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:8px;z-index:2;animation:mileDot 1.6s ease-in-out infinite}
+@keyframes mileDot{0%,100%{transform:scale(.9)}50%{transform:scale(1.15)}}
+@media(prefers-reduced-motion:reduce){.av-wrap.fresh .av,.mile-dot{animation:none}}
+/* ── SPILLERKORT ── */
+.pc-bd{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;opacity:0;pointer-events:none;transition:opacity .25s}
+.pc-bd.open{opacity:1;pointer-events:auto}
+.pc-sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:520px;
+  background:var(--card);border-top:3px solid var(--gold);border-radius:18px 18px 0 0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:88vh;overflow-y:auto;padding-bottom:24px;z-index:10001}
+.pc-sheet.open{transform:translate(-50%,0)}
+.pc-grab{position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:5;width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.28);margin:0}
+.pc-x{position:absolute;top:11px;right:13px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:#fff;font-size:15px;cursor:pointer;z-index:5}
+.fc{position:relative;overflow:hidden;border-radius:16px 16px 0 0}
+.fc-hero{position:relative;padding:30px 18px 18px;text-align:center;overflow:hidden;border-radius:16px 16px 0 0;border-bottom:1px solid rgba(201,168,76,.13);
+  background:radial-gradient(85% 62% at 50% -4%, rgba(201,168,76,.16), transparent 56%),linear-gradient(180deg, var(--accentTint) 0%, transparent 64%),var(--card)}
+.fc-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(130% 95% at 50% -14%, var(--accentGlow) 0%, transparent 60%)}
+.fc-hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(201,168,76,.16) 50%,transparent 65%);background-size:240% 100%;background-position:240% 0}
+.fc.fresh .fc-hero::after{animation:fcSweep 3.8s ease-in-out infinite}
+@keyframes fcSweep{0%{background-position:240% 0}55%,100%{background-position:-240% 0}}
+.fc-rating{position:absolute;top:13px;left:16px;z-index:4;text-align:left;line-height:.82}
+.fc-rating .r-n{font-family:'Anton',sans-serif;font-size:30px;color:var(--gold);filter:drop-shadow(0 2px 6px rgba(201,168,76,.4))}
+.fc-rating .r-l{font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--gold);opacity:.85;text-transform:uppercase}
+.fc-photo-wrap{position:relative;z-index:2;width:104px;margin:2px auto 0}
+.fc-rank-badge{position:absolute;bottom:-3px;right:-3px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:14px;background:var(--bg);border:2px solid var(--rankCol);color:var(--rankCol);box-shadow:0 3px 10px rgba(0,0,0,.55);z-index:3}
+.fc-photo{position:relative;z-index:2;width:104px;height:104px;border-radius:50%;margin:0;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:38px;border:3px solid var(--gold);overflow:hidden;background:var(--accentBg);color:var(--accent);box-shadow:0 0 0 3px rgba(201,168,76,.14),0 0 24px rgba(201,168,76,.16),0 8px 22px rgba(0,0,0,.45)}
+.fc-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%)}
+.fc.fresh .fc-photo{animation:fcGlow 1.9s ease-in-out infinite}
+@keyframes fcGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 16px 3px rgba(201,168,76,.6),0 0 34px 8px rgba(255,180,0,.22)}}
+.fc-name{position:relative;z-index:2;font-family:'Anton',sans-serif;font-size:25px;letter-spacing:.5px;margin-top:11px;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 42%,#fff 64%,var(--gold) 100%);background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:fcNameShine 3.6s linear infinite}
+@keyframes fcNameShine{to{background-position:220% center}}
+.fc-dept{position:relative;z-index:2;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:3px;display:inline-flex;align-items:center;gap:6px}
+.fc-dept .dd{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.fc-tag{position:relative;z-index:2;display:inline-block;margin-top:10px;font-family:'Cinzel',serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);border-radius:20px;padding:5px 14px}
+.fc-strip{display:flex;margin:4px 16px 0;background:var(--card2);border:1px solid var(--b1);border-radius:12px;overflow:hidden}
+.fc-st{flex:1;text-align:center;padding:13px 6px;position:relative}
+.fc-st+.fc-st::before{content:"";position:absolute;left:0;top:22%;height:56%;width:1px;background:var(--b1)}
+.fc-st .n{font-family:'Anton',sans-serif;font-size:25px;color:var(--gold);line-height:1}
+.fc-st .l{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:5px}
+.fc-sec{padding:16px 18px 0}
+.fc-sec-h{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.fc-sec-h::after{content:"";flex:1;height:1px;background:var(--b1)}
+.fc-badges{display:flex;flex-wrap:wrap;gap:8px}
+.fc-badge{display:flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--b1);border-radius:20px;padding:6px 12px 6px 7px;font-size:11.5px;font-weight:600;color:var(--txt)}
+.fc-badge .bi{width:23px;height:23px;border-radius:50%;background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.fc-badge.new{border-color:var(--gold);background:rgba(201,168,76,.09);animation:fcGlow 1.9s ease-in-out infinite}
+.fc-badge.new .bi{background:var(--gold)}
+.fc-empty{font-size:12px;color:var(--muted);font-style:italic;line-height:1.5}
+.fc-next{background:var(--card2);border:1px solid var(--b1);border-radius:12px;padding:14px}
+.fc-next-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.fc-next-name{font-size:13px;font-weight:600;color:var(--txt)}
+.fc-next-frac{font-family:'Anton',sans-serif;font-size:16px;color:var(--gold)}
+.fc-bar{height:10px;border-radius:6px;background:var(--bg);overflow:hidden;border:1px solid var(--b1)}
+.fc-bar-fill{height:100%;border-radius:6px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1);background:linear-gradient(90deg,#8a6d0b,var(--gold));position:relative}
+.fc-bar-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);background-size:300% 100%;animation:fcBarSheen 2.4s linear infinite}
+@keyframes fcBarSheen{to{background-position:-300% 0}}
+.fc-next-go{font-size:10.5px;color:var(--muted);margin-top:8px}
+.fc-form{display:flex;align-items:center;gap:10px}
+.fc-pills{display:flex;gap:6px}
+.fc-pill{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.fc-pill.w{background:rgba(34,197,94,.16);border:1px solid rgba(34,197,94,.45)}
+.fc-pill.x{background:var(--bg);border:1px solid var(--b1);color:var(--b2)}
+.fc-form-sum{margin-left:auto;font-family:'Anton',sans-serif;font-size:14px;color:var(--gold);text-align:right}
+.fc-form-sum span{font-family:'Barlow';font-size:9px;color:var(--muted);font-weight:600;display:block;letter-spacing:.5px}
+.fc-skjerf{margin:18px 18px 6px;width:calc(100% - 36px);padding:13px;border:none;border-radius:10px;cursor:pointer;font-family:'Anton',sans-serif;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:#000;background:linear-gradient(135deg,#fff 0%,var(--gold) 45%,#e0b400 100%)}
+.rv{opacity:0;transform:translateY(14px)}
+.rv.in{opacity:1;transform:none;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+/* åpne-flimmer: tre raske sveip over hele kortet */
+.fc-sheen{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.fc-sheen::before{content:"";position:absolute;top:-15%;bottom:-15%;width:50%;left:-60%;transform:skewX(-18deg);
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);animation:fcSheen 1s ease-in-out .15s both}
+@keyframes fcSheen{0%{left:-60%}100%{left:130%}}
+/* foto-ping: to gull-ringer pulser ut ved åpning */
+.fc-photo-wrap::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold);opacity:0;pointer-events:none;animation:fcPing 1.5s ease-out .2s 2}
+@keyframes fcPing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.fc *{animation:none!important}.fc .rv{opacity:1;transform:none}.fc-bar-fill{transition:none}.fc-sheen::before,.fc-photo-wrap::after,.fc-name{animation:none!important}}
+
 .hdr-btn{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.35);border-radius:4px;
   padding:0 10px;height:28px;color:var(--gold);font-size:11px;cursor:pointer;font-weight:700;
   flex-shrink:0;white-space:nowrap;display:flex;align-items:center;gap:5px}
@@ -401,40 +524,7 @@ html, body {
 
 /* ── SPILLERKORT HOVER ─────────────────────────────── */
 .trow{position:relative}
-.player-card{
-  position:fixed;z-index:9999;
-  width:220px;
-  background:linear-gradient(160deg,#0f1f10 0%,#09111e 70%);
-  border:1px solid rgba(255,215,0,.35);
-  border-radius:10px;overflow:hidden;
-  box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 30px rgba(255,215,0,.1);
-  pointer-events:all;
-  opacity:0;transition:opacity .15s ease;
-}
-.player-card.show{opacity:1}
-.pc-top{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,215,0,.03));
-        border-bottom:1px solid rgba(255,215,0,.15);
-        padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
-.pc-comp{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,215,0,.6)}
-.pc-week{font-size:8px;color:#5a7898}
-.pc-photo-wrap{padding:14px 0 0;display:flex;justify-content:center}
-.pc-photo{width:80px;height:80px;border-radius:50%;overflow:hidden;
-          border:3px solid var(--gold);
-          box-shadow:0 0 20px rgba(255,215,0,.25)}
-.pc-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%)}
-.pc-photo-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-             font-size:22px;font-weight:900;color:var(--gold);background:rgba(255,215,0,.08)}
-.pc-name{font-family:'Anton',sans-serif;font-size:17px;color:#fff;
-         text-align:center;padding:8px 12px 2px;line-height:1}
-.pc-avd{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-        text-align:center;margin-bottom:10px}
-.pc-stats{display:flex;border-top:1px solid rgba(255,215,0,.1)}
-.pc-stat{flex:1;padding:8px 4px;text-align:center;border-right:1px solid rgba(255,215,0,.08)}
-.pc-stat:last-child{border-right:none}
-.pc-stat-n{font-family:'Anton',sans-serif;font-size:20px;line-height:1}
-.pc-stat-l{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#5a7898;margin-top:2px}
-.pc-form{display:flex;justify-content:center;gap:3px;padding:8px 12px 12px}
-.pc-dot{width:10px;height:10px;border-radius:50%}
+
 
 /* ── DEL SKJERF KNAPP ── */
 .pc-skjerf-btn{display:block;width:calc(100% - 24px);margin:0 12px 12px;padding:8px;
@@ -772,6 +862,9 @@ html, body {
   </div>
 </div>
 
+<!-- SPOTLIGHT BANNER (vises kun når aktiv) -->
+<div class="sp-banner" id="sp-banner" style="display:none"></div>
+
 <!-- MATCHDAY BAR -->
 <div class="mbar">
   <div>
@@ -916,6 +1009,41 @@ html, body {
     </div>
     <button class="reg-btn" id="reg-btn" onclick="reg()">Registrer scoring &#8212; +3 poeng!</button>
     <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<!-- SPOTLIGHT ADMIN (kun admin) -->
+<div class="sp-admin" id="sp-admin" style="display:none">
+  <div class="sp-admin-h">🎯 Spotlight-modell <span>· valgfritt — ikke hver uke</span></div>
+  <div class="sp-admin-status" id="sp-admin-status">Ingen aktiv spotlight</div>
+  <div class="sp-admin-row">
+    <select id="sp-mod">
+      <option value="">Modell...</option>
+      <option>EX30</option><option>XC40/EX40</option><option>EX90</option>
+      <option>EC40</option><option>ES90</option><option>XC60</option><option>XC90</option>
+      <option>V90</option><option>V60</option><option>Polestar</option><option>Zeekr</option>
+    </select>
+    <input id="sp-my" type="text" placeholder="Årsmodell — tom = hele" autocomplete="off">
+  </div>
+  <div class="sp-admin-row2">
+    <div class="sp-bonus-seg" id="sp-bonus-seg">
+      <button type="button" onclick="spSetBonus(1,this)">+1</button>
+      <button type="button" class="on" onclick="spSetBonus(2,this)">+2</button>
+    </div>
+    <button class="sp-save" onclick="saveSpotlight()">Aktiver / lagre</button>
+  </div>
+  <button class="sp-clear" id="sp-clear" onclick="clearSpotlight()" style="display:none">Deaktiver spotlight</button>
+</div>
+
+<!-- BONUS-BIL POPUP -->
+<div class="sp-pop-bd" id="sp-pop-bd"><div class="sp-pop" id="sp-pop"></div></div>
+
+<!-- SPILLERKORT -->
+<div class="pc-bd" id="pc-bd" onclick="closePlayerCard(event)">
+  <div class="pc-sheet" id="pc-sheet" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+    <div class="pc-grab"></div>
+    <button class="pc-x" onclick="closePlayerCard()" aria-label="Lukk">&#10005;</button>
+    <div id="pc-body"></div>
   </div>
 </div>
 
@@ -1131,6 +1259,12 @@ var userRole    = null;   // 'selger' | 'tilskuer'
 var pushEnabled = false;
 var pendingDel  = null;
 var PASSORD     = 'selekt2026';
+var ADMIN_PASSORD = 'Salamander2026!';
+var isAdmin       = false;
+var activeSpotlight = null;
+var spBonus         = 2;
+var spPopCb         = null;
+var SPOT_API        = SUPABASE_URL + '/rest/v1/spotlight';
 
 // ─── SUPABASE ────────────────────────────────────────────────────────
 function sbH() {
@@ -1152,6 +1286,7 @@ function fetchSales() {
       renderAll();
       updateMVP();
       autoSaveWeeklyWinner();
+      fetchSpotlight();
     })
     .catch(function(e) { showStatus('Feil: ' + e.message, true); });
 }
@@ -1198,7 +1333,7 @@ function autoSaveWeeklyWinner() {
       weekSales.forEach(function(s){
         if(!stats[s.selger]) stats[s.selger] = { selger:s.selger, loc:s.loc, g:0, fin:0, pts:0, days:{} };
         var p = stats[s.selger];
-        p.g++; p.pts+=3;
+        p.g++; p.pts += 3 + (s.spotlight_bonus||0);
         if(s.finansiert) p.fin++;
         var d = (s.ts||'').substring(0,10);
         p.days[d] = (p.days[d]||0)+1;
@@ -1289,11 +1424,25 @@ function goalsFor(navn, m) {
     return s.selger === navn;
   }).length;
 }
+function bonusFor(navn, m) {
+  return sales.reduce(function(sum, s) {
+    if (m !== 'all' && s.mnd !== m) return sum;
+    if (s.selger !== navn) return sum;
+    return sum + (s.spotlight_bonus || 0);
+  }, 0);
+}
 function teamGoalsFor(teamId, m) {
   return sales.filter(function(s) {
     if (m !== 'all' && s.mnd !== m) return false;
     return s.loc === teamId;
   }).length;
+}
+function teamBonusFor(teamId, m) {
+  return sales.reduce(function(sum, s) {
+    if (m !== 'all' && s.mnd !== m) return sum;
+    if (s.loc !== teamId) return sum;
+    return sum + (s.spotlight_bonus || 0);
+  }, 0);
 }
 function teamGoal(teamId, m) {
   if (m === 'all') return (GOALS.mai[teamId] || 0) + (GOALS.jun[teamId] || 0);
@@ -1494,7 +1643,7 @@ function renderInd() {
     var g = goalsFor(s.navn, m);
     var thisWk = getWeekNum(new Date());
       var wk = sales.filter(function(x){ return x.selger===s.navn && !x.deleted && getWeekNum(new Date(x.ts))===thisWk; }).length;
-      return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:g*PTS, wk:wk };
+      return { navn:s.navn, loc:s.loc, id:s.id, initials:s.initials, color:s.color, bg:s.bg, g:g, pts:g*PTS + bonusFor(s.navn, m), wk:wk };
   }).map(function(s) {
     // Tell finansierte salg for tiebreaker
     var fin = sales.filter(function(x) {
@@ -1541,9 +1690,10 @@ function renderInd() {
     var avHtml = hasPhoto
       ? '<img src="'+SELGER_PHOTOS[r.id]+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)">'
       : r.initials;
-    return '<div class="trow zm" data-navn="'+r.navn+'" style="animation-delay:'+(i*0.03)+'s">'
+    var ms = milestoneState(r.navn);
+    return '<div class="trow zm" data-navn="'+r.navn+'" onclick="openPlayerCard(\''+r.id+'\')" style="animation-delay:'+(i*0.03)+'s;cursor:pointer">'
       + '<div class="pos-n" style="color:'+pc+';font-size:'+(isTied?'11px':'13px')+'">'+(rankLabel)+'</div>'
-      + '<div><div class="av" style="background:'+r.bg+';color:'+r.color+';overflow:hidden;padding:0">'+avHtml+'</div></div>'
+      + '<div><div class="av-wrap'+(ms.fresh?' fresh':'')+'"><div class="av" style="background:'+r.bg+';color:'+r.color+';overflow:hidden;padding:0">'+avHtml+'</div>'+(ms.fresh?'<span class="mile-dot">&#9733;</span>':'')+'</div></div>'
       + '<div class="name-c">'
         + '<div class="name-main">'+r.navn+(ht>0?' '+Array(Math.min(ht,5)+1).join('&#11088;'):'')+(sk>=3?' &#128293;':'')+'</div>'
         + '<div class="name-sub">'+(LL[r.loc]||r.loc)+'</div>'
@@ -1555,7 +1705,7 @@ function renderInd() {
           var already=hasHeia(r.navn);
           var cnt=getHeiaCount(r.navn);
           return '<div style="display:flex;flex-direction:column;align-items:center;gap:2px">'
-            + '<button id="hb-'+r.id+'" onclick="heiaClick(\''+r.id+'\')"'
+            + '<button id="hb-'+r.id+'" onclick="event.stopPropagation();heiaClick(\''+r.id+'\')"'
             + ' title="'+(already?'Du har heia!':'Klikk for \u00e5 heie!')+'"'
             + ' style="background:none;border:none;padding:0;font-size:16px;cursor:'+(already?'default':'pointer')+';transition:transform .2s;line-height:1">&#128588;</button>'
             + '<span id="hn-'+r.id+'" style="font-size:10px;color:var(--muted)">'+( cnt||'')+'</span>'
@@ -1757,7 +1907,7 @@ function renderTeam() {
   var rows = TEAMS.map(function(t) {
     var g = teamGoalsFor(t.id, m);
     var members = SELGERE.filter(function(s) { return s.loc===t.id; }).length || 1;
-    var pts = g*PTS;
+    var pts = g*PTS + teamBonusFor(t.id, m);
     return { id:t.id, navn:t.navn, initials:t.initials, color:t.color, bg:t.bg, g:g, pts:pts, members:members, pps:pts/members };
   }).sort(function(a,b) { return b.pps-a.pps || b.pts-a.pts || b.g-a.g; });
 
@@ -2379,6 +2529,279 @@ function toggleFin() {
   if (label) label.classList.toggle('fin-active', on);
 }
 
+// ─── MILEPÆLER + SPILLERKORT ─
+function hexToRgba(hex,a){var h=String(hex).replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);if(isNaN(r))return 'rgba(201,168,76,'+a+')';return 'rgba('+r+','+g+','+b+','+a+')';}
+function milestoneState(navn) {
+  var mine = sales.filter(function(s){ return s.selger===navn; })
+                  .slice().sort(function(a,b){ return (a.ts||'').localeCompare(b.ts||''); });
+  var salgN = mine.length;
+  var finSales = mine.filter(function(s){ return s.finansiert; });
+  var finN = finSales.length;
+  var modelCounts = {};
+  mine.forEach(function(s){ modelCounts[s.modell] = (modelCounts[s.modell]||0) + 1; });
+
+  var now = Date.now();
+  var FRESH = 7*24*60*60*1000;
+  var fresh = false;
+  var achieved = [];
+
+  function tsAt(arr, n){ return arr[n-1] ? arr[n-1].ts : null; }
+  function isFresh(ts){ return ts && (now - new Date(ts).getTime() <= FRESH); }
+
+  for (var t=25; t<=salgN; t+=25) {
+    var cts = tsAt(mine, t), fr = isFresh(cts);
+    if (fr) fresh = true;
+    achieved.push({ icon:'\uD83C\uDFC5', label:t+' salg', ts:cts, fresh:fr });
+  }
+  for (var f=25; f<=finN; f+=25) {
+    var fts = tsAt(finSales, f), frf = isFresh(fts);
+    if (frf) fresh = true;
+    achieved.push({ icon:'\uD83D\uDCB0', label:f+' finansiert', ts:fts, fresh:frf });
+  }
+  Object.keys(modelCounts).forEach(function(mod){
+    var c = modelCounts[mod];
+    if (c < 100) return;
+    var modSales = mine.filter(function(s){ return s.modell===mod; });
+    for (var k=100; k<=c; k+=100) {
+      var mts = tsAt(modSales, k), frm = isFresh(mts);
+      if (frm) fresh = true;
+      achieved.push({ icon:'\uD83D\uDE99', label:k+' '+mod, ts:mts, fresh:frm });
+    }
+  });
+
+  achieved.sort(function(a,b){ return (b.ts||'').localeCompare(a.ts||''); });
+  var nextGoal = (Math.floor(salgN/25)+1)*25;
+  return { salgN:salgN, finN:finN, achieved:achieved, next:{ cur:salgN, goal:nextGoal }, fresh:fresh };
+}
+
+function openPlayerCard(id) {
+  var sObj = SELGERE.find(function(x){ return x.id===id; });
+  if (!sObj) return;
+  var navn = sObj.navn, loc = sObj.loc, m = curMonth;
+  var ms = milestoneState(navn);
+  var poeng = ms.salgN*3 + bonusFor(navn, 'all');
+  var fin = ms.finN;
+  var ht = (typeof hatTrickCount==='function') ? hatTrickCount(navn, 'all') : 0;
+
+  // rang i gjeldende visning
+  var standings = SELGERE.map(function(s){
+    return { navn:s.navn,
+             pts: goalsFor(s.navn,m)*PTS + bonusFor(s.navn,m),
+             fin: sales.filter(function(x){ return x.selger===s.navn && x.finansiert && (m==='all'||x.mnd===m); }).length };
+  }).sort(function(a,b){ return b.pts-a.pts || b.fin-a.fin || a.navn.localeCompare(b.navn); });
+  var rank = 1;
+  for (var ri=0; ri<standings.length; ri++){ if(standings[ri].navn===navn){ rank=ri+1; break; } }
+
+  // form siste 5 dager
+  var dmap = {};
+  sales.forEach(function(s){ if(s.selger===navn){ var d=(s.ts||'').slice(0,10); dmap[d]=(dmap[d]||0)+1; } });
+  var form = [];
+  for (var i=4;i>=0;i--){ var dd=new Date(); dd.setDate(dd.getDate()-i);
+    form.push(dmap[dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate())]>0); }
+  var formSum = form.filter(Boolean).length;
+
+  var tag = ms.fresh ? 'NY MILEP\u00c6L'
+    : rank===1 ? 'TABELLTOPP'
+    : (ms.salgN>=5 && fin/ms.salgN>=0.5) ? 'FINANSIERINGSKONGE'
+    : formSum>=3 ? 'I FORM'
+    : 'P\u00c5 JAKT';
+
+  var accGlow = hexToRgba(sObj.color, .33), accTint = hexToRgba(sObj.color, .20);
+  var rankCol = rank===1?'#ffd700':rank===2?'#94a3b8':rank===3?'#cd7f32':'#5a7898';
+  var rankSym = rank<=3 ? ['','\u2460','\u2461','\u2462'][rank] : '#'+rank;
+
+  var hasPhoto = typeof SELGER_PHOTOS !== 'undefined' && SELGER_PHOTOS[id];
+  var avInner = hasPhoto ? '<img src="'+SELGER_PHOTOS[id]+'">' : sObj.initials;
+
+  var badgeList = ms.achieved.slice();
+  if (ht > 0) badgeList.push({ icon:'\u26a1', label: ht>1 ? ht+' hat-tricks' : 'Hat-trick', fresh:false });
+  var streak = (typeof streakCount==='function') ? streakCount(navn) : 0;
+  if (streak >= 3) badgeList.push({ icon:'\uD83D\uDD25', label: streak+'-dagers streak', fresh:false });
+  var badges = badgeList.length
+    ? badgeList.map(function(b){ return '<div class="fc-badge'+(b.fresh?' new':'')+'"><span class="bi">'+b.icon+'</span>'+b.label+'</div>'; }).join('')
+    : '<div class="fc-empty">Ingen prestasjoner enn\u00e5 \u2014 f\u00f8rste milep\u00e6l er '+ms.next.goal+' salg. Fremdriften vises under.</div>';
+
+  var pct = Math.max(0, Math.min(100, Math.round(ms.next.cur/ms.next.goal*100)));
+  var pills = form.map(function(f){ return '<div class="fc-pill '+(f?'w':'x')+'">'+(f?'\u26bd':'\u00b7')+'</div>'; }).join('');
+  var skjerfArgs = "'"+navn.replace(/'/g,"\\'")+"','"+id+"','"+loc+"',"+ms.salgN+","+poeng+","+fin+","+ht;
+
+  document.getElementById('pc-body').innerHTML =
+    '<div class="fc'+(ms.fresh?' fresh':'')+'" style="--accent:'+sObj.color+';--accentBg:'+sObj.bg+';--accentGlow:'+accGlow+';--accentTint:'+accTint+';--rankCol:'+rankCol+'">'
+    + '<div class="fc-hero">'
+      + '<div class="fc-sheen"></div>'
+      + '<div class="fc-rating rv"><div class="r-n" data-count="'+poeng+'">0</div><div class="r-l">Poeng</div></div>'
+      + '<div class="fc-photo-wrap rv"><div class="fc-photo">'+avInner+'</div><span class="fc-rank-badge">'+rankSym+'</span></div>'
+      + '<div class="fc-name rv">'+navn+'</div>'
+      + '<div class="fc-dept rv"><span class="dd"></span>'+(LL[loc]||loc)+'</div>'
+      + '<div class="fc-tag rv">'+tag+'</div>'
+    + '</div>'
+    + '<div class="fc-strip rv">'
+      + '<div class="fc-st"><div class="n" data-count="'+ms.salgN+'">0</div><div class="l">Salg</div></div>'
+      + '<div class="fc-st"><div class="n" data-count="'+fin+'">0</div><div class="l">Finansiert</div></div>'
+      + '<div class="fc-st"><div class="n" style="color:'+rankCol+'">#'+rank+'</div><div class="l">Plassering</div></div>'
+    + '</div>'
+    + '<div class="fc-sec rv"><div class="fc-sec-h">Prestasjoner</div><div class="fc-badges">'+badges+'</div></div>'
+    + '<div class="fc-sec rv"><div class="fc-sec-h">Neste milep\u00e6l</div>'
+      + '<div class="fc-next"><div class="fc-next-top"><div class="fc-next-name">'+ms.next.goal+' salg</div>'
+      + '<div class="fc-next-frac">'+ms.next.cur+' / '+ms.next.goal+'</div></div>'
+      + '<div class="fc-bar"><div class="fc-bar-fill" data-pct="'+pct+'"></div></div>'
+      + '<div class="fc-next-go">'+(ms.next.goal-ms.next.cur)+' salg unna</div></div></div>'
+    + '<div class="fc-sec rv"><div class="fc-sec-h">Form \u2014 siste 5 salgsdager</div>'
+      + '<div class="fc-form"><div class="fc-pills">'+pills+'</div>'
+      + '<div class="fc-form-sum">'+formSum+'/5<span>dager m/ salg</span></div></div></div>'
+    + '<button class="fc-skjerf rv" onclick="closePlayerCard();visSkjerf('+skjerfArgs+')">\uD83E\uDDE3 Del skjerf</button>'
+    + '</div>';
+
+  document.getElementById('pc-bd').classList.add('open');
+  document.getElementById('pc-sheet').classList.add('open');
+  animatePlayerCard();
+}
+
+function animatePlayerCard(){
+  var sheet = document.getElementById('pc-sheet');
+  if (!sheet) return;
+  sheet.querySelectorAll('.rv').forEach(function(el,i){ setTimeout(function(){ el.classList.add('in'); }, 80 + i*60); });
+  sheet.querySelectorAll('[data-count]').forEach(function(el){
+    var target = parseInt(el.getAttribute('data-count'),10)||0, start=null, dur=900;
+    function step(t){ if(!start)start=t; var p=Math.min(1,(t-start)/dur);
+      el.textContent = Math.round(target*(1-Math.pow(1-p,3)));
+      if(p<1) requestAnimationFrame(step); }
+    setTimeout(function(){ requestAnimationFrame(step); }, 250);
+  });
+  var bar = sheet.querySelector('.fc-bar-fill');
+  if (bar) setTimeout(function(){ bar.style.width = bar.getAttribute('data-pct')+'%'; }, 450);
+}
+
+function closePlayerCard(e){
+  document.getElementById('pc-bd').classList.remove('open');
+  document.getElementById('pc-sheet').classList.remove('open');
+}
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePlayerCard(); });
+
+// ─── SPOTLIGHT-MODELL ────────────────────────────────────────────────
+function fetchSpotlight() {
+  fetch(SPOT_API + '?active=is.true&order=created_at.desc&limit=1', { headers: sbH() })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      activeSpotlight = (Array.isArray(data) && data.length) ? data[0] : null;
+      renderSpotlightBanner();
+      if (isAdmin) renderSpotlightAdmin();
+    })
+    .catch(function(){});
+}
+
+function renderSpotlightBanner() {
+  var el = document.getElementById('sp-banner');
+  if (!el) return;
+  if (!activeSpotlight) { el.style.display = 'none'; return; }
+  var s = activeSpotlight;
+  var myChip = s.arsmodell ? '<span class="sp-my">'+s.arsmodell+'</span>' : '';
+  var sub = s.arsmodell ? 'Kun denne \u00e5rsmodellen gir bonus' : 'Hele modellen gir bonus';
+  el.innerHTML =
+    '<div class="sp-ico">\uD83C\uDFAF</div>'
+    + '<div class="sp-txt"><div class="sp-lbl">Aktiv spotlight-modell</div>'
+    + '<div class="sp-mod">'+s.modell+myChip+'</div>'
+    + '<div class="sp-sub">'+sub+'</div></div>'
+    + '<div class="sp-pts">+'+s.bonus+'</div>';
+  el.style.display = 'flex';
+}
+
+function applyAdminUI() {
+  var sa = document.getElementById('sp-admin');
+  if (sa) sa.style.display = 'block';
+  updateRoleBadge();
+  renderSpotlightAdmin();
+}
+
+function spSetBonus(v, btn) {
+  spBonus = v;
+  var seg = document.getElementById('sp-bonus-seg');
+  if (seg) [].forEach.call(seg.querySelectorAll('button'), function(b){ b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+}
+
+function renderSpotlightAdmin() {
+  var st = document.getElementById('sp-admin-status');
+  var clr = document.getElementById('sp-clear');
+  if (!st) return;
+  if (activeSpotlight) {
+    var s = activeSpotlight;
+    st.innerHTML = 'Aktiv: <b style="color:var(--gold)">'+s.modell+(s.arsmodell?' '+s.arsmodell:'')+'</b> \u00b7 +'+s.bonus;
+    var modSel = document.getElementById('sp-mod'); if (modSel) modSel.value = s.modell;
+    var myIn = document.getElementById('sp-my'); if (myIn) myIn.value = s.arsmodell || '';
+    spBonus = s.bonus;
+    var seg = document.getElementById('sp-bonus-seg');
+    if (seg) [].forEach.call(seg.querySelectorAll('button'), function(b){
+      b.classList.toggle('on', b.textContent.replace('+','') == String(s.bonus));
+    });
+    if (clr) clr.style.display = 'block';
+  } else {
+    st.textContent = 'Ingen aktiv spotlight';
+    if (clr) clr.style.display = 'none';
+  }
+}
+
+function saveSpotlight() {
+  var modell = document.getElementById('sp-mod').value;
+  var arsmodell = document.getElementById('sp-my').value.trim();
+  if (!modell) { toast('Velg en modell f\u00f8rst!'); return; }
+  var now = new Date();
+  var row = {
+    modell: modell,
+    arsmodell: arsmodell || null,
+    bonus: spBonus,
+    week_nr: getIsoWeek(now),
+    week_year: getIsoYear(now),
+    active: true
+  };
+  var btn = document.querySelector('.sp-save');
+  if (btn) { btn.disabled = true; btn.textContent = 'Lagrer...'; }
+  // Deaktiver eventuelle aktive f\u00f8rst, deretter sett ny
+  fetch(SPOT_API + '?active=is.true', {
+    method: 'PATCH', headers: sbH(), body: JSON.stringify({ active: false })
+  })
+  .then(function(){
+    return fetch(SPOT_API, { method: 'POST', headers: sbH(), body: JSON.stringify(row) });
+  })
+  .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(function(){
+    if (btn) { btn.disabled = false; btn.textContent = 'Aktiver / lagre'; }
+    toast('Spotlight aktivert: '+modell+(arsmodell?' '+arsmodell:'')+' (+'+spBonus+')');
+    fetchSpotlight();
+  })
+  .catch(function(e){
+    if (btn) { btn.disabled = false; btn.textContent = 'Aktiver / lagre'; }
+    toast('Feil ved lagring: '+e.message);
+  });
+}
+
+function clearSpotlight() {
+  fetch(SPOT_API + '?active=is.true', {
+    method: 'PATCH', headers: sbH(), body: JSON.stringify({ active: false })
+  })
+  .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); })
+  .then(function(){ toast('Spotlight deaktivert.'); fetchSpotlight(); })
+  .catch(function(e){ toast('Feil: '+e.message); });
+}
+
+function askBonusBil(spot, cb) {
+  spPopCb = cb;
+  document.getElementById('sp-pop').innerHTML =
+    '<div class="sp-pop-ico">\uD83C\uDFAF</div>'
+    + '<div class="sp-pop-q">Var dette en bonusbil?</div>'
+    + '<div class="sp-pop-ctx">Spotlighten gjelder <b>'+spot.modell+' '+spot.arsmodell+'</b> (+'+spot.bonus+'). Var dette akkurat den \u00e5rsmodellen?</div>'
+    + '<div class="sp-pop-btns">'
+    + '<button class="sp-pop-no" onclick="spAnswer(false)">Nei</button>'
+    + '<button class="sp-pop-yes" onclick="spAnswer(true)">Ja \u2014 '+spot.arsmodell+'</button></div>';
+  document.getElementById('sp-pop-bd').classList.add('open');
+}
+
+function spAnswer(yes) {
+  document.getElementById('sp-pop-bd').classList.remove('open');
+  var cb = spPopCb; spPopCb = null;
+  if (cb) cb(yes);
+}
+
 function reg() {
   if (userRole !== 'selger') { toast('Logg inn som selger for \u00e5 registrere salg.'); return; }
   var selger = document.getElementById('sel-selger').value;
@@ -2396,14 +2819,31 @@ function reg() {
   var ts = now.getFullYear()+'-'+pad(mo)+'-'+pad(now.getDate())+'T'+pad(now.getHours())+':'+pad(now.getMinutes())+':00';
   var finansiert = document.getElementById('chk-fin').checked;
 
+  var saleObj = { selger:selger, modell:modell, loc:sObj.loc||'', mnd:mnd, ts:ts, finansiert:finansiert, spotlight_bonus:0 };
+
+  if (activeSpotlight && activeSpotlight.modell === modell) {
+    if (activeSpotlight.arsmodell) {
+      askBonusBil(activeSpotlight, function(isBonus) {
+        saleObj.spotlight_bonus = isBonus ? activeSpotlight.bonus : 0;
+        finalizeReg(saleObj, selger, modell, sObj);
+      });
+      return;
+    }
+    saleObj.spotlight_bonus = activeSpotlight.bonus;
+  }
+  finalizeReg(saleObj, selger, modell, sObj);
+}
+
+function finalizeReg(saleObj, selger, modell, sObj) {
+  var bonus = saleObj.spotlight_bonus || 0;
+  var totalPts = 3 + bonus;
   var btn = document.getElementById('reg-btn');
   btn.disabled = true; btn.textContent = 'Lagrer...';
 
-  insertSale({ selger:selger, modell:modell, loc:sObj.loc||'', mnd:mnd, ts:ts, finansiert:finansiert }, function(err) {
+  insertSale(saleObj, function(err) {
     btn.disabled = false; btn.textContent = 'Registrer scoring \u2014 +3 poeng!';
     if (err) { toast('Feil ved lagring: ' + err.message); return; }
 
-    // Reset form
     document.getElementById('sel-selger').value = '';
     document.getElementById('sel-modell').value = '';
     document.getElementById('sel-loc').value = '';
@@ -2419,12 +2859,11 @@ function reg() {
 
     var total = sales.filter(function(s) { return s.selger === selger; }).length;
     var name = selger.split(' ')[0];
-    toast(name + ' SCORER! +3 poeng! ' + total + ' m\u00e5l totalt!');
+    toast(name + ' SCORER! +' + totalPts + ' poeng!' + (bonus ? ' (spotlight +'+bonus+')' : '') + ' ' + total + ' m\u00e5l totalt!');
     launchKonfetti(LC[sObj.loc] || '#ffd700');
     sendPush(selger, modell, sObj.loc);
     renderAll();
     if (document.getElementById('hof-container')) renderTeam();
-    // Switch to scoringer tab
     setTimeout(function() {
       var scoringBtn = document.querySelector('.tab[onclick*="scoring"]');
       if (scoringBtn) setTab('scoring', scoringBtn);
@@ -2514,7 +2953,10 @@ function closeIntro() {
 function updateRoleBadge() {
   var b = document.getElementById('role-badge');
   if (!b) return;
-  if (userRole === 'selger') {
+  if (isAdmin) {
+    b.className = 'login-badge badge-admin';
+    b.textContent = '\uD83D\uDC51 Admin';
+  } else if (userRole === 'selger') {
     b.className = 'login-badge badge-selger';
     b.textContent = '\u26bd Selger';
   } else {
@@ -2542,6 +2984,8 @@ function enterAsSelger() {
 
 function enterAsGuest() {
   userRole = 'tilskuer';
+  isAdmin = false;
+  sessionStorage.removeItem('vcso-admin');
   sessionStorage.setItem('vcso-role', 'tilskuer');
   closeIntro();
   var ro = document.getElementById('reg-outer');
@@ -2557,6 +3001,11 @@ function tryLogin() {
   var pw = document.getElementById('pw-input').value;
   if (pw === PASSORD) {
     enterAsSelger();
+  } else if (pw === ADMIN_PASSORD) {
+    isAdmin = true;
+    sessionStorage.setItem('vcso-admin', '1');
+    enterAsSelger();
+    applyAdminUI();
   } else {
     var err = document.getElementById('pw-err');
     if (err) {
@@ -2581,7 +3030,8 @@ setInterval(countdown, 1000);
 // Restore session
 (function() {
   var saved = sessionStorage.getItem('vcso-role');
-  if (saved === 'selger')    { enterAsSelger(); }
+  if (sessionStorage.getItem('vcso-admin') === '1') { isAdmin = true; enterAsSelger(); applyAdminUI(); }
+  else if (saved === 'selger')    { enterAsSelger(); }
   else if (saved === 'tilskuer') { enterAsGuest(); }
   // else: show intro/login screen
 })();
@@ -2591,140 +3041,7 @@ setInterval(countdown, 1000);
 
 
 
-// ── SPILLERKORT HOVER ─────────────────────────────────────────────────────
-(function() {
-  var card = document.createElement('div');
-  card.className = 'player-card';
-  card.id = 'player-hover-card';
-  document.body.appendChild(card);
-
-  var hideTimer = null;
-  var frozen = false; // stopp bevegelse når mus er over kortet
-
-  function getSelgerStats(navn) {
-    var per = 0, fin = 0, form = [], hatTricks = 0;
-    var dmap = {};
-    sales.forEach(function(s) {
-      if (s.selger !== navn) return;
-      per++;
-      if (s.finansiert) fin++;
-      dmap[s.ts.slice(0,10)] = (dmap[s.ts.slice(0,10)]||0)+1;
-    });
-    for (var i = 0; i <= 4; i++) {
-      var d = new Date(); d.setDate(d.getDate() - i);
-      var ds = d.getFullYear() + '-' + (d.getMonth()+1<10?'0':'') + (d.getMonth()+1) + '-' + (d.getDate()<10?'0':'') + d.getDate();
-      form.push(dmap[ds] > 0);
-    }
-    Object.keys(dmap).forEach(function(d){ if(dmap[d]>=3) hatTricks++; });
-    return { per:per, fin:fin, form:form, hatTricks:hatTricks };
-  }
-
-  function positionCard(e) {
-    var x = e.clientX + 14, y = e.clientY - 60;
-    if (x + 228 > window.innerWidth) x = e.clientX - 242;
-    if (y + 340 > window.innerHeight) y = window.innerHeight - 350;
-    if (y < 10) y = 10;
-    card.style.left = x + 'px';
-    card.style.top  = y + 'px';
-  }
-
-  function showCard(navn, color, id, loc, e) {
-    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
-    frozen = false;
-    var stats = getSelgerStats(navn);
-    var photos = typeof SELGER_PHOTOS !== 'undefined' ? SELGER_PHOTOS : {};
-    var ini = id.replace(/_/g,' ').split(' ').map(function(w){return w[0]?w[0].toUpperCase():''}).join('').slice(0,2);
-    var photoHtml = photos[id]
-      ? '<img src="'+photos[id]+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)">'
-      : '<div class="pc-photo-ph">'+ini+'</div>';
-    var locMap = {ryen:'Ryen',fornebu:'Fornebu',lillestrom:'Lillestrøm',okern:'Økern'};
-    var locStr = locMap[loc] || loc;
-    var formDots = stats.form.map(function(f){
-      return '<div class="pc-dot" style="background:'+(f?'#22c55e':'#ef4444')+'"></div>';
-    }).join('');
-
-    card.innerHTML =
-      '<div class="pc-top">'
-        +'<div class="pc-comp">VCSO Selekt Cup</div>'
-        +'<div class="pc-week">2026</div>'
-      +'</div>'
-      +'<div class="pc-photo-wrap"><div class="pc-photo">'+photoHtml+'</div></div>'
-      +'<div class="pc-name">'+navn+'</div>'
-      +'<div class="pc-avd" style="color:'+color+'">'+locStr+'</div>'
-      +'<div class="pc-stats">'
-        +'<div class="pc-stat">'
-          +'<div class="pc-stat-n" style="color:var(--gold)">'+stats.per+'</div>'
-          +'<div class="pc-stat-l">Salg</div>'
-        +'</div>'
-        +'<div class="pc-stat">'
-          +'<div class="pc-stat-n" style="color:var(--gold2)">'+stats.per*3+'</div>'
-          +'<div class="pc-stat-l">Poeng</div>'
-        +'</div>'
-        +'<div class="pc-stat">'
-          +'<div class="pc-stat-n" style="color:#22c55e">'+stats.fin+'</div>'
-          +'<div class="pc-stat-l">Finansiert</div>'
-        +'</div>'
-        +(stats.hatTricks>0?'<div class="pc-stat">'
-          +'<div class="pc-stat-n" style="color:var(--gold)">'+stats.hatTricks+'</div>'
-          +'<div class="pc-stat-l">Hat-trick</div>'
-        +'</div>':'')
-      +'</div>'
-      +'<div class="pc-form">'+formDots+'</div>'
-      +'<button class="pc-skjerf-btn" onclick="visSkjerf(\''+navn+'\',\''+id+'\',\''+loc+'\','+stats.per+','+stats.per*3+','+stats.fin+','+stats.hatTricks+')">&#x1F9E3; Del skjerf</button>';
-
-    positionCard(e);
-    card.classList.add('show');
-
-    // Når mus er over kortet: frys posisjon og ikke skjul
-    card.onmouseenter = function() {
-      frozen = true;
-      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
-    };
-    card.onmouseleave = function() {
-      frozen = false;
-      hideTimer = setTimeout(function() { card.classList.remove('show'); }, 80);
-    };
-  }
-
-  function scheduleHide() {
-    hideTimer = setTimeout(function() {
-      if (!frozen) card.classList.remove('show');
-    }, 120);
-  }
-
-  function moveCard(e) {
-    if (!frozen) positionCard(e);
-  }
-
-  function attachHovers() {
-    var tbl = document.getElementById('tbl-ind');
-    if (!tbl) return;
-    var rows = tbl.querySelectorAll('.trow');
-    rows.forEach(function(row) {
-      if (row._hoverAttached) return;
-      row._hoverAttached = true;
-      var navn = row.getAttribute('data-navn');
-      if (!navn) return;
-      var sObj = SELGERE.find(function(s){ return s.navn === navn; });
-      if (!sObj) return;
-      row.addEventListener('mouseenter', function(e){ showCard(sObj.navn, sObj.color, sObj.id, sObj.loc, e); });
-      row.addEventListener('mousemove', moveCard);
-      row.addEventListener('mouseleave', scheduleHide);
-    });
-  }
-
-  // Hook into renderAll
-  var origRenderAll = typeof renderAll === 'function' ? renderAll : null;
-  if (origRenderAll) {
-    window.renderAll = function() {
-      origRenderAll();
-      setTimeout(attachHovers, 100);
-    };
-  }
-
-  setTimeout(attachHovers, 2000);
-  document.addEventListener('click', function(){ setTimeout(attachHovers, 200); });
-})();
+// (Hover-kortet fjernet — erstattet av trykk-spillerkortet.)
 // ── SKJERF ─────────────────────────────────────────────────────────────
 var AVD_SKJERF = {
   ryen:       { color: '#c9171e', dark: '#7a0b0e' },

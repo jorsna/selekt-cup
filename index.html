@@ -805,21 +805,21 @@ html, body {
 
 <style id="atmo-css">
 /* ═══ SESONG 2 ATMOSFÆRE (additivt lag, tema: selekt (grønn)) ═══ */
-html{background:#070b16}
+html{background:#0a1a0f}
 body{background:transparent !important}
 .atmo{position:fixed;inset:0;pointer-events:none;z-index:-1}
-.atmo-sky{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% -20%,#16203c 0%,#0b1020 45%,#05080f 100%)}
-.atmo-pitch{position:absolute;inset:0;opacity:.035}
+.atmo-sky{position:absolute;inset:0;background:radial-gradient(ellipse 90% 50% at 50% -5%, rgba(39,201,138,0.14), transparent 60%),radial-gradient(ellipse 70% 50% at 50% 110%, rgba(34,197,94,0.10), transparent 60%),radial-gradient(120% 90% at 50% -20%,#0e2418 0%,#0a1a0f 45%,#050c08 100%)}
+.atmo-pitch{position:absolute;inset:0;opacity:.05}
 .atmo-pitch svg{width:100%;height:100%}
-.atmo-pitch circle,.atmo-pitch line,.atmo-pitch path{stroke:#3f7a5f}
-.atmo-pitch circle[r="4"]{fill:#3f7a5f;stroke:none}
+.atmo-pitch circle,.atmo-pitch line,.atmo-pitch path{stroke:#2f9e6f}
+.atmo-pitch circle[r="4"]{fill:#2f9e6f;stroke:none}
 .beam{position:absolute;top:-12%;width:65vw;height:120vh;opacity:.10;background:linear-gradient(180deg,rgba(200,225,210,.7),transparent 62%);filter:blur(28px);transform-origin:top center;animation:beamSway 14s ease-in-out infinite}
 .beam.l{left:-24vw;transform:rotate(20deg)}
 .beam.r{right:-24vw;transform:rotate(-20deg);animation-delay:-7s}
 @keyframes beamSway{0%,100%{opacity:.07}50%{opacity:.14}}
-.aurora{position:absolute;width:70vw;height:70vw;border-radius:50%;filter:blur(90px);opacity:.06;mix-blend-mode:screen}
-.aurora.a{background:radial-gradient(circle,#2f8a63,transparent 65%);top:-15vw;left:-20vw;animation:auraA 26s ease-in-out infinite alternate}
-.aurora.b{background:radial-gradient(circle,#124a33,transparent 65%);bottom:-25vw;right:-20vw;animation:auraB 32s ease-in-out infinite alternate}
+.aurora{position:absolute;width:70vw;height:70vw;border-radius:50%;filter:blur(90px);opacity:.08;mix-blend-mode:screen}
+.aurora.a{background:radial-gradient(circle,#27c98a,transparent 65%);top:-15vw;left:-20vw;animation:auraA 26s ease-in-out infinite alternate}
+.aurora.b{background:radial-gradient(circle,#157f4f,transparent 65%);bottom:-25vw;right:-20vw;animation:auraB 32s ease-in-out infinite alternate}
 @keyframes auraA{to{transform:translate(14vw,10vh) scale(1.15)}}
 @keyframes auraB{to{transform:translate(-12vw,-8vh) scale(1.2)}}
 .godrays{position:absolute;top:-6%;left:50%;width:150vw;height:150vw;transform:translateX(-50%);background:conic-gradient(from 0deg,transparent 0 14deg,#7aa88f0a 17deg 20deg,transparent 23deg 40deg,#7aa88f08 43deg 46deg,transparent 49deg 78deg,#7aa88f0a 81deg 84deg,transparent 87deg 120deg,#7aa88f08 123deg 126deg,transparent 129deg 360deg);border-radius:50%;animation:raySpin 70s linear infinite;-webkit-mask-image:radial-gradient(circle at 50% 12%,#000 0%,transparent 42%);mask-image:radial-gradient(circle at 50% 12%,#000 0%,transparent 42%)}

@@ -7,28 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy-950:#070b16;--navy-900:#0c1222;--navy-800:#121a30;--navy-700:#1a2440;
+  --navy-950:#081409;--navy-900:#0e1c12;--navy-800:#14261a;--navy-700:#1d3627;
   --hair:rgba(255,255,255,.07);--hair-gold:rgba(39,201,138,.4);
   --txt:#eef1f8;--muted:#8b93a7;--dim:#5a6379;
-  --gold:#27c98a;--gold-metal:#22c55e;--gold-deep:#157f4f;
-  --selekt:#27c98a;--osat:#f97316;
+  --gold:#c9a84c;--gold-metal:#c9a84c;--gold-deep:#7a5f22;
+  --selekt:#c9a84c;--osat:#f97316;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:#070b16;scroll-behavior:smooth}
+html{background:#0a1a0f;scroll-behavior:smooth}
 body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 .wrap{max-width:520px;margin:0 auto;padding:0 16px 70px;position:relative;z-index:1}
 .display{font-family:'Anton',sans-serif;text-transform:uppercase;font-weight:400}
 .eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-metal)}
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 @keyframes shine{to{background-position:200% center}}
-.goldshine{background:linear-gradient(110deg,#fff 0%,var(--gold) 38%,#dcf7e9 52%,var(--gold) 66%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
+.goldshine{background:linear-gradient(110deg,#fff 0%,var(--gold) 38%,#f5ecce 52%,var(--gold) 66%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .rise{opacity:0;animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
 @media (prefers-reduced-motion:reduce){.rise{animation:none;opacity:1}.goldshine{animation:none}}
 
 /* ── ATMOSFÆRE ── */
 .atmo{position:fixed;inset:0;pointer-events:none;z-index:-1}
-.atmo-sky{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% -20%,#16203c 0%,#0b1020 45%,#05080f 100%)}
+.atmo-sky{position:absolute;inset:0;background:radial-gradient(ellipse 90% 50% at 50% -5%, rgba(39,201,138,0.14), transparent 60%),radial-gradient(ellipse 70% 50% at 50% 110%, rgba(34,197,94,0.10), transparent 60%),radial-gradient(120% 90% at 50% -20%,#0e2418 0%,#0a1a0f 45%,#050c08 100%)}
 .atmo-pitch{position:absolute;inset:0;opacity:.05}
 .atmo-pitch svg{width:100%;height:100%}
 .beam{position:absolute;top:-12%;width:65vw;height:120vh;opacity:.10;background:linear-gradient(180deg,rgba(190,240,215,.9),transparent 62%);filter:blur(28px);transform-origin:top center;animation:beamSway 14s ease-in-out infinite}
@@ -55,7 +55,7 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
 
 /* ── CHYRON ── */
 .chyron{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:stretch;height:30px;background:linear-gradient(180deg,rgba(7,11,22,.95),rgba(7,11,22,.85));border-bottom:1px solid var(--hair-gold);backdrop-filter:blur(6px)}
-.chyron .tag{display:flex;align-items:center;gap:6px;padding:0 12px;background:linear-gradient(180deg,#7ff0c0,#22c55e);color:#06130c;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:.14em;white-space:nowrap;clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.chyron .tag{display:flex;align-items:center;gap:6px;padding:0 12px;background:linear-gradient(180deg,#ffe452,#c9a24a);color:#161001;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:.14em;white-space:nowrap;clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%)}
 .chyron .belt{flex:1;overflow:hidden;display:flex;align-items:center}
 .chyron .track{display:inline-flex;gap:44px;white-space:nowrap;padding-left:100%;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;animation:chyronRoll 26s linear infinite}
 .chyron .track b{color:var(--gold-metal)}
@@ -82,9 +82,9 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
 .board .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
 .tiles{display:flex;align-items:center;gap:7px;justify-content:center}
-.tile{position:relative;background:linear-gradient(180deg,#1c2544 48%,#121a30 52%);border:1px solid var(--hair-gold);border-radius:7px;min-width:60px;padding:10px 6px 8px;box-shadow:0 10px 24px -12px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06)}
+.tile{position:relative;background:linear-gradient(180deg,#123524 48%,#0c2418 52%);border:1px solid var(--hair-gold);border-radius:7px;min-width:60px;padding:10px 6px 8px;box-shadow:0 10px 24px -12px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06)}
 .tile::before{content:"";position:absolute;left:4px;right:4px;top:50%;height:1px;background:rgba(0,0,0,.55)}
-.tile b{display:block;font-family:'Anton',sans-serif;font-size:28px;line-height:1;color:var(--gold);text-shadow:0 0 14px #27c98a59}
+.tile b{display:block;font-family:'Anton',sans-serif;font-size:28px;line-height:1;color:var(--gold);text-shadow:0 0 14px rgba(201,168,76,.4)}
 .tile b.tick{animation:tickFlip .35s ease}
 @keyframes tickFlip{0%{transform:rotateX(70deg);opacity:.2}100%{transform:rotateX(0);opacity:1}}
 .tile span{display:block;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin-top:4px}
@@ -135,7 +135,7 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
 .leg.l-osat{border-color:rgba(249,115,22,.4)}
 .leg.l-osat::before{background:linear-gradient(180deg,#fb923c,#c2410c)}
 .leg.l-osat .cap{color:var(--osat)}
-.leg .who.gs-selekt{background:linear-gradient(110deg,#fff,#27c98a 40%,#fff 70%,#27c98a);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
+.leg .who.gs-selekt{background:linear-gradient(110deg,#fff,#c9a84c 40%,#fff 70%,#c9a84c);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
 .leg .who.gs-osat{background:linear-gradient(110deg,#fff,#f97316 40%,#fff 70%,#f97316);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
 @media (prefers-reduced-motion:reduce){.leg .who{animation:none}}
 
@@ -154,7 +154,7 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
 
 <div class="curtain" id="curtain">
   <svg viewBox="0 0 74 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="cg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#7ff0c0"/><stop offset=".5" stop-color="#27c98a"/><stop offset="1" stop-color="#157f4f"/></linearGradient></defs>
+    <defs><linearGradient id="cg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#e3c878"/><stop offset=".5" stop-color="#c9a84c"/><stop offset="1" stop-color="#7a5f22"/></linearGradient></defs>
     <path d="M37 2 L70 12 V44 C70 63 56 76 37 82 C18 76 4 63 4 44 V12 Z" fill="none" stroke="url(#cg)" stroke-width="2.5"/>
     <path d="M37 20 l4.7 9.5 10.5 1.5 -7.6 7.4 1.8 10.4 -9.4 -4.9 -9.4 4.9 1.8 -10.4 -7.6 -7.4 10.5 -1.5 Z" fill="url(#cg)"/>
   </svg>
@@ -164,10 +164,10 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
   <div class="atmo-sky"></div>
   <div class="atmo-pitch">
     <svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="200" cy="400" r="150" fill="none" stroke="#22c55e" stroke-width="1.5"/>
-      <circle cx="200" cy="400" r="4" fill="#22c55e"/>
-      <line x1="-50" y1="400" x2="450" y2="400" stroke="#22c55e" stroke-width="1.5"/>
-      <path d="M-50 60 h500 M-50 740 h500" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="200" cy="400" r="150" fill="none" stroke="#2f9e6f" stroke-width="1.5"/>
+      <circle cx="200" cy="400" r="4" fill="#2f9e6f"/>
+      <line x1="-50" y1="400" x2="450" y2="400" stroke="#2f9e6f" stroke-width="1.5"/>
+      <path d="M-50 60 h500 M-50 740 h500" stroke="#2f9e6f" stroke-width="1"/>
     </svg>
   </div>
   <div class="aurora a"></div><div class="aurora b"></div>
@@ -189,8 +189,8 @@ body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-we
   <!-- HERO -->
   <div class="hero rise" style="animation-delay:.1s">
     <svg class="crest-main" viewBox="0 0 74 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="hg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#7ff0c0"/><stop offset=".5" stop-color="#27c98a"/><stop offset="1" stop-color="#157f4f"/></linearGradient>
-      <linearGradient id="hb" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#1a2440"/><stop offset="1" stop-color="#0c1222"/></linearGradient></defs>
+      <defs><linearGradient id="hg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#e3c878"/><stop offset=".5" stop-color="#c9a84c"/><stop offset="1" stop-color="#7a5f22"/></linearGradient>
+      <linearGradient id="hb" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#123524"/><stop offset="1" stop-color="#0a1a0f"/></linearGradient></defs>
       <path d="M37 2 L70 12 V44 C70 63 56 76 37 82 C18 76 4 63 4 44 V12 Z" fill="url(#hb)" stroke="url(#hg)" stroke-width="2.5"/>
       <path d="M37 20 l4.7 9.5 10.5 1.5 -7.6 7.4 1.8 10.4 -9.4 -4.9 -9.4 4.9 1.8 -10.4 -7.6 -7.4 10.5 -1.5 Z" fill="url(#hg)"/>
       <path d="M18 62 q19 11 38 0" stroke="url(#hg)" stroke-width="2" fill="none" stroke-linecap="round"/>

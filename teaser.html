@@ -2,235 +2,346 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VCSO Selekt Cup – Kommer snart</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selekt Cup · Sesong 2 — Avspark 3. august</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --g:#0a1a0f;--g2:#0f2014;--g3:#1e3d26;--g4:#2a5235;
-  --gold:#c9a84c;--gold2:#f0c96e;--gold3:#ffe08a;
+  --navy-950:#070b16;--navy-900:#0c1222;--navy-800:#121a30;--navy-700:#1a2440;
+  --hair:rgba(255,255,255,.07);--hair-gold:rgba(39,201,138,.4);
+  --txt:#eef1f8;--muted:#8b93a7;--dim:#5a6379;
+  --gold:#27c98a;--gold-metal:#22c55e;--gold-deep:#157f4f;
+  --selekt:#27c98a;--osat:#f97316;
 }
-html,body{background:var(--g);font-family:'Barlow Condensed',sans-serif;color:#fff;min-height:100vh;overflow-x:hidden}
-
-/* ANIMATED BG */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(201,168,76,.10) 0%,transparent 70%),
-    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(30,61,38,.5) 0%,transparent 60%);
-  animation:pulse 7s ease-in-out infinite alternate
-}
-@keyframes pulse{from{opacity:.6}to{opacity:1}}
-
-/* PITCH LINES */
-body::after{
-  content:'';position:fixed;bottom:0;left:0;right:0;height:220px;z-index:0;
-  background:
-    repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(201,168,76,.04) 38px,rgba(201,168,76,.04) 40px),
-    linear-gradient(180deg,transparent 0%,rgba(14,28,16,.9) 100%)
-}
-
-/* PAGE */
-.page{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;gap:0}
-
-/* TOP PILL */
-.pill{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:5px 16px;border-radius:99px;
-  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
-  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);
-  margin-bottom:28px;
-  opacity:0;animation:fadeDown .5s .1s ease forwards
-}
-.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.2s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* LOGO AREA */
-.logo-wrap{margin-bottom:28px;opacity:0;animation:fadeDown .5s .2s ease forwards}
-.crest{
-  width:80px;height:80px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,var(--g3),var(--g));
-  border:2.5px solid var(--gold);
-  display:flex;align-items:center;justify-content:center;
-  font-size:36px;margin:0 auto 12px;
-  box-shadow:0 0 0 10px rgba(201,168,76,.07),0 0 50px rgba(201,168,76,.2)
-}
-.brand-top{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.brand-main{font-size:36px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
-  background:linear-gradient(135deg,var(--gold3),var(--gold),var(--gold2));
-  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
-.brand-sub{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px}
-
-/* MAIN HEADLINE */
-.headline-wrap{margin-bottom:36px;opacity:0;animation:fadeUp .6s .35s ease forwards}
-.headline{font-size:clamp(42px,10vw,72px);font-weight:900;line-height:.92;text-transform:uppercase;letter-spacing:-1px}
-.headline span{
-  display:block;
-  background:linear-gradient(135deg,#fff 0%,var(--gold2) 50%,#fff 100%);
-  background-size:200% auto;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:shine 4s linear infinite
-}
-.headline .sub-word{
-  font-size:clamp(22px,5vw,36px);font-style:italic;font-weight:700;
-  color:rgba(255,255,255,.35);letter-spacing:2px;display:block;margin-top:4px
-}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:#070b16;scroll-behavior:smooth}
+body{background:transparent;color:var(--txt);font-family:'Barlow',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px 70px;position:relative;z-index:1}
+.display{font-family:'Anton',sans-serif;text-transform:uppercase;font-weight:400}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-metal)}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 @keyframes shine{to{background-position:200% center}}
+.goldshine{background:linear-gradient(110deg,#fff 0%,var(--gold) 38%,#dcf7e9 52%,var(--gold) 66%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rise{opacity:0;animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+@media (prefers-reduced-motion:reduce){.rise{animation:none;opacity:1}.goldshine{animation:none}}
 
-/* DATE BOX */
-.date-row{
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:36px;
-  opacity:0;animation:fadeUp .6s .45s ease forwards
-}
-.date-box{
-  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
-  border-radius:6px;padding:10px 18px;text-align:center;
-}
-.date-n{font-size:32px;font-weight:900;color:var(--gold);line-height:1}
-.date-l{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.6)}
-.date-sep{font-size:24px;color:rgba(201,168,76,.3)}
-.date-month{font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+/* ── ATMOSFÆRE ── */
+.atmo{position:fixed;inset:0;pointer-events:none;z-index:-1}
+.atmo-sky{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% -20%,#16203c 0%,#0b1020 45%,#05080f 100%)}
+.atmo-pitch{position:absolute;inset:0;opacity:.05}
+.atmo-pitch svg{width:100%;height:100%}
+.beam{position:absolute;top:-12%;width:65vw;height:120vh;opacity:.10;background:linear-gradient(180deg,rgba(190,240,215,.9),transparent 62%);filter:blur(28px);transform-origin:top center;animation:beamSway 14s ease-in-out infinite}
+.beam.l{left:-24vw;transform:rotate(20deg)}
+.beam.r{right:-24vw;transform:rotate(-20deg);animation-delay:-7s}
+@keyframes beamSway{0%,100%{opacity:.07}50%{opacity:.14}}
+.aurora{position:absolute;width:70vw;height:70vw;border-radius:50%;filter:blur(90px);opacity:.09;mix-blend-mode:screen}
+.aurora.a{background:radial-gradient(circle,#27c98a,transparent 65%);top:-15vw;left:-20vw;animation:auraA 26s ease-in-out infinite alternate}
+.aurora.b{background:radial-gradient(circle,#157f4f,transparent 65%);bottom:-25vw;right:-20vw;animation:auraB 32s ease-in-out infinite alternate}
+@keyframes auraA{to{transform:translate(14vw,10vh) scale(1.15)}}
+@keyframes auraB{to{transform:translate(-12vw,-8vh) scale(1.2)}}
+.godrays{position:absolute;top:-6%;left:50%;width:150vw;height:150vw;transform:translateX(-50%);background:conic-gradient(from 0deg,transparent 0 14deg,#6fe0ac0d 17deg 20deg,transparent 23deg 40deg,#6fe0ac0a 43deg 46deg,transparent 49deg 78deg,#6fe0ac0d 81deg 84deg,transparent 87deg 120deg,#6fe0ac0a 123deg 126deg,transparent 129deg 360deg);border-radius:50%;animation:raySpin 70s linear infinite;-webkit-mask-image:radial-gradient(circle at 50% 12%,#000 0%,transparent 42%);mask-image:radial-gradient(circle at 50% 12%,#000 0%,transparent 42%)}
+@keyframes raySpin{to{transform:translateX(-50%) rotate(360deg)}}
+.dust i{position:absolute;width:3px;height:3px;border-radius:50%;background:radial-gradient(circle,#a9ecc9,#27c98a00);animation:drift linear infinite;opacity:0}
+@keyframes drift{0%{transform:translateY(15vh) translateX(0);opacity:0}12%{opacity:.7}88%{opacity:.4}100%{transform:translateY(-110vh) translateX(6vw);opacity:0}}
+.crowd{position:absolute;left:0;right:0;bottom:0;height:110px}
+.crowd svg{position:absolute;inset:0;width:100%;height:100%}
+.flash{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:0;animation:blitz 4s linear infinite}
+@keyframes blitz{0%,96%,100%{opacity:0}97%{opacity:.95}98%{opacity:.2}99%{opacity:.7}}
+.grain{position:absolute;inset:-100%;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");animation:grainShift 1.4s steps(3) infinite}
+@keyframes grainShift{0%{transform:translate(0,0)}33%{transform:translate(-6%,4%)}66%{transform:translate(5%,-5%)}100%{transform:translate(0,0)}}
+.atmo-vig{position:absolute;inset:0;background:radial-gradient(140% 100% at 50% 55%,transparent 55%,rgba(0,0,0,.55) 100%)}
+@media (prefers-reduced-motion:reduce){.beam,.dust i,.grain,.aurora,.godrays,.flash{animation:none}.godrays{display:none}}
 
-/* FEATURES */
-.features{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
-  max-width:500px;margin-bottom:40px;
-  opacity:0;animation:fadeUp .6s .55s ease forwards
-}
-.feat{
-  display:flex;align-items:center;gap:7px;
-  padding:8px 14px;border-radius:99px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  font-size:12px;font-weight:700;color:rgba(255,255,255,.7);
-  letter-spacing:.5px
-}
-.feat-icon{font-size:15px}
+/* ── CHYRON ── */
+.chyron{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:stretch;height:30px;background:linear-gradient(180deg,rgba(7,11,22,.95),rgba(7,11,22,.85));border-bottom:1px solid var(--hair-gold);backdrop-filter:blur(6px)}
+.chyron .tag{display:flex;align-items:center;gap:6px;padding:0 12px;background:linear-gradient(180deg,#7ff0c0,#22c55e);color:#06130c;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:.14em;white-space:nowrap;clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.chyron .belt{flex:1;overflow:hidden;display:flex;align-items:center}
+.chyron .track{display:inline-flex;gap:44px;white-space:nowrap;padding-left:100%;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;animation:chyronRoll 26s linear infinite}
+.chyron .track b{color:var(--gold-metal)}
+@keyframes chyronRoll{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.chyron .track{animation:none;padding-left:12px}}
 
-/* CTA */
-.cta-wrap{opacity:0;animation:fadeUp .6s .65s ease forwards}
-.cta-text{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
-.url{
-  display:inline-block;padding:14px 32px;
-  background:var(--gold);color:var(--g);
-  font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
-  border-radius:5px;text-decoration:none;
-  box-shadow:0 0 30px rgba(201,168,76,.3);
-  transition:all .2s
-}
-.url:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 4px 40px rgba(201,168,76,.4)}
-.pw{margin-top:12px;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px}
-.pw span{color:var(--gold);font-weight:700}
+/* ── TEPPE ── */
+.curtain{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 90% at 50% 30%,#101a33,#05080f);display:flex;align-items:center;justify-content:center;animation:curtainOut .8s ease 1s forwards}
+.curtain svg{width:88px;height:100px;filter:drop-shadow(0 0 30px rgba(39,201,138,.5));animation:crestIn .8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes crestIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes curtainOut{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.curtain{display:none}}
 
-/* COUNTDOWN */
-.countdown{
-  display:flex;gap:8px;align-items:center;
-  margin-top:36px;
-  opacity:0;animation:fadeUp .5s .75s ease forwards
-}
-.cd-box{background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:8px 12px;min-width:52px;text-align:center}
-.cd-n{font-size:26px;font-weight:900;color:var(--gold);line-height:1}
-.cd-l{font-size:7px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(201,168,76,.5)}
-.cd-sep{font-size:20px;color:rgba(201,168,76,.25);font-weight:300}
-.cd-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:8px;text-align:center}
+/* ── HERO ── */
+.hero{position:relative;text-align:center;padding:70px 0 26px}
+.crest-main{width:74px;height:84px;margin:0 auto 14px;filter:drop-shadow(0 6px 18px rgba(39,201,138,.25))}
+.hero-club{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.5em;color:var(--muted);padding-left:.5em}
+.hero-mark{font-size:clamp(52px,15vw,76px);line-height:1;margin-top:2px;letter-spacing:.02em}
+.hero-sub{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3em;color:var(--gold-metal);text-transform:uppercase;margin-top:8px}
 
-/* BOTTOM TAGLINE */
-.tagline{
-  margin-top:40px;font-size:11px;font-style:italic;
-  color:rgba(255,255,255,.2);letter-spacing:1px;
-  opacity:0;animation:fadeUp .5s .85s ease forwards
-}
+/* ── SCOREBOARD ── */
+.board{display:inline-block;margin-top:22px}
+.board-cap{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.board .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.tiles{display:flex;align-items:center;gap:7px;justify-content:center}
+.tile{position:relative;background:linear-gradient(180deg,#1c2544 48%,#121a30 52%);border:1px solid var(--hair-gold);border-radius:7px;min-width:60px;padding:10px 6px 8px;box-shadow:0 10px 24px -12px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06)}
+.tile::before{content:"";position:absolute;left:4px;right:4px;top:50%;height:1px;background:rgba(0,0,0,.55)}
+.tile b{display:block;font-family:'Anton',sans-serif;font-size:28px;line-height:1;color:var(--gold);text-shadow:0 0 14px #27c98a59}
+.tile b.tick{animation:tickFlip .35s ease}
+@keyframes tickFlip{0%{transform:rotateX(70deg);opacity:.2}100%{transform:rotateX(0);opacity:1}}
+.tile span{display:block;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin-top:4px}
+.colon{font-family:'Anton',sans-serif;color:var(--gold-deep);font-size:20px}
+@media (prefers-reduced-motion:reduce){.board .dot,.tile b.tick{animation:none}}
 
-@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ── MODUL ── */
+.mod{position:relative;background:linear-gradient(180deg,var(--navy-800),var(--navy-900));border:1px solid var(--hair);border-radius:10px;margin-top:26px;box-shadow:0 20px 40px -24px rgba(0,0,0,.8);overflow:hidden}
+.mod::before{content:"";position:absolute;top:0;left:0;width:44px;height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+.mod-h{display:flex;align-items:baseline;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--hair)}
+.mod-t{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+.mod-sub{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+
+/* ── PRODUKTKORT ── */
+.prods{display:flex;flex-direction:column;gap:10px;padding:16px 18px 18px}
+.prod{position:relative;display:flex;align-items:center;gap:14px;background:var(--navy-900);border:1px solid var(--hair);border-radius:8px;padding:14px 16px;overflow:hidden;transition:transform .2s,border-color .2s}
+.prod:hover{transform:translateY(-2px)}
+.prod::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.prod.p-champ::before{background:linear-gradient(180deg,#ffe452,#8a6d1f)}
+.prod.p-selekt::before{background:linear-gradient(180deg,#e3c878,#7a5f22)}
+.prod.p-osat::before{background:linear-gradient(180deg,#fb923c,#c2410c)}
+.prod .pn{font-family:'Anton',sans-serif;font-size:16px;letter-spacing:.08em}
+.prod.p-champ .pn{color:var(--gold)}
+.prod.p-selekt .pn{color:var(--selekt)}
+.prod.p-osat .pn{color:var(--osat)}
+.prod .pd{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.prod .go{margin-left:auto;font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+
+/* ── NYTT I SESONG 2 ── */
+.news{padding:8px 18px 18px}
+.nitem{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--hair)}
+.nitem:last-child{border-bottom:none}
+.nitem .ic{width:34px;height:34px;border-radius:8px;background:rgba(212,175,55,.08);border:1px solid var(--hair-gold);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.nitem b{display:block;font-size:14px;font-weight:700}
+.nitem p{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+
+/* ── LEGENDER ── */
+.leg{margin:16px 18px 20px;position:relative;background:linear-gradient(120deg,var(--navy-700),var(--navy-800) 70%);border:1px solid var(--hair-gold);border-radius:8px;padding:15px 16px 15px 20px;overflow:hidden}
+.leg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),var(--gold-deep))}
+.leg .cap{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.3em;color:var(--gold-metal);text-transform:uppercase}
+.leg .who{font-family:'Anton',sans-serif;font-size:21px;letter-spacing:.03em;margin-top:3px}
+.leg .stat{display:flex;gap:16px;margin-top:9px}
+.leg .stat b{font-family:'Anton',sans-serif;font-size:15px;display:block}
+.leg .stat span{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.leg.l-selekt{border-color:rgba(39,201,138,.4)}
+.leg.l-selekt::before{background:linear-gradient(180deg,#e3c878,#7a5f22)}
+.leg.l-selekt .cap{color:var(--selekt)}
+.leg.l-osat{border-color:rgba(249,115,22,.4)}
+.leg.l-osat::before{background:linear-gradient(180deg,#fb923c,#c2410c)}
+.leg.l-osat .cap{color:var(--osat)}
+.leg .who.gs-selekt{background:linear-gradient(110deg,#fff,#27c98a 40%,#fff 70%,#27c98a);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
+.leg .who.gs-osat{background:linear-gradient(110deg,#fff,#f97316 40%,#fff 70%,#f97316);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4.5s linear infinite}
+@media (prefers-reduced-motion:reduce){.leg .who{animation:none}}
+
+.foot{text-align:center;margin-top:44px;padding-top:22px;border-top:1px solid var(--hair)}
+.foot .md{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.3em}
+.foot .md b{color:var(--gold)}
+.foot .sl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.24em;color:var(--dim);margin-top:6px;text-transform:uppercase}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <div class="pill">
-    <div class="pill-dot"></div>
-    Ny konkurranse
+<div class="chyron" aria-hidden="true">
+  <span class="tag">&#128240; LA GAZZETTA</span>
+  <span class="belt"><span class="track">Sesong 2 sparkes i gang mandag 3. august kl. 08:00 &nbsp;&middot;&nbsp; <b>Fabian Noraker</b> forsvarer tronen fra Ryen &nbsp;&middot;&nbsp; Fornebu vant avdelingskampen &mdash; kan de gjenta? &nbsp;&middot;&nbsp; Nye regler &middot; nytt stadiondesign &middot; nye Legender</span></span>
+</div>
+
+<div class="curtain" id="curtain">
+  <svg viewBox="0 0 74 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="cg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#7ff0c0"/><stop offset=".5" stop-color="#27c98a"/><stop offset="1" stop-color="#157f4f"/></linearGradient></defs>
+    <path d="M37 2 L70 12 V44 C70 63 56 76 37 82 C18 76 4 63 4 44 V12 Z" fill="none" stroke="url(#cg)" stroke-width="2.5"/>
+    <path d="M37 20 l4.7 9.5 10.5 1.5 -7.6 7.4 1.8 10.4 -9.4 -4.9 -9.4 4.9 1.8 -10.4 -7.6 -7.4 10.5 -1.5 Z" fill="url(#cg)"/>
+  </svg>
+</div>
+
+<div class="atmo" aria-hidden="true">
+  <div class="atmo-sky"></div>
+  <div class="atmo-pitch">
+    <svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="200" cy="400" r="150" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="200" cy="400" r="4" fill="#22c55e"/>
+      <line x1="-50" y1="400" x2="450" y2="400" stroke="#22c55e" stroke-width="1.5"/>
+      <path d="M-50 60 h500 M-50 740 h500" stroke="#22c55e" stroke-width="1"/>
+    </svg>
   </div>
-
-  <div class="logo-wrap">
-    <div class="crest">⚽</div>
-    <div class="brand-top">Volvo Car Stor Oslo</div>
-    <div class="brand-main">SELEKT CUP</div>
-    <div class="brand-sub">Bruktbil &nbsp;&middot;&nbsp; Mai &amp; Juni 2026</div>
+  <div class="aurora a"></div><div class="aurora b"></div>
+  <div class="godrays"></div>
+  <div class="beam l"></div><div class="beam r"></div>
+  <div class="dust" id="dust"></div>
+  <div class="crowd" id="crowd">
+    <svg viewBox="0 0 400 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 110 V70 q6 -7 12 0 q5 -9 11 -1 q6 -8 12 0 q5 -7 11 0 q6 -9 12 -1 q5 -7 11 0 q6 -8 12 0 q5 -9 11 -1 q6 -7 12 0 q5 -8 11 0 q6 -9 12 -1 q5 -7 11 0 q6 -8 12 0 q5 -7 11 0 q6 -9 12 -1 q5 -7 11 0 q6 -8 12 0 q5 -9 11 -1 q6 -7 12 0 q5 -8 11 0 q6 -9 12 -1 q5 -7 11 0 q6 -8 12 0 q5 -7 11 0 q6 -9 12 -1 q5 -7 11 0 q6 -8 12 0 q5 -9 11 -1 q6 -7 12 0 q5 -8 11 0 q6 -9 12 -1 q5 -7 11 0 L400 110 Z" fill="#03050b"/>
+      <path d="M0 110 V88 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 -1 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 -1 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 -1 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 -1 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 -1 q8 -6 16 0 q7 -7 15 0 q8 -6 16 0 q7 -8 15 0 L400 110 Z" fill="#01030a"/>
+    </svg>
   </div>
+  <div class="grain"></div>
+  <div class="atmo-vig"></div>
+</div>
 
-  <div class="headline-wrap">
-    <div class="headline">
-      <span>Kampen</span>
-      <span>er i gang</span>
-      <span class="sub-word">hvem tar tittelen?</span>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero rise" style="animation-delay:.1s">
+    <svg class="crest-main" viewBox="0 0 74 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="hg" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#7ff0c0"/><stop offset=".5" stop-color="#27c98a"/><stop offset="1" stop-color="#157f4f"/></linearGradient>
+      <linearGradient id="hb" x1="0" y1="0" x2="74" y2="84"><stop offset="0" stop-color="#1a2440"/><stop offset="1" stop-color="#0c1222"/></linearGradient></defs>
+      <path d="M37 2 L70 12 V44 C70 63 56 76 37 82 C18 76 4 63 4 44 V12 Z" fill="url(#hb)" stroke="url(#hg)" stroke-width="2.5"/>
+      <path d="M37 20 l4.7 9.5 10.5 1.5 -7.6 7.4 1.8 10.4 -9.4 -4.9 -9.4 4.9 1.8 -10.4 -7.6 -7.4 10.5 -1.5 Z" fill="url(#hg)"/>
+      <path d="M18 62 q19 11 38 0" stroke="url(#hg)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="hero-club">VOLVO CAR STOR OSLO</div>
+    <div class="display goldshine hero-mark" style="font-size:clamp(34px,11vw,58px)">Selekt Cup</div>
+    <div class="hero-sub">Sesong 2 &middot; Q3 2026 &middot; Bruktbil</div>
+    <div class="board">
+      <div class="board-cap"><span class="dot"></span>Avspark mandag 3. august kl. 08:00</div>
+      <div class="tiles num">
+        <div class="tile"><b id="td">--</b><span>Dager</span></div>
+        <div class="colon">:</div>
+        <div class="tile"><b id="th">--</b><span>Timer</span></div>
+        <div class="colon">:</div>
+        <div class="tile"><b id="tm">--</b><span>Min</span></div>
+        <div class="colon">:</div>
+        <div class="tile"><b id="ts">--</b><span>Sek</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="date-row">
-    <div class="date-box">
-      <div class="date-n">11</div>
-      <div class="date-l">Mai</div>
+  <!-- TIL ARENAEN -->
+  <div class="mod rise" style="animation-delay:.25s">
+    <div class="mod-h"><span class="mod-t">Arenaen &aring;pner 3. august</span><span class="mod-sub">Bruktbil</span></div>
+    <div class="prods">
+      <a class="prod" href="https://jorsna.github.io/selekt-cup/" style="text-decoration:none;color:inherit;border-color:rgba(39,201,138,.4)">
+        <div><div class="pn" style="color:var(--gold)">Selekt Cup</div><div class="pd">Volvo &middot; Zeekr &middot; Polestar</div></div>
+        <span class="go">&rarr;</span>
+      </a>
     </div>
-    <div class="date-sep">—</div>
-    <div class="date-month">Starter mandag</div>
   </div>
 
-  <div class="features">
-    <div class="feat"><span class="feat-icon">👑</span> MVP daglig</div>
-    <div class="feat"><span class="feat-icon">⭐</span> Hat-trick</div>
-    <div class="feat"><span class="feat-icon">🏆</span> Hall of Fame</div>
-    <div class="feat"><span class="feat-icon">🔥</span> Streak</div>
-    <div class="feat"><span class="feat-icon">🙌</span> Heia fra tilskuere</div>
-    <div class="feat"><span class="feat-icon">📊</span> Live leaderboard</div>
+  <!-- NYTT I SESONG 2 -->
+  <div class="mod rise" style="animation-delay:.4s">
+    <div class="mod-h"><span class="mod-t">Nytt i Sesong 2</span><span class="mod-sub">Oppgraderinger</span></div>
+    <div class="news">
+      <div class="nitem">
+        <div class="ic" style="border-color:rgba(39,201,138,.4)">&#127976;</div>
+        <div><b>Helt nytt stadiondesign</b><p>Flomlys, tribune og gullst&oslash;v &mdash; hele arenaen er bygget om. Du ser det med &eacute;n gang du &aring;pner appen.</p></div>
+      </div>
+      <div class="nitem">
+        <div class="ic" style="border-color:rgba(39,201,138,.4)">&#128203;</div>
+        <div><b>Registrering med kontraktsnummer</b><p>Hver scoring knyttes til kontraktsnummeret i Tacdis. &Eacute;n registrering per nummer &mdash; rent, rettferdig og klart for s&oslash;ndagsavstemming.</p></div>
+      </div>
+      <div class="nitem">
+        <div class="ic" style="border-color:rgba(39,201,138,.4)">&#128197;</div>
+        <div><b>Etterregistrering</b><p>Glemte du &aring; legge inn i g&aring;r? N&aring; kan du velge riktig salgsdato &mdash; maks &eacute;n dag tilbake.</p></div>
+      </div>
+      <div class="nitem">
+        <div class="ic" style="border-color:rgba(39,201,138,.4)">&#129309;</div>
+        <div><b>Tillitsreglene</b><p>Oppdatert regelverk i bruksanvisningen: alle Volvo, Zeekr og Polestar teller &mdash; oppkj&oslash;pere gj&oslash;r det ikke.</p></div>
+      </div>
+      <div class="nitem">
+        <div class="ic" style="border-color:rgba(39,201,138,.4)">&#127775;</div>
+        <div><b>Legender i Hall of Fame</b><p>Sesong 1 er arkivert for alltid: sesongmester, finanskonge p&aring; finansgrad og vinneravdeling.</p></div>
+      </div>
+    </div>
   </div>
 
-  <div class="cta-wrap">
-    <div class="cta-text">Følg med live på</div>
-    <a class="url" href="https://jorsna.github.io/selekt-cup/" target="_blank">jorsna.github.io/selekt-cup</a>
-    <div class="pw">Passord: <span>selekt2026</span></div>
+  <!-- LEGENDENE FRA SESONG 1 -->
+  <div class="mod rise" style="animation-delay:.55s">
+    <div class="mod-h"><span class="mod-t">Sesong 1 i historieb&oslash;kene</span><span class="mod-sub">Kan tronen forsvares?</span></div>
+    <div class="leg">
+      <div class="cap">&#127942; Sesongmester &middot; Sesong 1</div>
+      <div class="who goldshine">Fabian Noraker</div>
+      <div class="stat num">
+        <div><b>69</b><span>Poeng</span></div>
+        <div><b>23</b><span>Salg</span></div>
+        <div><b>Ryen</b><span>Avdeling</span></div>
+      </div>
+    </div>
+    <div class="leg">
+      <div class="cap">&#127967;&#65039; Vinneravdeling &middot; Sesong 1</div>
+      <div class="who goldshine">Fornebu</div>
+      <div class="stat num">
+        <div><b>52.0</b><span>Poeng/selger</span></div>
+      </div>
+    </div>
   </div>
 
-  <div class="countdown" id="cd">
-    <div class="cd-box"><div class="cd-n" id="cd-d">–</div><div class="cd-l">dager</div></div>
-    <div class="cd-sep">:</div>
-    <div class="cd-box"><div class="cd-n" id="cd-h">–</div><div class="cd-l">timer</div></div>
-    <div class="cd-sep">:</div>
-    <div class="cd-box"><div class="cd-n" id="cd-m">–</div><div class="cd-l">min</div></div>
-    <div class="cd-sep">:</div>
-    <div class="cd-box"><div class="cd-n" id="cd-s">–</div><div class="cd-l">sek</div></div>
+  <div class="foot rise" style="animation-delay:.7s">
+    <div class="md">MATCH<b>DAY</b></div>
+    <div class="sl">Et produkt fra SnarLink &middot; &copy; 2026</div>
   </div>
-  <div class="cd-label">Nedtelling til kickoff</div>
-
-  <div class="tagline">Volvo Car Stor Oslo &nbsp;&middot;&nbsp; Selekt Bruktbil &nbsp;&middot;&nbsp; Mai &amp; Juni 2026</div>
 
 </div>
 
 <script>
-var target = new Date('2026-05-11T08:00:00');
-function tick() {
-  var now = new Date();
-  var diff = target - now;
-  if (diff <= 0) {
-    document.getElementById('cd-d').textContent = '0';
-    document.getElementById('cd-h').textContent = '00';
-    document.getElementById('cd-m').textContent = '00';
-    document.getElementById('cd-s').textContent = '00';
-    return;
+// Gullstøv
+(function(){
+  var host = document.getElementById('dust');
+  if (!host) return;
+  for (var i = 0; i < 22; i++) {
+    var p = document.createElement('i');
+    p.style.left = (Math.random()*100) + 'vw';
+    p.style.animationDuration = (14 + Math.random()*18) + 's';
+    p.style.animationDelay = (-Math.random()*20) + 's';
+    var s = 2 + Math.random()*2.5;
+    p.style.width = s+'px'; p.style.height = s+'px';
+    host.appendChild(p);
   }
-  var d = Math.floor(diff/86400000);
-  var h = Math.floor((diff%86400000)/3600000);
-  var m = Math.floor((diff%3600000)/60000);
-  var s = Math.floor((diff%60000)/1000);
-  document.getElementById('cd-d').textContent = d;
-  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
-  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
-  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
-}
-tick();
-setInterval(tick, 1000);
+})();
+// Kamerablitser
+(function(){
+  var crowd = document.getElementById('crowd');
+  if (!crowd) return;
+  for (var i = 0; i < 16; i++) {
+    var f = document.createElement('i');
+    f.className = 'flash';
+    f.style.left = (2+Math.random()*96) + '%';
+    f.style.bottom = (8+Math.random()*55) + 'px';
+    f.style.animationDelay = (Math.random()*7).toFixed(2) + 's';
+    f.style.animationDuration = (3+Math.random()*5).toFixed(2) + 's';
+    crowd.appendChild(f);
+  }
+})();
+// Parallakse
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var pitch = document.querySelector('.atmo-pitch');
+  var rays  = document.querySelector('.godrays');
+  addEventListener('scroll', function(){
+    var y = scrollY;
+    if (pitch) pitch.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+    if (rays)  rays.style.opacity = Math.max(0, 1 - y/500);
+  }, { passive:true });
+})();
+// Live nedtelling til avspark
+(function(){
+  var end = new Date('2026-08-03T08:00:00');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = Math.max(0, end - new Date());
+    var vals = {
+      td: Math.floor(diff/864e5),
+      th: Math.floor(diff%864e5/36e5),
+      tm: Math.floor(diff%36e5/6e4),
+      ts: Math.floor(diff%6e4/1e3)
+    };
+    Object.keys(vals).forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      var v = pad(vals[id]);
+      if (el.textContent !== v) {
+        el.textContent = v;
+        el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick');
+      }
+    });
+  }
+  tick(); setInterval(tick, 1000);
+})();
 </script>
 </body>
 </html>

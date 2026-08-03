@@ -918,7 +918,7 @@ body{background:transparent !important}
         </div>
       </div>
       <div class="hdr-right">
-        <button id="news-btn" onclick="openNews()" aria-label="Nyheter fra Podium" title="Nyheter fra Podium" style="position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);background:rgba(201,168,76,.08);font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center">📣<span id="news-dot" style="display:none;position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--card)"></span></button>
+        <button id="news-btn" onclick="openNews()" aria-label="Nyheter fra Matchday" title="Nyheter fra Matchday" style="position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);background:rgba(201,168,76,.08);font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center">📣<span id="news-dot" style="display:none;position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--card)"></span></button>
         <button onclick="location.href='bruksanvisning_selekt.html'" aria-label="Slik fungerer det" title="Slik fungerer det" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);background:rgba(201,168,76,.08);font-size:18px;font-weight:700;color:var(--gold);cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">?</button>
   <div id="export-btn" style="display:none"></div>
       </div>
@@ -1764,6 +1764,43 @@ function teamSalesInWeek(teamId, weekNum) {
   }).length;
 }
 
+
+
+function renderPodium(rows) {
+  var el = document.getElementById('team-podium');
+  if (!el) return;
+  var top = rows.slice(0,3);
+  var rest = rows.slice(3);
+  var heights = [104, 74, 58];
+  var medals = ['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
+  var slots = [top[1], top[0], top[2]];
+  var slotRank = [1, 0, 2];
+  var cols = '';
+  slots.forEach(function(r, idx) {
+    if (!r) { cols += '<div class="pod-col" style="visibility:hidden"></div>'; return; }
+    var rank = slotRank[idx];
+    var isLeader = rank === 0;
+    cols += '<div class="pod-col">'
+      + (isLeader ? '<div class="pod-crown">\ud83d\udc51</div>' : '')
+      + '<div class="pod-pps" style="color:'+(isLeader?'var(--gold)':r.color)+'">'+r.pps.toFixed(1)+'</div>'
+      + '<div class="pod-lbl">pr. selger</div>'
+      + '<div class="pod-bar'+(isLeader?' pod-bar-lead':'')+'" style="height:'+heights[rank]+'px;background:linear-gradient(180deg,'+r.color+','+r.color+'33)"><span class="pod-medal">'+medals[rank]+'</span></div>'
+      + '<div class="pod-name" style="color:'+(isLeader?'var(--gold)':r.color)+'">'+r.navn+'</div>'
+    + '</div>';
+  });
+  var restHtml = rest.map(function(r, i) {
+    return '<div class="pod-rest">'
+      + '<span class="pod-rest-rank">'+(i+4)+'</span>'
+      + '<span class="pod-rest-dot" style="background:'+r.color+'"></span>'
+      + '<span class="pod-rest-name">'+r.navn+'</span>'
+      + '<span class="pod-rest-pps">'+r.pps.toFixed(1)+'</span>'
+      + '<span class="pod-rest-lbl">pr. selger</span>'
+    + '</div>';
+  }).join('');
+  el.innerHTML = '<div class="pod-wrap"><div class="pod-row">' + cols + '</div>'
+    + (restHtml ? '<div class="pod-rest-list">' + restHtml + '</div>' : '')
+    + '</div>';
+}
 
 
 function renderTeam() {
@@ -3435,7 +3472,7 @@ function buildTicker(items) {
 }
 </script>
 
-<!-- Nyheter fra Podium (leses fra delt Supabase-tabell; rediger via skriv_nyhet.html) -->
+<!-- Nyheter fra Matchday (leses fra delt Supabase-tabell; rediger via skriv_nyhet.html) -->
 <script>
 (function(){
   var NEWS_URL='https://resrjvztsqdxzqgiffeg.supabase.co/rest/v1/news';
@@ -3464,7 +3501,7 @@ function buildTicker(items) {
     o.style.cssText='position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.82);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow:auto;font-family:Barlow,system-ui,sans-serif';
     o.innerHTML='<div style="background:var(--card);border:1.5px solid var(--gold);border-radius:16px;max-width:440px;width:100%;padding:22px">'
       +'<div style="display:flex;align-items:center;justify-content:space-between">'
-      +'<div style="font-family:Anton,sans-serif;color:var(--gold);font-size:18px;letter-spacing:.06em">📣 NYHETER FRA PODIUM</div>'
+      +'<div style="font-family:Anton,sans-serif;color:var(--gold);font-size:18px;letter-spacing:.06em">📣 NYHETER FRA MATCHDAY</div>'
       +'<div id="news-close" style="cursor:pointer;color:var(--muted);font-size:24px;line-height:1;padding:0 4px">×</div></div>'
       +'<div style="width:46px;height:2px;background:var(--gold);opacity:.5;margin:8px 0 4px"></div>'
       +inner+'</div>';

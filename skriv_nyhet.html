@@ -31,6 +31,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
 .ndt{font-size:10px;color:var(--muted);margin-top:2px}
 .del{background:none;border:none;color:#e06a6a;cursor:pointer;font-size:12px;padding:4px;white-space:nowrap}
 .hint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
+.npop{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:var(--gold);color:#000;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -53,6 +54,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
       <input id="title" maxlength="80" placeholder="F.eks. Sommerpausen nærmer seg">
       <label for="body">Tekst</label>
       <textarea id="body" maxlength="600" placeholder="Skriv nyheten her …"></textarea>
+      <label class="chk"><input type="checkbox" id="popup"> Vis som pop-up i appen</label>
+      <div class="chk-hint">For viktige nyheter alle må få med seg. Vises som fullskjerm-varsel første gang (i tillegg til roperten).</div>
       <button class="btn" id="publish">Publiser</button>
       <div class="msg" id="msg"></div>
       <div class="hint">Publiseres kun på <b>Selekt</b>. Trykk 📣-ikonet i appen for å se nyhetene.</div>
@@ -84,26 +87,26 @@ $('unlock').onclick=function(){
 $('pass').addEventListener('keydown',function(e){if(e.key==='Enter')$('unlock').click();});
 
 $('publish').onclick=function(){
-  var title=$('title').value.trim(), body=$('body').value.trim(), tag=$('tag').value, msg=$('msg');
+  var title=$('title').value.trim(), body=$('body').value.trim(), tag=$('tag').value, popup=$('popup').checked, msg=$('msg');
   if(!title||!body){msg.className='msg err';msg.textContent='Fyll inn overskrift og tekst.';return;}
   var btn=$('publish'); btn.disabled=true; msg.className='msg'; msg.textContent='Publiserer …';
-  fetch(SB,{method:'POST',headers:Object.assign(H(),{Prefer:'return=minimal'}),body:JSON.stringify({tag:tag,title:title,body:body,comp:COMP,popup:false})})
+  fetch(SB,{method:'POST',headers:Object.assign(H(),{Prefer:'return=minimal'}),body:JSON.stringify({tag:tag,title:title,body:body,comp:COMP,popup:popup})})
     .then(function(r){
       btn.disabled=false;
-      if(r.ok){msg.className='msg ok';msg.textContent='Publisert på Selekt!';$('title').value='';$('body').value='';loadList();}
+      if(r.ok){msg.className='msg ok';msg.textContent=popup?'Publisert som pop-up på Selekt!':'Publisert på Selekt!';$('title').value='';$('body').value='';$('popup').checked=false;loadList();}
       else{msg.className='msg err';msg.textContent='Noe gikk galt ('+r.status+'). Prøv igjen.';}
     })
     .catch(function(){btn.disabled=false;msg.className='msg err';msg.textContent='Nettverksfeil. Prøv igjen.';});
 };
 
 function loadList(){
-  fetch(SB+'?select=id,created_at,tag,title,body&comp=in.('+COMP+',begge)&order=created_at.desc&limit=20',{headers:H()})
+  fetch(SB+'?select=id,popup,created_at,tag,title,body&comp=in.('+COMP+',begge)&order=created_at.desc&limit=20',{headers:H()})
     .then(function(r){return r.json();})
     .then(function(d){
       var el=$('list');
       if(!Array.isArray(d)||!d.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:6px 0">Ingen nyheter ennå.</div>';return;}
       el.innerHTML=d.map(function(n){
-        return '<div class="nrow"><span class="ntag">'+esc(n.tag)+'</span>'
+        return '<div class="nrow"><span class="ntag">'+esc(n.tag)+'</span>'+(n.popup?'<span class="npop">Pop-up</span>':'')
           +'<div style="flex:1"><div class="nttl">'+esc(n.title)+'</div><div class="ndt">'+esc(fmt(n.created_at))+'</div></div>'
           +'<button class="del" data-id="'+n.id+'">Slett</button></div>';
       }).join('');

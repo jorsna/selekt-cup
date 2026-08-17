@@ -4353,10 +4353,37 @@ function buildTicker(items) {
     o.querySelector('#news-close').addEventListener('click',dismiss);
     markSeen();
   };
+  var POPUP_KEY='selekt_news_popup_seen_id';
+  function maybePopup(){
+    if(!document.body) return;
+    if(document.getElementById('news-overlay')||document.getElementById('news-popup')) return;
+    var seen=0; try{seen=parseInt(localStorage.getItem(POPUP_KEY)||'0',10)||0;}catch(e){}
+    var pops=NEWS.filter(function(n){return n.popup && n.id>seen;});
+    if(!pops.length) return;
+    pops.sort(function(a,b){return b.id-a.id;});
+    showPopup(pops[0]);
+  }
+  function showPopup(n){
+    try{localStorage.setItem(POPUP_KEY,String(n.id));}catch(e){}
+    var o=document.createElement('div');o.id='news-popup';
+    o.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;font-family:Barlow,system-ui,sans-serif';
+    o.innerHTML='<div style="background:var(--card);border:1.5px solid var(--gold);border-radius:16px;padding:26px 26px 22px;max-width:360px;width:100%;text-align:center;max-height:88vh;overflow:auto">'
+      +'<div style="font-size:34px;line-height:1">\uD83D\uDCE3</div>'
+      +'<div style="font-family:Barlow,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.85;margin-top:10px">'+esc(n.tag||'Nyhet')+'</div>'
+      +'<div style="font-family:Anton,sans-serif;font-size:23px;letter-spacing:.01em;color:var(--txt);margin-top:6px;line-height:1.15">'+esc(n.title)+'</div>'
+      +'<div style="width:42px;height:1px;background:var(--gold);opacity:.4;margin:14px auto"></div>'
+      +'<div style="font-size:13.5px;line-height:1.5;color:var(--muted);white-space:pre-wrap;text-align:left">'+esc(n.body)+'</div>'
+      +'<button id="np-ok" style="margin-top:20px;background:var(--gold);color:#000;font-family:Barlow,sans-serif;font-weight:700;font-size:14px;border:none;cursor:pointer;padding:11px 28px;border-radius:100px">Skj\u00f8nner!</button>'
+      +'</div>';
+    document.body.appendChild(o);
+    function close(){if(o&&o.parentNode)o.parentNode.removeChild(o);markSeen();}
+    o.addEventListener('click',function(e){if(e.target===o)close();});
+    o.querySelector('#np-ok').addEventListener('click',close);
+  }
   function load(){
-    fetch(NEWS_URL+'?select=id,created_at,tag,title,body&comp=in.(selekt,begge)&order=created_at.desc&limit=30',{headers:{apikey:NEWS_KEY,Authorization:'Bearer '+NEWS_KEY}})
+    fetch(NEWS_URL+'?select=id,popup,created_at,tag,title,body&comp=in.(selekt,begge)&order=created_at.desc&limit=30',{headers:{apikey:NEWS_KEY,Authorization:'Bearer '+NEWS_KEY}})
       .then(function(r){return r.json();})
-      .then(function(d){if(Array.isArray(d))NEWS=d;updateDot();})
+      .then(function(d){if(Array.isArray(d))NEWS=d;updateDot();maybePopup();})
       .catch(function(){});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();

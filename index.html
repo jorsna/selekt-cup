@@ -1581,6 +1581,226 @@ body.er-admin .adm-flex.adm-only{display:flex!important}
 .adm-avbryt{background:transparent;border:1px solid var(--b2,var(--b1));color:var(--txt)}
 .adm-lagre{background:var(--gold);border:1px solid var(--gold);color:#111}
 </style>
+<style id="matchday-drakt">
+/* ═══ MATCHDAY FELLES DRAKT v1 ═══════════════════════════════════════════
+   Kilde: matchday-drakt.css. Felles for Championship, Selekt Cup og OSAT League.
+   Ikke rediger her i appen – endre kildefilen og bygg på nytt.
+   Hver app setter bare tokenene (--md-*) i sin egen blokk over denne.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Faner: strekikoner i samme stil */
+.tabs{background:var(--md-fanebunn)!important;border-bottom:1px solid var(--md-linje)!important;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.tabs-row .tab{color:var(--md-ikon)!important;padding:11px 0 9px!important;gap:5px!important}
+.tabs-row .tab .tab-icon svg{width:21px;height:21px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabs-row .tab.on{color:var(--md-aksent)!important;border-bottom-color:var(--md-aksent)!important;
+  background:linear-gradient(180deg,transparent 40%,rgba(var(--md-aksent-rgb),.10))}
+.tabs-row .tab.on .tab-icon svg{filter:drop-shadow(0 0 6px rgba(var(--md-aksent-rgb),.55))}
+.tabs-row .tab-label{letter-spacing:0!important}
+@media(max-width:420px){.tabs-row .tab-label{font-size:10px!important}}
+
+/* Periodevelger: piller, får plass på smale telefoner */
+.mbar{background:transparent!important;border-bottom:1px solid var(--md-linje)!important}
+.mbar .mt{border-color:var(--md-linje2)!important;border-radius:999px!important}
+.mbar .mt.on{background:var(--md-aksent)!important;color:var(--md-ink)!important;border-color:var(--md-aksent)!important}
+@media(max-width:400px){.mbar{padding:10px 12px!important;gap:8px!important}.mbar .mt{padding:6px 9px!important}.mbar-v{font-size:12px!important}}
+
+/* Nyhetsstripe og værstripe i husets farger */
+#gazzetta-ticker{background:var(--md-stripe)!important;border-top:1px solid rgba(var(--md-aksent-rgb),.25)!important;box-shadow:none!important}
+#gazzetta-ticker .ticker-label{background:var(--md-aksent)!important;color:var(--md-ink)!important;border-right:0!important}
+#vbar{background:var(--md-stripe)!important;border-top:1px solid var(--md-linje)!important;border-bottom:1px solid var(--md-linje)}
+#vbar .vb-dag{background:transparent!important;color:var(--md-aksent-lys)!important;border-right:1px solid var(--md-linje)!important}
+#vbar .vb-kort{display:none}
+@media(max-width:560px){#vbar .vb-lang{display:none}#vbar .vb-kort{display:inline}
+  #vbar .vb-n{flex:0 0 auto;overflow:visible;color:rgba(255,255,255,.6)}#vbar .vb-r{display:none}#vbar .vb{gap:4px;padding:0 4px}}
+
+/* Tabellen: ett panel med tynne linjer i stedet for mange tunge kort */
+#view-ind .tbl-head{background:transparent!important;border:0!important;color:var(--md-ikon)!important;font-size:10px!important;
+  letter-spacing:.1em!important;margin:10px 10px 0!important;padding:6px 8px!important}
+#tbl-ind{margin:0 10px 16px;border:1px solid var(--md-linje);border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,var(--md-panel-a),var(--md-panel-b))}
+#tbl-ind .trow{margin:0!important;border:0!important;border-bottom:1px solid var(--md-linje)!important;border-radius:0!important;
+  background:transparent!important;padding:10px 8px!important}
+#tbl-ind .trow:last-child{border-bottom:0!important}
+#tbl-ind .trow:hover{background:rgba(var(--md-aksent-rgb),.05)!important}
+#tbl-ind .trow.s3-fyr{border-color:var(--md-linje)!important;background:rgba(var(--md-aksent-rgb),.07)!important}
+#tbl-ind .av{box-shadow:0 0 0 2px color-mix(in srgb,currentColor 55%,transparent)}
+#tbl-ind .name-c{min-width:0;overflow:hidden}
+#tbl-ind .name-main{font-size:14px!important;font-weight:600!important;line-height:1.15}
+#tbl-ind .sc.pts{font-size:20px!important}
+#tbl-ind .sc.pts.null{color:var(--md-null)!important}
+#tbl-ind .pos-n.tom{color:var(--md-null)!important}
+#view-ind .tbl-head>*{white-space:nowrap}
+@media(max-width:600px){#tbl-ind .trow{padding:10px 6px!important}#tbl-ind .name-main{font-size:13.5px!important}
+  #view-ind .tbl-head{letter-spacing:.03em!important}.mj-ufrow{gap:2px}.mj-uf{width:13px!important}}
+
+/* Formfelt: tomt er nøytralt, ikke rødt */
+.fd.empty{background:var(--md-tomfelt)}
+.fd.sold{background:var(--md-aksent);box-shadow:0 0 6px rgba(var(--md-aksent-rgb),.65)}
+.mj-uf.t{background:var(--md-tomfelt)!important;border-color:var(--md-linje)!important;color:var(--md-ikon)!important}
+
+/* Sesongstripe */
+.s3-ses{background:linear-gradient(135deg,rgba(var(--md-aksent-rgb),.13),rgba(var(--md-aksent-rgb),.03))!important;border-color:rgba(var(--md-aksent-rgb),.30)!important}
+.s3-ses-k{background:var(--md-aksent)!important;color:var(--md-ink)!important}
+
+/* Tomtilstander */
+.s3-tom{padding:18px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
+.s3-tom b{display:block;font-family:'Anton',sans-serif;font-weight:400;font-size:17px;letter-spacing:.03em;color:var(--txt);margin-bottom:4px}
+.s3-tom-avd{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px}
+.s3-tom-avd span{padding:4px 10px;border-radius:999px;border:1px solid var(--md-linje2);font-size:12px;font-weight:600}
+.stat-card .s3-tom{padding:14px 8px;font-size:12px}
+.stat-card .s3-tom b{font-size:15px}
+
+/* ── TAVLEN: ukens tall med rullende siffer ─────────────────────────────── */
+#bstripe.md-tavle{display:block!important;height:auto!important;padding:10px 12px 12px!important;background:var(--md-stripe)!important;
+  border-bottom:1px solid var(--md-linje)!important;overflow:visible}
+.md-tv{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;max-width:640px;margin:0 auto}
+.md-tv-c{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;
+  padding:9px 4px 8px;border-radius:10px;text-align:center}
+.md-tv-v{display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.md-tv-l{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.06em;line-height:1.15;
+  color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.md-r{display:inline-block;height:1em;overflow:hidden;position:relative}
+.md-rs{display:block;transition:transform 1.1s cubic-bezier(.2,.75,.25,1)}
+.md-rs i{display:block;height:1em;font-style:normal;text-align:center}
+.md-rt{display:inline-block;padding:0 .08em;opacity:.55}
+@media(max-width:420px){.md-tv{gap:5px}.md-tv-v{font-size:22px}.md-tv-l{font-size:10.5px;letter-spacing:.03em}}
+@media(prefers-reduced-motion:reduce){.md-rs{transition:none}}
+
+/* Variant «resultat» (Championship): stadiontavle med LED-glød */
+.md-tv-resultat .md-tv-c{background:
+  radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 1.4px) 0 0/5px 5px,
+  linear-gradient(180deg,var(--md-tavle-a),var(--md-tavle-b));
+  border:1px solid var(--md-linje2);box-shadow:inset 0 2px 10px rgba(0,0,0,.55)}
+.md-tv-resultat .md-tv-v{color:var(--md-aksent-lys);text-shadow:0 0 14px rgba(var(--md-aksent-rgb),.55)}
+.md-tv-resultat .md-tv-c.jakt .md-tv-v{color:#fca5a5;text-shadow:0 0 14px rgba(239,68,68,.45)}
+.md-tv-resultat .md-tv-c.ok{border-color:rgba(var(--md-aksent-rgb),.65);box-shadow:inset 0 2px 10px rgba(0,0,0,.55),0 0 22px rgba(var(--md-aksent-rgb),.25)}
+
+/* Variant «km» (Selekt): kilometerteller – hvert siffer på sitt eget hjul */
+.md-tv-km .md-tv-c{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));border:1px solid var(--md-linje2)}
+.md-tv-km .md-tv-v{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;gap:2px}
+.md-tv-km .md-r{padding:2px 3px;border-radius:3px;color:#f4f1e6;
+  background:linear-gradient(180deg,#020403 0%,#1d221d 45%,#2a302a 50%,#1d221d 55%,#020403 100%);
+  box-shadow:inset 0 0 0 1px rgba(var(--md-aksent-rgb),.45),0 1px 0 rgba(255,255,255,.05)}
+.md-tv-km .md-r:last-child{color:#121212;background:linear-gradient(180deg,#bfbcae 0%,#f4f1e6 45%,#fffdf5 50%,#f4f1e6 55%,#bfbcae 100%)}
+.md-tv-km .md-rt{opacity:.5;padding:0 2px}
+.md-tv-km .md-tv-c.ok{border-color:rgba(var(--md-aksent-rgb),.65)}
+.md-tv-km .md-tv-c.ok .md-tv-l{color:var(--md-aksent-lys)}
+@media(max-width:420px){.md-tv-km .md-tv-v{font-size:20px}.md-tv-km .md-r{padding:1px 2px}}
+
+/* ═══ SELEKT CUP: «Racinggrønt og messing» – tokens for felles drakt ═══ */
+:root{
+  --md-aksent:#c9a84c;--md-aksent-rgb:201,168,76;--md-aksent-lys:#f0c96e;--md-ink:#0b1a0f;
+  --md-fanebunn:rgba(8,20,12,.9);--md-stripe:#06120a;
+  --md-linje:rgba(184,212,188,.09);--md-linje2:rgba(184,212,188,.17);--md-ikon:#6f9a78;
+  --md-panel-a:#112417;--md-panel-b:#0c1b10;--md-null:rgba(184,212,188,.3);--md-tomfelt:rgba(184,212,188,.07);
+  --md-tavle-a:#030805;--md-tavle-b:#0a160d;
+}
+/* Rester av Championship-blått byttet til Selekt-grønt */
+#atmo-crowd path:nth-child(1){fill:#06140b}
+#atmo-crowd path:nth-child(2){fill:#030c06}
+#intro-overlay .login-section{background:rgba(5,14,8,.6)!important}
+.s3-p .s3-pil{background:rgba(5,14,8,.85)!important}
+select option{background:#0f2014}
+</style>
+<script id="matchday-drakt-js">
+/* ═══ MATCHDAY FELLES DRAKT v1 – JS ══════════════════════════════════════
+   Kilde: matchday-drakt.js. Felles for Championship, Selekt Cup og OSAT League.
+   Ikke rediger her i appen – endre kildefilen og bygg på nytt.
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+  var REDUSERT = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function hjul(d) {
+    var h = '';
+    for (var i = 0; i < 10; i++) h += '<i>' + i + '</i>';
+    return '<span class="md-r" aria-hidden="true"><span class="md-rs" data-d="' + d + '">' + h + '</span></span>';
+  }
+
+  /* Viser et tall der hvert siffer ruller fra forrige verdi (fra 0 første gang). */
+  window.mdRullTall = function (el, verdi) {
+    if (!el) return;
+    var ny = String(verdi), gml = el.getAttribute('data-v');
+    if (gml === ny) return;
+    var html = '';
+    for (var i = 0; i < ny.length; i++) {
+      var c = ny.charAt(i);
+      html += (c >= '0' && c <= '9') ? hjul(c) : '<span class="md-rt" aria-hidden="true">' + c + '</span>';
+    }
+    el.innerHTML = html;
+    el.setAttribute('data-v', ny);
+    el.setAttribute('aria-label', ny);
+    var ruller = el.querySelectorAll('.md-rs'), n = ruller.length;
+    var gs = (gml || '').replace(/[^0-9]/g, '');
+    for (var j = 0; j < n; j++) {
+      var fra = gml == null ? 0 : (parseInt(gs.charAt(gs.length - n + j), 10) || 0);
+      ruller[j].style.transition = 'none';
+      ruller[j].style.transform = 'translateY(-' + (REDUSERT ? ruller[j].getAttribute('data-d') : fra) + 'em)';
+    }
+    if (REDUSERT) return;
+    void el.offsetHeight;
+    for (var k = 0; k < n; k++) {
+      ruller[k].style.transition = '';
+      ruller[k].style.transitionDelay = (k * 0.07) + 's';
+      ruller[k].style.transform = 'translateY(-' + ruller[k].getAttribute('data-d') + 'em)';
+    }
+  };
+
+  /* Tavle med celler: [{k, v, l, kls}] */
+  window.mdTavle = function (el, celler, variant) {
+    if (!el) return;
+    var tv = el.querySelector('.md-tv');
+    var noekler = celler.map(function (c) { return c.k; }).join(',');
+    if (!tv || tv.getAttribute('data-k') !== noekler) {
+      el.innerHTML = '<div class="md-tv md-tv-' + variant + '" data-k="' + noekler + '">' + celler.map(function (c) {
+        return '<div class="md-tv-c" data-k="' + c.k + '"><div class="md-tv-v"></div><div class="md-tv-l"></div></div>';
+      }).join('') + '</div>';
+    }
+    celler.forEach(function (c) {
+      var celle = el.querySelector('.md-tv-c[data-k="' + c.k + '"]');
+      if (!celle) return;
+      celle.className = 'md-tv-c' + (c.kls ? ' ' + c.kls : '');
+      window.mdRullTall(celle.querySelector('.md-tv-v'), c.v);
+      celle.querySelector('.md-tv-l').innerHTML = c.l;
+    });
+  };
+
+  /* Ukens tavle for konkurranser med ukesmål (Championship og Selekt) */
+  window.mdRenderTavle = function (variant) {
+    var el = document.getElementById('bstripe');
+    if (!el || typeof MJ === 'undefined' || !MJ || !MJ.naa) return;
+    var pu = mjPerUke(), u = MJ.naa, tot = 0;
+    SELGERE.forEach(function (s) { tot += (pu[s.navn] || {})[u.uke] || 0; });
+    var mal = Math.round(MAL_UKE * SELGERE.length * u.dager / 5);
+    var igjen = Math.max(mal - tot, 0), ok = mal > 0 && igjen === 0;
+    var dIgjen = u.igjen !== undefined ? u.igjen : (u.dager - u.gaatt);
+    var celler = [
+      { k: 'uke', v: u.uke, l: 'Uke · ' + (dIgjen > 0 ? dIgjen + ' d. igjen' : 'ferdig') },
+      { k: 'solgt', v: tot + '/' + mal, l: 'Biler denne uka' },
+      { k: 'igjen', v: ok ? '✓' : igjen, l: ok ? 'Over streken!' : 'Igjen til målet', kls: ok ? 'ok' : 'jakt' }
+    ];
+    if (MJ.malBedrift && typeof mjSesongSolgt === 'function') {
+      celler.push({ k: 'tot', v: mjSesongSolgt() + '/' + MJ.malBedrift, l: 'Bedriftsmål' });
+    }
+    el.className = 'md-tavle';
+    el.style.display = 'block';
+    window.mdTavle(el, celler, variant);
+  };
+
+  /* Bilde som ikke finnes: vis initialer i stedet for et ødelagt bilde */
+  document.addEventListener('error', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'IMG' || (t.getAttribute('src') || '').indexOf('photos/') !== 0) return;
+    var rad = t.closest('[data-navn]');
+    var n = rad ? rad.getAttribute('data-navn') : '';
+    var init = n ? n.split(' ').map(function (x) { return x[0]; }).join('').slice(0, 2).toUpperCase() : '';
+    var p = t.parentNode;
+    t.remove();
+    if (p && init && !p.textContent.trim()) p.textContent = init;
+  }, true);
+})();
+</script>
 </head>
 <body data-tab="ind">
 <div class="atmo" aria-hidden="true">
@@ -1671,12 +1891,12 @@ body.er-admin .adm-flex.adm-only{display:flex!important}
 <!-- TABS -->
 <div class="tabs">
   <div class="tabs-row">
-    <button class="tab on" onclick="setTab('ind',this)"><span class="tab-icon">⚽</span><span class="tab-label">Selgere</span></button>
-    <button class="tab" onclick="setTab('team',this)"><span class="tab-icon">🏟️</span><span class="tab-label">Avdelinger</span></button>
-    <button class="tab" onclick="setTab('scoring',this)"><span class="tab-icon">🚗</span><span class="tab-label">Scoringer</span></button>
-    <button class="tab" onclick="setTab('stats',this)"><span class="tab-icon">📊</span><span class="tab-label">Statistikk</span></button>
-    <button class="tab" onclick="setTab('hof',this)"><span class="tab-icon">🏆</span><span class="tab-label">Legender</span></button>
-    <button class="tab" onclick="setTab('tips',this)"><span class="tab-icon">💡</span><span class="tab-label">Verktøy</span></button>
+    <button class="tab on" onclick="setTab('ind',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></svg></span><span class="tab-label">Selgere</span></button>
+    <button class="tab" onclick="setTab('team',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span><span class="tab-label">Avdelinger</span></button>
+    <button class="tab" onclick="setTab('scoring',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 15.5v-3l2-4.6A2 2 0 0 1 7.3 6.8h9.4a2 2 0 0 1 1.8 1.1l2 4.6v3"/><rect x="2.5" y="12.5" width="19" height="4.5" rx="1.5"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg></span><span class="tab-label">Scoringer</span></button>
+    <button class="tab" onclick="setTab('stats',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M7 16v-5"/><path d="M12 16V6"/><path d="M17 16v-8"/></svg></span><span class="tab-label">Statistikk</span></button>
+    <button class="tab" onclick="setTab('hof',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4"/><path d="M16 6h3a3 3 0 0 1-3 4"/><path d="M12 13v4"/><path d="M8 20h8"/></svg></span><span class="tab-label">Legender</span></button>
+    <button class="tab" onclick="setTab('tips',this)"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><span class="tab-label">Verktøy</span></button>
   </div>
 </div>
 
@@ -1720,6 +1940,9 @@ body.er-admin .adm-flex.adm-only{display:flex!important}
 
 <!-- VÆRSTRIPE -->
 <div class="vbar" id="vbar" style="display:none"></div>
+
+<!-- UKESTAVLE (kilometerteller) -->
+<div id="bstripe" style="display:none"></div>
 
 <!-- SPOTLIGHT BANNER (vises kun når aktiv) -->
 <div class="sp-banner" id="sp-banner" style="display:none"></div>
@@ -2701,8 +2924,9 @@ function renderInd() {
   el.innerHTML = rows.map(function(r,i) {
     var rank = ranks[i];
     var isTied = rankCount[rank] > 1;
-    var rankLabel = isTied ? 'T'+rank : String(rank);
-    var pc = rank===1?gold : rank===2?silver : rank===3?bronze : 'var(--muted)';
+    var utenPoeng = !r.pts;
+    var rankLabel = utenPoeng ? '\u2013' : (isTied ? 'T'+rank : String(rank));
+    var pc = utenPoeng ? 'var(--muted)' : (rank===1?gold : rank===2?silver : rank===3?bronze : 'var(--muted)');
     var sk = streakCount(r.navn);
     var ht = hatTrickCount(r.navn, m);
     var hasPhoto = typeof SELGER_PHOTOS !== 'undefined' && SELGER_PHOTOS[r.id];
@@ -2712,7 +2936,7 @@ function renderInd() {
     var ms = milestoneState(r.navn);
     var over = MJ && mjNaadd(r.wk, MJ.naa.mal);
     return '<div class="trow zm" data-navn="'+r.navn+'" role="button" tabindex="0" onclick="openPlayerCard(\''+r.id+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openPlayerCard(\''+r.id+'\');}" style="animation-delay:'+(i*0.03)+'s;cursor:pointer">'
-      + '<div class="pos-n" style="color:'+pc+';font-size:'+(isTied?'11px':'13px')+'">'+(rankLabel)+'</div>'
+      + '<div class="pos-n'+(utenPoeng?' tom':'')+'" style="color:'+pc+';font-size:'+(isTied&&!utenPoeng?'11px':'13px')+'">'+(rankLabel)+'</div>'
       + '<div><div class="av-wrap'+(ms.fresh?' fresh':'')+'"><div class="av'+(over?' mj-gull':'')+'" style="background:'+r.bg+';color:'+r.color+';overflow:hidden;padding:0">'+avHtml+'</div>'+(ms.fresh?'<span class="mile-dot">&#9733;</span>':'')+'</div></div>'
       + '<div class="name-c">'
         + '<div class="name-main">'+r.navn+(ht>0?' '+Array(Math.min(ht,5)+1).join('&#11088;'):'')+(sk>=3?' &#128293;':'')+mdTags(r.navn)
@@ -2723,7 +2947,7 @@ function renderInd() {
           + '</div>'
       + '</div>'
       + '<div class="sc" style="line-height:1">'+r.g+(r.wk>0?'<br><span style="font-size:8px;opacity:.4;font-weight:400">('+r.wk+')</span>':'')+'</div>'
-      + '<div class="sc pts">'+r.pts+'</div>'
+      + '<div class="sc pts'+(r.pts?'':' null')+'">'+r.pts+'</div>'
       + '<div>' + (MJ ? '<div class="mj-ufrow">'+mjUkeForm(r.navn)+'</div>' : '<div class="form-dots">'+selgerDots(r.navn)+'</div>') + '</div>'
     + '</div>';
   }).join('');
@@ -3059,10 +3283,10 @@ function renderVaer() {
   var el = document.getElementById('vbar');
   if (!el || !vaerData) return;
   var rekke = [
-    { sted:'Ryen', kort:'Ryen' },
-    { sted:'Fornebu', kort:'Fornebu' },
-    { sted:'Lillestr\u00f8m', kort:'Lillestr\u00f8m' },
-    { sted:'\u00d8kern', kort:'\u00d8kern' }
+    { sted:'Ryen', kort:'Ryen', kode:'RY' },
+    { sted:'Fornebu', kort:'Fornebu', kode:'FN' },
+    { sted:'Lillestr\u00f8m', kort:'Lillestr\u00f8m', kode:'LS' },
+    { sted:'\u00d8kern', kort:'\u00d8kern', kode:'\u00d8K' }
   ];
   var h = '<div class="vb-dag">V\u00c6RET I DAG</div><div class="vb-wrap">';
   var antall = 0;
@@ -3072,7 +3296,7 @@ function renderVaer() {
     antall++;
     var ik = VAER_IKON[v.kategori] || '\u2014';
     h += '<div class="vb"><span class="vb-ik">' + ik + '</span>'
-       + '<span class="vb-n">' + r.kort + '</span>'
+       + '<span class="vb-n"><span class="vb-lang">' + r.kort + '</span><span class="vb-kort">' + (r.kode || r.kort) + '</span></span>'
        + '<span class="vb-t">' + Math.round(v.temp_maks) + '\u00b0</span>'
        + (v.nedbor_mm > 0 ? '<span class="vb-r">' + v.nedbor_mm + ' mm</span>' : '')
        + '</div>';
@@ -3549,6 +3773,7 @@ function renderScoring() {
 }
 
 function renderAll() {
+  if (MJ) { try { mdRenderTavle('km'); } catch(e) { console.error('Tavle: ' + e.message); } }
   if      (curTab==='ind')     renderInd();
   else if (curTab==='team' || curTab==='hof')    renderTeam();
   else if (curTab==='stats')   renderStats();
@@ -4563,7 +4788,7 @@ var CARD_BRAND = { liga:'VCSO SELEKT CUP', sesong:'SESONG 3 \u00b7 2026', bg1:'#
 function cardToast(msg){
   var t = document.createElement('div');
   t.textContent = msg;
-  t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0b1526;color:#f4e9c8;border:1px solid '+CARD_BRAND.gull+';padding:10px 18px;border-radius:8px;font-family:Barlow,sans-serif;font-size:14px;z-index:9999;box-shadow:0 6px 24px rgba(0,0,0,.5);opacity:0;transition:opacity .3s';
+  t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0c1a10;color:#f4e9c8;border:1px solid '+CARD_BRAND.gull+';padding:10px 18px;border-radius:8px;font-family:Barlow,sans-serif;font-size:14px;z-index:9999;box-shadow:0 6px 24px rgba(0,0,0,.5);opacity:0;transition:opacity .3s';
   document.body.appendChild(t);
   setTimeout(function(){ t.style.opacity='1'; }, 20);
   setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 350); }, 2600);
